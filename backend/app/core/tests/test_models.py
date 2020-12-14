@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 
 def sample_user(username='test', email='test@email.com', password='testpass'):
-    return get_user_model().objects.create_user(username ,email, password)
+    return get_user_model().objects.create_user(username, email, password)
 
 
 class ModelsTests(TestCase):
@@ -11,7 +11,7 @@ class ModelsTests(TestCase):
     """User part"""
 
     def test_create_user_successful(self):
-        """Test que la création d'un user avec username, email et password fonctionne"""
+        """Test création custom user"""
         username = "test"
         email = "test@email.com"
         password = "testpass"
@@ -32,16 +32,28 @@ class ModelsTests(TestCase):
     def test_user_invalid_username(self):
         """Test qu'un user ne peut être créé sans username"""
         with self.assertRaises(ValueError):
-            get_user_model().objects.create_user(None,'test@email.com', 'testpass')
+            get_user_model().objects.create_user(
+                None,
+                'test@email.com',
+                'testpass'
+            )
 
     def test_user_invalid_email(self):
         """Test qu'un user ne peut être créé sans email"""
         with self.assertRaises(ValueError):
-            get_user_model().objects.create_user('test', None, 'testpass')
+            get_user_model().objects.create_user(
+                'test',
+                None,
+                'testpass'
+            )
 
     def test_create_superuser(self):
         """Test qu'un superuser a bien les droits de superuser et de staff"""
-        user = get_user_model().objects.create_superuser('test', 'test@email.com', 'testpasss')
+        user = get_user_model().objects.create_superuser(
+            'test',
+            'test@email.com',
+            'testpasss'
+        )
 
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)

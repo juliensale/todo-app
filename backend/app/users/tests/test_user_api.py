@@ -13,6 +13,7 @@ ME_URL = reverse("users:me")
 def create_user(**params):
     return get_user_model().objects.create(**params)
 
+
 class PublicUserApiTests(TestCase):
     """Tests des fonctionnalités qui ne requierent pas la connexion"""
 
@@ -20,7 +21,7 @@ class PublicUserApiTests(TestCase):
         self.client = APIClient()
 
     def test_create_valid_user_success(self):
-        """Test que la création d'un user avec des arguments valides fonctionne"""
+        """Test création user avec des arguments valides"""
         payload = {
             'username': 'Test',
             'email': 'test@email.com',
@@ -35,7 +36,7 @@ class PublicUserApiTests(TestCase):
         self.assertNotIn(payload['password'], res.data)
 
     def test_username_taken(self):
-        """Test que la création d'un user avec un pseudo déjà existant échoue"""
+        """Test création user avec pseudo déjà pris échoue"""
         payload = {
             'username': 'Test',
             'email': 'test@email.com',
