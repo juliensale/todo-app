@@ -11,7 +11,9 @@ from core.models import List
 
 class BaseItemViewSet(viewsets.GenericViewSet,
                       mixins.ListModelMixin,
-                      mixins.CreateModelMixin):
+                      mixins.CreateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin):
 
     """View set de base, réutilisé pour les différents modèles"""
 

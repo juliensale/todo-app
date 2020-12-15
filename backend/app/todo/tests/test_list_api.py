@@ -87,8 +87,8 @@ class PrivateListApiTests(TestCase):
 
         self.assertTrue(exists)
 
-    def test_create_tag_invalid(self):
-        """Test creating a new tag with invalid payload fails"""
+    def test_create_list_invalid(self):
+        """Test creating a new list with invalid payload fails"""
         payload = {
             'user': self.user,
             'title': '',
@@ -97,3 +97,46 @@ class PrivateListApiTests(TestCase):
 
         res = self.client.post(LISTS_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_list(self):
+        """Test la modification d'une liste"""
+        list = self.client.post(LISTS_URL, {
+            "user": self.user,
+            "title": "testliste",
+            "color": "red"
+        }).data
+
+        precise_url = reverse(
+            'todo:list-detail',
+            kwargs={"pk": list['id']}
+        )
+
+        res = self.client.patch(
+            precise_url,
+            {'title': 'modifiedtitle'}
+        )
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['title'], 'modifiedtitle')
+
+    def test_detail_view_limited_to_owner(self):
+        """Vérifie que l'on ne peut voir que ses propres listes"""
+        user2 = get_user_model().objects.create_user(
+            username="test2",
+            email="test2@email.com",
+            password="testpass123"
+        )
+
+        liste = List.objects.create(
+            title="listetest",
+            user=user2,
+            color="red"
+        )
+
+        precise_url = reverse(
+            'todo:list-detail',
+            kwargs={"pk": liste.id}
+        )
+        res = self.client.get(precise_url)
+
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
