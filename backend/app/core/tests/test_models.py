@@ -69,3 +69,27 @@ class ListModelTests(TestCase):
         )
 
         self.assertEqual(str(list), list.title)
+
+
+class SublistModelTests(TestCase):
+
+    def setUp(self):
+        self.list = models.List.objects.create(
+            user=sample_user(),
+            title="liste test",
+            color="blue"
+        )
+        self.sublist = models.SubList.objects.create(
+            title="sous liste test",
+            list=self.list
+        )
+
+    def test_sublist_str(self):
+        """Test la représentation des sous-listes"""
+
+        self.assertEqual(str(self.sublist), self.sublist.title)
+
+    def test_sublist_inherit_user(self):
+        """Test l'héritage du user"""
+        
+        self.assertEqual(self.sublist.user, self.list.user)

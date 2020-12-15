@@ -55,3 +55,19 @@ class List(models.Model):
 
     def __str__(self):
         return self.title
+
+class SubList(models.Model):
+    list = models.ForeignKey("List", on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    def save(self, *args, **kwargs):
+        self.user = self.list.user
+        super(SubList, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
