@@ -1,14 +1,13 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from core import models
 
 
 def sample_user(username='test', email='test@email.com', password='testpass'):
     return get_user_model().objects.create_user(username, email, password)
 
 
-class ModelsTests(TestCase):
-
-    """User part"""
+class UserModelTests(TestCase):
 
     def test_create_user_successful(self):
         """Test création custom user"""
@@ -57,3 +56,16 @@ class ModelsTests(TestCase):
 
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+
+
+class ListModelTests(TestCase):
+
+    def test_list_str(self):
+        """Test la représentation des listes"""
+        list = models.List.objects.create(
+            user=sample_user(),
+            title='Food',
+            color='red'
+        )
+
+        self.assertEqual(str(list), list.title)
