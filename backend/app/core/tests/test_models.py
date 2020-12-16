@@ -113,3 +113,94 @@ class SublistModelTests(TestCase):
                 title="test",
                 user=user2
             )
+
+
+class TaskModelTests(TestCase):
+
+    def setUp(self):
+        self.user = sample_user()
+        self.list = models.List.objects.create(
+            user=self.user,
+            title="liste test",
+            color="blue"
+        )
+        self.sublist = models.SubList.objects.create(
+            title="sous liste test",
+            list=self.list,
+            user=self.user
+        )
+        self.task = models.Task.objects.create(
+            user=self.user,
+            sublist=self.sublist,
+            title="tache test",
+            completed=False,
+        )
+
+    def test_task_str(self):
+        """Test la représentation des taches"""
+        self.assertEqual(str(self.task), self.task.title)
+
+    def test_task_other_user(self):
+        """Test que l'on ne peut pas créer une tâche
+           à partir d'une sous-liste d'un autre utilisateur"""
+        user2 = get_user_model().objects.create_user(
+            username="user2",
+            email="user2@email.com",
+            password="user2pass"
+        )
+
+        with self.assertRaises(PermissionDenied):
+            models.Task.objects.create(
+                user=user2,
+                sublist=self.sublist,
+                title="tache test",
+                completed=False,
+            )
+
+
+class SubTaskModelTests(TestCase):
+
+    def setUp(self):
+        self.user = sample_user()
+        self.list = models.List.objects.create(
+            user=self.user,
+            title="liste test",
+            color="blue"
+        )
+        self.sublist = models.SubList.objects.create(
+            title="sous liste test",
+            list=self.list,
+            user=self.user
+        )
+        self.task = models.Task.objects.create(
+            user=self.user,
+            sublist=self.sublist,
+            title="tache test",
+            completed=False
+        )
+        self.subtask = models.SubTask.objects.create(
+            user=self.user,
+            task=self.task,
+            title="sous-tache test",
+            completed=False
+        )
+
+    def test_subtask_str(self):
+        """Test la représentation des sous-tâches"""
+        self.assertEqual(str(self.subtask), self.subtask.title)
+
+    def test_create_subtask_other_user(self):
+        """Test que l'on ne peut pas créer de sous-tâche
+           à partir d'une tâche d'un autre utilistaeur"""
+        user2 = get_user_model().objects.create_user(
+            username="user2",
+            email="user2@email.com",
+            password="testpass123"
+        )
+        with self.assertRaises(PermissionDenied):
+            models.SubTask.objects.create(
+                user=user2,
+                task=self.task,
+                title="sa sous-tache",
+                completed=False
+            )

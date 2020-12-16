@@ -76,3 +76,51 @@ class SubList(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Task(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    sublist = models.ForeignKey(
+        'SubList',
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    completed = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.user == self.sublist.user:
+            super(Task, self).save(*args, **kwargs)
+        else:
+            raise PermissionDenied(
+                "La création d'objet est restreinte à son propre compte."
+            )
+
+    def __str__(self):
+        return self.title
+
+
+class SubTask(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    task = models.ForeignKey(
+        'Task',
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    completed = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.user == self.task.user:
+            super(SubTask, self).save(*args, **kwargs)
+        else:
+            raise PermissionDenied(
+                "La création d'objet est restreinte à son propre compte."
+            )
+
+    def __str__(self):
+        return self.title
