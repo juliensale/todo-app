@@ -6,6 +6,7 @@ from todo import views
 
 router = DefaultRouter()
 router.register('lists', views.ListViewSet)
+router.register('sublists', views.SubListViewSet)
 
 app_name = 'todo'
 

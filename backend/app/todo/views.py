@@ -5,8 +5,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
-from todo.serializers import ListSerializer
-from core.models import List
+from todo.serializers import ListSerializer, SubListSerializer
+from core.models import List, SubList
 
 
 class BaseItemViewSet(viewsets.GenericViewSet,
@@ -34,3 +34,8 @@ class BaseItemViewSet(viewsets.GenericViewSet,
 class ListViewSet(BaseItemViewSet):
     queryset = List.objects.all()
     serializer_class = ListSerializer
+
+
+class SubListViewSet(BaseItemViewSet):
+    queryset = SubList.objects.all()
+    serializer_class = SubListSerializer

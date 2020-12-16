@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from core import models
 
+from django.core.exceptions import PermissionDenied
+
 
 def sample_user(username='test', email='test@email.com', password='testpass'):
     return get_user_model().objects.create_user(username, email, password)
@@ -74,14 +76,16 @@ class ListModelTests(TestCase):
 class SublistModelTests(TestCase):
 
     def setUp(self):
+        self.user = sample_user()
         self.list = models.List.objects.create(
-            user=sample_user(),
+            user=self.user,
             title="liste test",
             color="blue"
         )
         self.sublist = models.SubList.objects.create(
             title="sous liste test",
-            list=self.list
+            list=self.list,
+            user=self.user
         )
 
     def test_sublist_str(self):
@@ -91,5 +95,21 @@ class SublistModelTests(TestCase):
 
     def test_sublist_inherit_user(self):
         """Test l'héritage du user"""
-        
+
         self.assertEqual(self.sublist.user, self.list.user)
+
+    def test_create_sublist_other_user(self):
+        """Test que l'on ne peut pas créer de sous-liste
+           depuis une liste d'un autre utilisateur"""
+
+        user2 = get_user_model().objects.create_user(
+            username="user2",
+            email="user2@email.com",
+            password="testpass123"
+        )
+        with self.assertRaises(PermissionDenied):
+            models.SubList.objects.create(
+                list=self.list,
+                title="test",
+                user=user2
+            )

@@ -3,6 +3,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
 
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 
 
 class UserManager(BaseUserManager):
@@ -56,6 +57,7 @@ class List(models.Model):
     def __str__(self):
         return self.title
 
+
 class SubList(models.Model):
     list = models.ForeignKey("List", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
@@ -65,9 +67,12 @@ class SubList(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        self.user = self.list.user
-        super(SubList, self).save(*args, **kwargs)
+        if self.user == self.list.user:
+            super(SubList, self).save(*args, **kwargs)
+        else:
+            raise PermissionDenied(
+                    "La création d'objet est restreinte à son propre compte."
+                  )
 
     def __str__(self):
         return self.title
-
