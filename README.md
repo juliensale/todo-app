@@ -10,5 +10,6 @@ Temps passé:
     - Création User: 4h
     - Modèle list: 3h
     - Modèle sublist: 2h30
+    - Modèles task & subtask: 1h
 
 Total: 12h30

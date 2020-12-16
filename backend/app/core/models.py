@@ -90,6 +90,31 @@ class Task(models.Model):
     title = models.CharField(max_length=255)
     completed = models.BooleanField(default=False)
 
+    def set_completed(self, value):
+        self.completed = value
+        self.save()
+
+    def complete(self):
+        self.set_completed(True)
+        subtasks = SubTask.objects.all().filter(task=self)
+        for subtask in subtasks:
+            subtask.set_completed(True)
+
+    def uncomplete(self):
+        self.set_completed(False)
+        subtasks = SubTask.objects.all().filter(task=self)
+        for subtask in subtasks:
+            subtask.set_completed(False)
+
+    def checkComplete(self):
+        subtasks = SubTask.objects.all().filter(task=self)
+        shouldComplete = True
+        for subtask in subtasks:
+            shouldComplete = shouldComplete and subtask.completed
+
+        if shouldComplete:
+            self.complete()
+
     def save(self, *args, **kwargs):
         if self.user == self.sublist.user:
             super(Task, self).save(*args, **kwargs)
@@ -113,6 +138,18 @@ class SubTask(models.Model):
     )
     title = models.CharField(max_length=255)
     completed = models.BooleanField(default=False)
+
+    def set_completed(self, value):
+        self.completed = value
+        self.save()
+
+    def complete(self):
+        self.set_completed(True)
+        self.task.checkComplete()
+
+    def uncomplete(self):
+        self.set_completed(False)
+        self.task.set_completed(False)
 
     def save(self, *args, **kwargs):
         if self.user == self.task.user:

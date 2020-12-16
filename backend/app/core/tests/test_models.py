@@ -157,6 +157,10 @@ class TaskModelTests(TestCase):
                 completed=False,
             )
 
+    def test_set_complete(self):
+        self.task.set_completed(True)
+        self.assertTrue(self.task.completed)
+
 
 class SubTaskModelTests(TestCase):
 
@@ -185,6 +189,13 @@ class SubTaskModelTests(TestCase):
             completed=False
         )
 
+        self.subtask2 = models.SubTask.objects.create(
+            user=self.user,
+            task=self.task,
+            title="sous-tache test 2",
+            completed=False
+        )
+
     def test_subtask_str(self):
         """Test la représentation des sous-tâches"""
         self.assertEqual(str(self.subtask), self.subtask.title)
@@ -204,3 +215,57 @@ class SubTaskModelTests(TestCase):
                 title="sa sous-tache",
                 completed=False
             )
+
+    def test_set_complete(self):
+        self.subtask.set_completed(True)
+        self.assertTrue(self.subtask.completed)
+
+    def test_complete_task(self):
+        """Test que la complétion d'un tâche
+           complète toutes les sous-tâches filles"""
+        self.task.complete()
+
+        self.subtask.refresh_from_db()
+        self.subtask2.refresh_from_db()
+        self.assertTrue(self.subtask.completed)
+        self.assertTrue(self.subtask2.completed)
+
+    def test_uncomplete_task(self):
+        """Test que la dé-complétion d'un tâche
+           dé-complète toutes les sous-tâches filles"""
+        self.task.complete()
+
+        self.task.uncomplete()
+
+        self.subtask.refresh_from_db()
+        self.subtask2.refresh_from_db()
+        self.assertFalse(self.subtask.completed)
+        self.assertFalse(self.subtask2.completed)
+
+    def test_complete_all_subtasks(self):
+        """Test que la complétion de toutes les sous-tâches
+           complète la tâche mère"""
+        self.subtask.complete()
+
+        # Une seule sous-tache ne doit pas compléter la tache mere
+        self.task.refresh_from_db()
+        self.assertFalse(self.task.completed)
+
+        self.subtask2.complete()
+
+        self.task.refresh_from_db()
+        self.assertTrue(self.task.completed)
+
+    def test_uncomplete_subtask(self):
+        """Test que la dé-complétion d'une seule sous-tâche
+           dé-complète la tâche mère, sans impacter ses soeurs"""
+        self.task.complete()
+
+        self.subtask.uncomplete()
+
+        self.subtask.refresh_from_db()
+        self.assertFalse(self.subtask.completed)
+        self.task.refresh_from_db()
+        self.assertFalse(self.task.completed)
+        self.subtask2.refresh_from_db()
+        self.assertTrue(self.subtask2.completed)
