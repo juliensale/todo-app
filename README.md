@@ -9,6 +9,6 @@ Temps passé:
     - Set up: 3h
     - Création User: 4h
     - Modèle list: 3h
-    - Modèle sublist: 1h + ?
+    - Modèle sublist: 2h30
 
-Total: 10h
+Total: 12h30

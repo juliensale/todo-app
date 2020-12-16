@@ -138,6 +138,24 @@ class PrivateSublistApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['title'], mod_payload['title'])
 
+    def test_delete_sublist(self):
+        """Test la suppression d'une sous-liste"""
+        sublist = SubList.objects.create(
+            user=self.user,
+            list=self.liste,
+            title="ma sous-liste"
+        )
+        precise_url = reverse(
+            'todo:sublist-detail',
+            kwargs={
+                'pk': sublist.id
+            }
+        )
+        res = self.client.delete(precise_url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertNotIn(sublist, SubList.objects.all())
+
     def test_detail_view_limited_to_owner(self):
         user2 = get_user_model().objects.create_user(
             username="test2",
@@ -162,3 +180,33 @@ class PrivateSublistApiTests(TestCase):
         res = self.client.get(precise_url)
 
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_limited_to_owner(self):
+        """Test que l'on ne peut pas supprimer
+           les sous-listes d'autres utilisateus"""
+        user2 = get_user_model().objects.create_user(
+            username="user2",
+            email="user2@email.com",
+            password="testpass123"
+        )
+        list2 = List.objects.create(
+            user=user2,
+            title="sa liste",
+            color="red"
+        )
+        sublist2 = SubList.objects.create(
+            user=user2,
+            title="sa sous-liste",
+            list=list2
+        )
+
+        precise_url = reverse(
+            'todo:sublist-detail',
+            kwargs={
+                'pk': sublist2.id
+            }
+        )
+        res = self.client.delete(precise_url)
+
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertIn(sublist2, SubList.objects.all())

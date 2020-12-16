@@ -13,7 +13,8 @@ class BaseItemViewSet(viewsets.GenericViewSet,
                       mixins.ListModelMixin,
                       mixins.CreateModelMixin,
                       mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin):
+                      mixins.UpdateModelMixin,
+                      mixins.DestroyModelMixin):
 
     """View set de base, réutilisé pour les différents modèles"""
 

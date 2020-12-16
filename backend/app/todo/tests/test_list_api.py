@@ -119,6 +119,24 @@ class PrivateListApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['title'], 'modifiedtitle')
 
+    def test_delete_list(self):
+        """Test la suppression d'une liste"""
+        list = List.objects.create(
+            user=self.user,
+            title="ma liste",
+            color="red"
+        )
+
+        precise_url = reverse(
+            'todo:list-detail',
+            kwargs={"pk": list.id}
+        )
+
+        res = self.client.delete(precise_url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertNotIn(list, List.objects.all())
+
     def test_detail_view_limited_to_owner(self):
         """Vérifie que l'on ne peut voir que ses propres listes"""
         user2 = get_user_model().objects.create_user(
@@ -140,3 +158,27 @@ class PrivateListApiTests(TestCase):
         res = self.client.get(precise_url)
 
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_limited_to_owner(self):
+        """Test que l'on ne peut pas supprimer
+           les listes d'un autre utilisateur"""
+        user2 = get_user_model().objects.create_user(
+            username="user2",
+            email="user2@email.com",
+            password="testpas133"
+        )
+        list = List.objects.create(
+            user=user2,
+            title="sa liste",
+            color="blue"
+        )
+
+        precise_url = reverse(
+            'todo:list-detail',
+            kwargs={'pk': list.id}
+        )
+
+        res = self.client.delete(precise_url)
+
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertIn(list, List.objects.all())
