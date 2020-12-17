@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 from rest_framework.test import APIClient
-from rest_framweork import status
+from rest_framework import status
 
 TASKS_URL = reverse('todo:task-list')
 
@@ -45,9 +45,6 @@ class PrivateTaskApiTests(TestCase):
             title="Ma sous-liste"
         )
 
-    
-
-
     def test_retrieve_tasks(self):
         """Test que les taches soient affichees"""
         Task.objects.create(
@@ -62,9 +59,12 @@ class PrivateTaskApiTests(TestCase):
         )
 
         res = self.client.get(TASKS_URL)
+        tasks = Task.objects.all().order_by('-title')
+        serializer = TaskSerializer(tasks, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 2)
+        self.assertEqual(res.data, serializer.data)
 
     def test_tasks_limited_to_user(self):
         """Test que seules les taches de l'utilisateur sont affichees"""
@@ -102,16 +102,14 @@ class PrivateTaskApiTests(TestCase):
     def test_create_task_successfull(self):
         """Test la création d'un tache"""
         payload = {
-            "user": self.user,
-            "sublist": self.sublist,
-            "title": "Tache test",
-            "completed": False
+            'sublist': self.sublist.id,
+            'title': "Tache test"
         }
         res = self.client.post(TASKS_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         exists = Task.objects.all().filter(
-            title=payload['titile'],
+            title=payload['title'],
             sublist=payload['sublist']
         ).exists()
 
@@ -121,7 +119,6 @@ class PrivateTaskApiTests(TestCase):
         """Test que la création d'une tache avec des
         arguments invalides échoue"""
         res = self.client.post(TASKS_URL, {
-            'user': self.user,
             'sublist': '',
             'title': '',
         })
@@ -137,7 +134,7 @@ class PrivateTaskApiTests(TestCase):
         payload = {
             'title': 'modified'
         }
-        
+
         res = self.client.patch(
             get_detail_url(task.id),
             payload

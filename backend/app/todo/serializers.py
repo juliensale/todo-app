@@ -18,8 +18,8 @@ class SubListSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
-# class TaskSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Task
-#         fields = ('id', 'sublist', 'title', 'completed')
-#         read_only_fields = ('id', 'completed')
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('id', 'sublist', 'title', 'completed')
+        read_only_fields = ('id', 'completed')
