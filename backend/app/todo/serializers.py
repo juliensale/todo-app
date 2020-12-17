@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import List, SubList
+from core.models import List, SubList, Task
 
 
 class ListSerializer(serializers.ModelSerializer):
@@ -16,3 +16,10 @@ class SubListSerializer(serializers.ModelSerializer):
         model = SubList
         fields = ('id', 'list', 'title')
         read_only_fields = ('id',)
+
+
+# class TaskSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Task
+#         fields = ('id', 'sublist', 'title', 'completed')
+#         read_only_fields = ('id', 'completed')
