@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-from todo.serializers import ListSerializer, SubListSerializer, TaskSerializer
-from core.models import List, SubList, Task
+from todo.serializers import ListSerializer, SubListSerializer, \
+    TaskSerializer, SubTaskSerializer
+from core.models import List, SubList, Task, SubTask
 
 
 class BaseItemViewSet(viewsets.GenericViewSet,
@@ -71,6 +72,37 @@ class TaskViewSet(BaseItemViewSet):
         task = self.queryset.get(id=pk)
         if request.user == task.user:
             task.uncomplete()
-            return Response(task.completed)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class SubTaskViewSet(BaseItemViewSet):
+    queryset = SubTask.objects.all()
+    serializer_class = SubTaskSerializer
+
+    @action(
+        methods=['put'],
+        detail=True,
+        permission_classes=[IsAuthenticated]
+    )
+    def complete(self, request, pk=None):
+        subtask = self.queryset.get(id=pk)
+        if request.user == subtask.user:
+            subtask.complete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    @action(
+        methods=['put'],
+        detail=True,
+        permission_classes=[IsAuthenticated]
+    )
+    def uncomplete(self, request, pk=None):
+        subtask = self.queryset.get(id=pk)
+        if request.user == subtask.user:
+            subtask.uncomplete()
+            return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)

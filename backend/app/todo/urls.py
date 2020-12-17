@@ -8,6 +8,7 @@ router = DefaultRouter()
 router.register('lists', views.ListViewSet)
 router.register('sublists', views.SubListViewSet)
 router.register('tasks', views.TaskViewSet)
+router.register('subtasks', views.SubTaskViewSet)
 
 app_name = 'todo'
 
