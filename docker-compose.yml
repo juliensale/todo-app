@@ -36,7 +36,3 @@ services:
         - 3000:3000
       volumes:
         - ./frontend/app:/frontend/app
-      command: >
-        sh -c "npm start"
-      depends_on:
-        - backend

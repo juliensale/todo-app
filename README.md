@@ -11,6 +11,7 @@ Temps passé:
     - Modèle list: 3h
     - Modèle sublist: 2h30
     - Modèles task & subtask: 4h30
-    - Set up Frontend: 1h
+    - Set up Frontend: 3h45
+    - 
 
-Total 17h
+Total 20h45
