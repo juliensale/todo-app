@@ -12,6 +12,7 @@ Temps passé:
     - Modèle sublist: 2h30
     - Modèles task & subtask: 4h30
     - Set up Frontend: 3h45
-    - Frontend store: 1h45
+    - Frontend auth: 2h15
+    - CSS : 30min
 
 Total 20h45

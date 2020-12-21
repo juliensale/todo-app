@@ -1,0 +1,28 @@
+.nav-container {
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+
+    .nav-content {
+        width: 90%;
+        height: 3em;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        ul {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            li {
+                margin-left: 2em;
+            }
+        }
+    }
+}

@@ -1,0 +1,202 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style-type: none;
+}
+
+section {
+  padding: 4em 10vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  min-height: calc(100vh - 6em);
+}
+
+.error {
+  color: var(--error-color);
+}
+
+* {
+  --secondary-color: rgb(55, 112, 219);
+  --text-color: white;
+  --button-color: rgb(91, 181, 241);
+  --line-color: rgb(150, 150, 150);
+  --error-color: red;
+}
+
+.nav-container {
+  width: 100vw;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.nav-container .nav-content {
+  width: 90%;
+  height: 3em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.nav-container .nav-content ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.nav-container .nav-content ul li {
+  margin-left: 2em;
+}
+
+.footer-container {
+  width: 100vw;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.footer-container .footer-content {
+  width: 90%;
+  height: 3em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.form-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.form-container form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 20vw;
+}
+
+.form-container form input {
+  width: 100%;
+  margin: .3em 0;
+  padding: .3em .7em;
+  border-radius: .3em;
+  border: 1px solid var(--line-color);
+}
+
+.form-container form button {
+  width: 100%;
+  margin-top: .3em;
+  padding: .3em .7em;
+  color: var(--text-color);
+  background-color: var(--button-color);
+  border-radius: .3em;
+  border: 1px solid var(--button-color);
+}
+
+.form-container form button:hover {
+  -webkit-transition: .2s;
+  transition: .2s;
+  color: var(--button-color);
+  background-color: transparent;
+}
+
+.form-container form .fake-button {
+  width: 100%;
+  margin-top: .3em;
+  padding: .3em .7em;
+  color: var(--button-color);
+  background-color: transparent;
+  text-align: center;
+  border-radius: .3em;
+  border: 1px solid var(--button-color);
+}
+
+.form-container form .fake-button:hover {
+  cursor: not-allowed;
+}
+/*# sourceMappingURL=App.css.map */

@@ -38,19 +38,23 @@ export const authLogin = (email, password) => {
     }
 }
 
-export const authSignup = (username, email, password1, password2) => {
+export const authSignup = (username, email, password, name) => {
     const URL = API_URL + 'users/create/'
     return dispatch => {
         dispatch(authStart())
-        axios.post(URL, {
+        var payload = {
             username: username,
             email: email,
-            password1: password1,
-            password2: password2
-        }).then(res => {
-            const token = res.data.token
-            localStorage.setItem('token', token)
-            dispatch(authSuccess(token))
+            password: password
+        }
+        if (name) {
+            payload = {
+                ...payload,
+                name: name
+            }
+        }
+        axios.post(URL, payload).then(() => {
+            dispatch(authLogin(email, password))
         }).catch(error => {
             dispatch(authFail(error))
         })
