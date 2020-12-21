@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import * as authActions from '../../store/actions/AuthActions'
+import * as authActions from '../../store/actions/authActions'
 import { connect } from 'react-redux'
 
 class Login extends Component {

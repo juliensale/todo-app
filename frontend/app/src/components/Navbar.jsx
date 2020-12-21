@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as authActions from '../store/actions/AuthActions'
+import * as authActions from '../store/actions/authActions'
 import { NavLink } from 'react-router-dom'
 
 class Navbar extends Component {
