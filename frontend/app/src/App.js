@@ -3,6 +3,8 @@ import "./css/App.css";
 import { Route, Switch } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 
+import loginRequired from "./HOC/LoginRequired.jsx";
+
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Main from './components/Main.jsx';
@@ -17,8 +19,8 @@ function App() {
       <Navbar />
       <section>
         <Switch>
-          <Route exact path="/" component={Main} />
-          <Route path="/settings/" component={Settings} />
+          <Route exact path="/" component={loginRequired(Main)} />
+          <Route path="/settings/" component={loginRequired(Settings)} />
           <Route path="/login/" component={Login} />
           <Route path="/signup/" component={Signup} />
         </Switch>

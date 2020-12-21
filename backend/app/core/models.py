@@ -1,5 +1,5 @@
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, \
-                                        PermissionsMixin
+    PermissionsMixin
 
 from django.db import models
 from django.conf import settings
@@ -36,7 +36,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=254, unique=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -71,8 +71,8 @@ class SubList(models.Model):
             super(SubList, self).save(*args, **kwargs)
         else:
             raise PermissionDenied(
-                    "La création d'objet est restreinte à son propre compte."
-                  )
+                "La création d'objet est restreinte à son propre compte."
+            )
 
     def __str__(self):
         return self.title
