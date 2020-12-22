@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import * as listActions from '../../store/actions/listActions';
 import { connect } from 'react-redux'
 

@@ -6,7 +6,7 @@ import ListItem from "./ListItem";
 const Lists = (props) => {
     let lists = null
     if (props.lists[0] !== undefined) {
-        lists = props.lists.map(list => <ListItem list={list} />)
+        lists = props.lists.map(list => <ListItem key={list.id} list={list} />)
     }
     return (
         <div>

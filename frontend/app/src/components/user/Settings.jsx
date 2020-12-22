@@ -86,6 +86,7 @@ class Settings extends Component {
                 <form onSubmit={this.handleSubmitPassword}>
                     <h1>Changer de mot de passe</h1>
                     <input type="password" name="password1" value={this.state.password1} placeholder="Mot de passe" onChange={this.handleChange} />
+                    {missMatchError}
                     <input type="password" name="password2" value={this.state.password2} placeholder="Mot de passe (confirmation)" onChange={this.handleChange} />
                     <button>Enregistrer</button>
                 </form>
