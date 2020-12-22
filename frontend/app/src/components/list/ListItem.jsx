@@ -1,25 +1,29 @@
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import * as listActions from '../../store/actions/listActions';
 import { connect } from 'react-redux'
 
-class ListItem extends Component {
 
-    handleDeleteClick = () => {
-        this.props.onDelete(this.props.list.id)
+const ListItemContext = React.createContext()
+const { Provider } = ListItemContext
+const ListItem = ({ onDelete, list, children }) => {
+
+    const handleDeleteClick = () => {
+        onDelete(list.id)
     }
 
-    render() {
-        const list = this.props.list
-        return (
+    const value = {
+        handleDeleteClick,
+        list
+    }
+
+    return (
+        <Provider value={value}>
             <div key={list.id}>
-                <div style={{ backgroundColor: list.color }, { borderRadius: "50%" }, { width: "50px" }, { height: "50px" }}>
-
-                </div>
-                {list.title}
-                <button onClick={this.handleDeleteClick}>Supprimer</button>
+                {children}
             </div>
-        )
-    }
+        </Provider>
+    )
+
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -28,4 +32,49 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ListItem)
+const ListColor = ({ styles: userStyles = {} }) => {
+    const { list } = useContext(ListItemContext)
+    const color = list.color;
+    const styles = {
+        height: "12px",
+        width: "12px",
+        borderRadius: "50%",
+        backgroundColor: color,
+        ...userStyles
+    }
+    return (
+        <div style={styles} />
+    )
+}
+
+const ListInfo = () => {
+    const { list } = useContext(ListItemContext)
+    return (
+        <p>{list.title}</p>
+    )
+}
+
+const ListDelete = ({ styles: userStyles = {} }) => {
+    const { handleDeleteClick } = useContext(ListItemContext)
+    const styles = {
+        ...userStyles
+    }
+    return (
+        <button style={styles} onClick={handleDeleteClick}>
+            supprimer
+        </button>
+    )
+
+}
+
+const Usage = ({ list, onDelete }) => {
+    return (
+        <ListItem list={list} onDelete={onDelete}>
+            <ListColor />
+            <ListInfo />
+            <ListDelete />
+        </ListItem>
+    )
+}
+
+export default connect(null, mapDispatchToProps)(Usage)

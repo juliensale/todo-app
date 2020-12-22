@@ -1,41 +1,39 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import * as listActions from '../../store/actions/listActions';
 import { connect } from 'react-redux'
 
-class ListCreate extends Component {
+const ListCreate = ({ onCreate }) => {
 
-    state = {
-        title: "",
-        color: ""
-    }
+    const [state, setState] = useState({
+        title: '',
+        color: ''
+    })
 
-    handleChange = (e) => {
-        this.setState({
+    const handleChange = (e) => {
+        setState({
+            ...state,
             [e.target.name]: e.target.value
         })
     }
 
-    handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
-        this.props.onCreate(
-            this.state.title,
-            this.state.color
+        onCreate(
+            state.title,
+            state.color
         )
     }
 
+    return (
+        <div className="form-container">
+            <form onSubmit={handleSubmit}>
+                <input type="text" name="title" value={state.title} onChange={handleChange} placeholder="Titre" />
+                <input type="text" name="color" value={state.color} onChange={handleChange} placeholder="Couleur" />
+                <button>Créer une liste</button>
+            </form>
+        </div>
+    )
 
-
-    render() {
-        return (
-            <div className="form-container">
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" name="title" value={this.state.title} onChange={this.handleChange} placeholder="Titre" />
-                    <input type="text" name="color" value={this.state.color} onChange={this.handleChange} placeholder="Couleur" />
-                    <button>Créer une liste</button>
-                </form>
-            </div>
-        )
-    }
 }
 
 
