@@ -52,7 +52,7 @@ class List(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    color = models.CharField(max_length=10)
+    color = models.CharField(max_length=255)
 
     def __str__(self):
         return self.title
