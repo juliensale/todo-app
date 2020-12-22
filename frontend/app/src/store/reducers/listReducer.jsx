@@ -23,7 +23,7 @@ const addList = (state, action) => {
 const removeList = (state, action) => {
     var lists = [...state.lists];
     const id = action.id;
-    const index = lists.indexOf(list => list.id === id);
+    const index = lists.findIndex(list => list.id === id);
     lists.splice(index, 1)
 
     return updateObject(state, {
@@ -38,7 +38,7 @@ const changeList = (state, action) => {
         title: action.title,
         color: action.color
     };
-    const index = lists.indexOf(list => list.id === action.id);
+    const index = lists.findIndex(list => list.id === action.id);
     lists[index] = modified_list;
 
     return updateObject(state, {

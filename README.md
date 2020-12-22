@@ -14,6 +14,6 @@ Temps passé:
     - Set up Frontend: 3h45
     - Frontend auth: 3h45
     - CSS : 30min
-    - Frontend List store: 45min
+    - Frontend List store: 45min + 45min
 
 Total 20h45
