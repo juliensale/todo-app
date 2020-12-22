@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as actions from "./actionTypes"
-
-export const API_URL = "http://192.168.99.100:8000/api/"
+import API_URL from "./apiUrl"
 
 export const authStart = () => ({
     type: actions.AUTH_START

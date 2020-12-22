@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import React, { Component } from 'react'
-import { API_URL } from '../../store/actions/authActions'
+import API_URL from '../../store/actions/apiUrl'
 
 class Settings extends Component {
 
