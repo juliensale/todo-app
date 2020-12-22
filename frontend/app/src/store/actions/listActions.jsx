@@ -14,7 +14,11 @@ export const setLists = (lists) => {
 
 export const updateLists = () => {
     return dispatch => {
-        axios.get(URL).then(res => {
+        axios.get(URL, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem('token')
+            }
+        }).then(res => {
             const lists = res.data
             dispatch(setLists(lists))
         }).catch(err => console.log(err))
@@ -31,6 +35,9 @@ export const addList = (list) => {
 export const createList = (title, color) => {
     return dispatch => {
         axios.post(URL, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem('token')
+            },
             title: title,
             color: color
         }).then(res => {
@@ -51,7 +58,11 @@ export const removeList = (id) => {
 export const deleteList = (id) => {
     return dispatch => {
         const DETAIL_URL = URL + id + '/';
-        axios.delete(DETAIL_URL)
+        axios.delete(DETAIL_URL, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem('token')
+            }
+        })
             .then(res => {
                 dispatch(removeList(id))
             }).catch(err => console.log(err))
@@ -71,6 +82,9 @@ export const editList = (id, title, color) => {
     return dispatch => {
         const DETAIL_URL = URL + id + '/';
         axios.patch(DETAIL_URL, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem('token')
+            },
             title: title,
             color: color
         })

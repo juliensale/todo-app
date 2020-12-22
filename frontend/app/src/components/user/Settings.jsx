@@ -19,7 +19,11 @@ class Settings extends Component {
 
 
     componentDidMount() {
-        Axios.get(this.URL)
+        Axios.get(this.URL, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem('token')
+            }
+        })
             .then(res => {
                 this.setState({
                     loading: false,
@@ -28,7 +32,7 @@ class Settings extends Component {
                     name: res.data.name
                 })
             }).catch(err => this.setState({
-                error: err,
+                error: "Il y a une erreur",
                 loading: false
             }))
     }
