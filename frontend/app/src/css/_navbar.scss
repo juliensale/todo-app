@@ -21,7 +21,17 @@
             align-items: center;
 
             li {
-                margin-left: 2em;
+                margin-left: 1em;
+                font-size: 1.3em;
+
+                button {
+                    border: none;
+                    background: transparent;
+                    outline: none;
+                    color: var(--text-color);
+
+                    font-size: 1em;
+                }
             }
         }
     }

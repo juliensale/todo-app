@@ -13,8 +13,8 @@ class Navbar extends Component {
                         {(this.props.isLoggedIn)
                             ? (
                                 <ul>
-                                    <li><NavLink to="/settings">Parametres</NavLink></li>
-                                    <li><button onClick={this.props.onLogout}>Déconnexion</button></li>
+                                    <li><NavLink to="/settings"><i className="fas fa-cog"></i></NavLink></li>
+                                    <li><button onClick={this.props.onLogout}><i className="fas fa-sign-out-alt"></i></button></li>
                                 </ul>
                             ) : (
                                 <ul>
