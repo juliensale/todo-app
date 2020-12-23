@@ -204,7 +204,7 @@ section {
 
 .edit-button {
   background: transparent;
-  color: #7bc74f;
+  color: #2e77ca;
   border: none;
   outline: none;
   margin: .2em;
@@ -215,7 +215,7 @@ section {
 .edit-button:hover {
   -webkit-transition: .2s;
   transition: .2s;
-  background: #7bc74f;
+  background: #2e77ca;
   color: white;
 }
 
@@ -234,5 +234,32 @@ section {
   transition: .2s;
   background: #b60e0e;
   color: white;
+}
+
+.create-button {
+  color: white;
+  background-color: #4caa16;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  width: 2em;
+  height: 2em;
+  text-align: center;
+  -webkit-transition: .5s;
+  transition: .5s;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4);
+          box-shadow: 0 0 0 rgba(0, 0, 0, 0.4);
+}
+
+.create-button:hover {
+  -webkit-transition: .2s;
+  transition: .2s;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
 }
 /*# sourceMappingURL=App.css.map */
