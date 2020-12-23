@@ -6,15 +6,9 @@ import { Link } from 'react-router-dom'
 
 const subListItemContext = React.createContext()
 const { Provider } = subListItemContext
-const SubListItem = ({ children, sublist, onDelete, onEdit }) => {
+const SubListItem = ({ children, sublist, onDelete, onEdit, style: userStyles = {} }) => {
     const styles = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        border: "1px solid var(--line-color)",
-        borderRadius: "2em",
-        padding: ".5em 1em"
+        ...userStyles
     }
 
     const handleDeleteClick = () => {
@@ -33,7 +27,7 @@ const SubListItem = ({ children, sublist, onDelete, onEdit }) => {
 
     return (
         <Provider value={value}>
-            <div style={styles}>
+            <div className="item" style={styles}>
                 {children}
             </div>
         </Provider>
@@ -42,17 +36,13 @@ const SubListItem = ({ children, sublist, onDelete, onEdit }) => {
 
 const SubListInfo = ({ style: userStyles = {} }) => {
     const styles = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
         ...userStyles
     }
 
     const { sublist } = useContext(subListItemContext)
 
     return (
-        <Link to={sublist.id + '/'} style={styles}>
+        <Link to={sublist.id + '/'} className="info" style={styles}>
             {sublist.title}
         </Link>
     )
@@ -60,15 +50,11 @@ const SubListInfo = ({ style: userStyles = {} }) => {
 
 const SubListParams = ({ children, style: userStyles = {} }) => {
     const styles = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
         ...userStyles
     }
 
     return (
-        <div style={styles} >
+        <div className="params" style={styles} >
             {children}
         </div>
     )
@@ -99,28 +85,17 @@ const SubListEdit = ({ style: userStyles = {} }) => {
 
 }
 
-const SubListEditForm = ({ style: userStyles = {}, setIsEditing }) => {
+const SubListEditForm = ({ style: userStyles = {}, containerStyle: userContainerStyles = {}, setIsEditing }) => {
 
     const { handleEdit, sublist } = useContext(subListItemContext)
 
     const styles = {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100vw",
-        height: "100vh",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "rgba(0,0,0,.15)",
+
         ...userStyles
     }
 
     const container_styles = {
-        padding: "3em 5em",
-        marginBottom: "5em",
-        borderRadius: "1em",
-        border: "1px solid var(--line-color)",
-        backgroundColor: "white"
+        ...userContainerStyles
     }
 
     const [title, setTitle] = useState(sublist.title)
@@ -141,8 +116,8 @@ const SubListEditForm = ({ style: userStyles = {}, setIsEditing }) => {
     }
 
     return (
-        <div style={styles} name="outside" onClick={handleClose}>
-            <div style={container_styles}>
+        <div className="full-window-outside" style={styles} name="outside" onClick={handleClose}>
+            <div className="full-window-container" style={container_styles}>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <input type="text" name="title" value={title} onChange={handleChange} placeholder="Titre" />

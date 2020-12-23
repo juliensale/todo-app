@@ -11,7 +11,7 @@ const SubLists = (props) => {
     }
 
     return (
-        <div>
+        <div className="item-list">
             <ul>{sublists}</ul>
             <SubListCreate list_id={list_id} />
         </div>

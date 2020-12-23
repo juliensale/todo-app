@@ -18,7 +18,7 @@ const SubListCreate = ({ onCreate, list_id }) => {
     }, [isCreating])
 
     return (
-        <div>
+        <div className="create-container">
             <button className="create-button" onClick={handleClick}>
                 <i className="far fa-plus" />
             </button>
@@ -27,7 +27,7 @@ const SubListCreate = ({ onCreate, list_id }) => {
     )
 }
 
-const SubListCreateForm = ({ handleCreate, style: userStyles = {}, setIsCreating }) => {
+const SubListCreateForm = ({ handleCreate, style: userStyles = {}, containerStyle: userContainerStyles = {}, setIsCreating }) => {
 
     const [title, setTitle] = useState('')
 
@@ -48,29 +48,17 @@ const SubListCreateForm = ({ handleCreate, style: userStyles = {}, setIsCreating
     }
 
     const styles = {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100vw",
-        height: "100vh",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "rgba(0,0,0,.15)",
         ...userStyles
     }
 
     const container_styles = {
-        padding: "3em 5em",
-        marginBottom: "5em",
-        borderRadius: "1em",
-        border: "1px solid var(--line-color)",
-        backgroundColor: "white"
+        ...userContainerStyles
     }
 
 
     return (
-        <div style={styles} name="outside" onClick={handleClose}>
-            <div style={container_styles}>
+        <div className="full-window-outside" style={styles} name="outside" onClick={handleClose}>
+            <div className="full-window-container" style={container_styles}>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <input type="text" name="title" value={title} onChange={handleChange} placeholder="Titre" />

@@ -78,9 +78,6 @@ const ListCreateForm = ({ style: userStyles = {}, setIsCreating, onCreate, conta
 
 }
 
-const Usage = ({ onCreate }) => {
-    return <ListCreate onCreate={onCreate} />
-}
 
 
 const mapDispatchToProps = (dispatch) => {
@@ -88,4 +85,4 @@ const mapDispatchToProps = (dispatch) => {
         onCreate: (title, color) => dispatch(listActions.createList(title, color))
     }
 }
-export default connect(null, mapDispatchToProps)(Usage)
+export default connect(null, mapDispatchToProps)(ListCreate)
