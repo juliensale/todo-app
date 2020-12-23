@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState } from 'react'
 import * as listActions from '../../store/actions/listActions';
 import { connect } from 'react-redux'
-
+import { Link } from "react-router-dom"
 
 const ListItemContext = React.createContext()
 const { Provider } = ListItemContext
@@ -68,10 +68,10 @@ const ListInfo = ({ children, style: userStyles = {} }) => {
     }
 
     return (
-        <div style={styles}>
+        <Link to={"/list/" + list.id} style={styles}>
             {children}
             <p>{list.title}</p>
-        </div>
+        </Link>
     )
 }
 
@@ -144,7 +144,7 @@ const ListEditForm = ({ style: userStyles = {}, setIsEditing }) => {
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <input type="text" name="title" value={state.title} onChange={handleChange} placeholder="Titre" />
-                        <input type="text" name="color" value={state.color} onChange={handleChange} placeholder="Couleur" />
+                        <label>Couleur</label><input type="color" name="color" value={state.color} onChange={handleChange} />
                         <button>Enregistrer</button>
                     </form>
                 </div>
@@ -169,7 +169,7 @@ const ListEdit = ({ style: userStyles = {} }) => {
 
     return (
         <div style={styles}>
-            <button onClick={handleClick}>
+            <button className="edit-button" onClick={handleClick}>
                 <i className="far fa-edit"></i>
             </button>
             <ListEditForm style={editor_style} setIsEditing={setIsEditing} />
@@ -180,15 +180,10 @@ const ListEdit = ({ style: userStyles = {} }) => {
 const ListDelete = ({ style: userStyles = {} }) => {
     const { handleDeleteClick } = useContext(ListItemContext)
     const styles = {
-        border: "none",
-        backgroundColor: " transparent",
-        color: "red",
-        fontSize: "1em",
-        fontWeight: "500",
         ...userStyles
     }
     return (
-        <button style={styles} onClick={handleDeleteClick}>
+        <button style={styles} className="delete-button" onClick={handleDeleteClick}>
             <i className="far fa-trash" />
         </button>
     )

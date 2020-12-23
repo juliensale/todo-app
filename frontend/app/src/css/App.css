@@ -201,4 +201,38 @@ section {
 .form-container form .fake-button:hover {
   cursor: not-allowed;
 }
+
+.edit-button {
+  background: transparent;
+  color: #7bc74f;
+  border: none;
+  outline: none;
+  margin: .2em;
+  padding: .2em;
+  border-radius: .1em;
+}
+
+.edit-button:hover {
+  -webkit-transition: .2s;
+  transition: .2s;
+  background: #7bc74f;
+  color: white;
+}
+
+.delete-button {
+  background: transparent;
+  color: #b60e0e;
+  border: none;
+  outline: none;
+  margin: .2em;
+  padding: .2em;
+  border-radius: .1em;
+}
+
+.delete-button:hover {
+  -webkit-transition: .2s;
+  transition: .2s;
+  background: #b60e0e;
+  color: white;
+}
 /*# sourceMappingURL=App.css.map */

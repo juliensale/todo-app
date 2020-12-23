@@ -1,0 +1,35 @@
+.edit-button {
+    background: transparent;
+    color: rgb(123, 199, 79);
+    border: none;
+    outline: none;
+    margin: .2em;
+    padding: .2em;
+    border-radius: .1em;
+
+
+}
+
+.edit-button:hover {
+    transition: .2s;
+    background: rgb(123, 199, 79);
+    color: white;
+}
+
+.delete-button {
+    background: transparent;
+    color: rgb(182, 14, 14);
+    border: none;
+    outline: none;
+    margin: .2em;
+    padding: .2em;
+    border-radius: .1em;
+
+
+}
+
+.delete-button:hover {
+    transition: .2s;
+    background: rgb(182, 14, 14);
+    color: white;
+}

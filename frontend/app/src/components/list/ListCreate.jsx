@@ -28,7 +28,7 @@ const ListCreate = ({ onCreate }) => {
         <div className="form-container">
             <form onSubmit={handleSubmit}>
                 <input type="text" name="title" value={state.title} onChange={handleChange} placeholder="Titre" />
-                <input type="text" name="color" value={state.color} onChange={handleChange} placeholder="Couleur" />
+                <label>Couleur</label><input type="color" name="color" value={state.color} onChange={handleChange} />
                 <button>Créer une liste</button>
             </form>
         </div>
