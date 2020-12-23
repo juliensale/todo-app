@@ -114,7 +114,7 @@ const ListEditForm = ({ style: userStyles = {}, setIsEditing, containerStyles: u
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <input type="text" name="title" value={state.title} onChange={handleChange} placeholder="Titre" />
-                        <label>Couleur</label><input type="color" name="color" value={state.color} onChange={handleChange} />
+                        <label>Couleur:<input type="color" name="color" value={state.color} onChange={handleChange} /></label>
                         <button>Enregistrer</button>
                     </form>
                 </div>

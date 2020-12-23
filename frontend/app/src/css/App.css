@@ -179,6 +179,27 @@ section {
   border: 1px solid var(--line-color);
 }
 
+.form-container form label {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.form-container form label input {
+  margin-left: 1em;
+}
+
 .form-container form button {
   width: 100%;
   margin-top: .3em;
