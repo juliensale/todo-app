@@ -14,10 +14,10 @@ const setSubLists = (state, action) => {
 
 const addSubList = (state, action) => {
     let sublists = [...state.sublists];
-    sublists.push(action.list)
+    sublists.push(action.sublist)
 
     return updateObject(state, {
-        sublists: setSubLists
+        sublists: sublists
     })
 }
 
