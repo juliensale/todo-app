@@ -16,6 +16,6 @@ Temps passé:
     - CSS : 30min
     - Frontend List: 45min + 45min + 35min + 45min + 1h25 + 15min
     - Frontend Sublist store:  30min
-    - Frontend Sublist UI: 45min + 45min
+    - Frontend Sublist UI: 45min + 45min + 16min
 
 Total 20h45
