@@ -29,10 +29,12 @@ const ListCreate = ({ onCreate }) => {
 
 const ListCreateForm = ({ style: userStyles = {}, setIsCreating, onCreate }) => {
 
-    const [state, setState] = useState({
+    const initState = {
         title: '',
         color: '#000000'
-    })
+    }
+
+    const [state, setState] = useState(initState)
 
     const styles = {
         position: "fixed",
@@ -74,6 +76,7 @@ const ListCreateForm = ({ style: userStyles = {}, setIsCreating, onCreate }) => 
             state.title,
             state.color
         )
+        setState(initState)
     }
 
     return (
