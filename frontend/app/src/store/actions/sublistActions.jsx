@@ -68,10 +68,11 @@ export const deleteSubList = (id) => {
     }
 }
 
-export const changeSubList = (id, title) => {
+export const changeSubList = (id, list, title) => {
     return {
         type: actionTypes.CHANGE_SUBLIST,
         id: id,
+        list: list,
         title: title
     }
 }
@@ -86,7 +87,8 @@ export const editSubList = (id, title) => {
                 Authorization: "Token " + localStorage.getItem('token')
             }
         }).then(res => {
-            dispatch(changeSubList(id, title))
+            const list = res.data.list
+            dispatch(changeSubList(id, list, title))
         }).catch(err => console.log(err))
     }
 }

@@ -23,7 +23,7 @@ const addSubList = (state, action) => {
 
 const removeSubList = (state, action) => {
     let sublists = [...state.sublists];
-    const index = sublists.findIndex(list => list.id === action.id)
+    const index = sublists.findIndex(sublist => sublist.id === action.id)
     sublists.splice(index, 1)
 
     return updateObject(state, {
@@ -33,8 +33,13 @@ const removeSubList = (state, action) => {
 
 const changeSubList = (state, action) => {
     let sublists = [...state.sublists];
-    const index = sublists.findIndex(list => list.id === action.id);
-    sublists[index].title = action.title
+    const modified_sublist = {
+        id: action.id,
+        list: action.list,
+        title: action.title
+    }
+    const index = sublists.findIndex(sublist => sublist.id === action.id);
+    sublists[index] = modified_sublist;
 
     return updateObject(state, {
         sublists: sublists

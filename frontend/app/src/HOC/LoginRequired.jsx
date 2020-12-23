@@ -9,7 +9,7 @@ const loginRequired = (BaseComponent) => {
             return (
                 (this.props.isLoggedIn)
                     ? (
-                        <BaseComponent />
+                        <BaseComponent {...this.props} />
                     ) : (
                         <div className="form-container">
                             <form>

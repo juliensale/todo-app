@@ -68,7 +68,7 @@ const ListInfo = ({ children, style: userStyles = {} }) => {
     }
 
     return (
-        <Link to={"/list/" + list.id} style={styles}>
+        <Link to={"/list/" + list.id + '/'} style={styles}>
             {children}
             <p>{list.title}</p>
         </Link>
