@@ -7,12 +7,12 @@ const SubLists = (props) => {
     var sublists = null;
     const list_id = props.match.params.id;
     if (props.sublists[0] !== undefined) {
-        sublists = props.sublists.filter(sublist => parseInt(sublist.list) === parseInt(list_id)).map(sublist => <SubListItem key={sublist.id} sublist={sublist} />)
+        sublists = props.sublists.filter(sublist => parseInt(sublist.list) === parseInt(list_id)).map(sublist => <li><SubListItem key={sublist.id} sublist={sublist} /></li>)
     }
 
     return (
         <div>
-            {sublists}
+            <ul>{sublists}</ul>
             <SubListCreate list_id={list_id} />
         </div>
     )

@@ -1,0 +1,19 @@
+.full-window-outside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, .15);
+    z-index: 1;
+
+    .full-window-container {
+        padding: 3em 5em;
+        margin-bottom: 5em;
+        border-radius: 1em;
+        border: 1px solid var(--line-color);
+        background-color: white;
+    }
+}

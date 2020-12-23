@@ -13,11 +13,11 @@ const ListCreate = ({ onCreate }) => {
 
     const creator_style = useMemo(() => {
         return isCreating ? { display: "flex" } : { display: "none" }
-    })
+    }, [isCreating])
 
 
     return (
-        <div>
+        <div className="create-container">
             <button className="create-button" onClick={handleClick}>
                 <i className="far fa-plus" />
             </button>
@@ -27,49 +27,32 @@ const ListCreate = ({ onCreate }) => {
     )
 }
 
-const ListCreateForm = ({ style: userStyles = {}, setIsCreating, onCreate }) => {
+const ListCreateForm = ({ style: userStyles = {}, setIsCreating, onCreate, containerStyle: userContainerStyles = {} }) => {
 
     const initState = {
         title: '',
         color: '#000000'
     }
-
     const [state, setState] = useState(initState)
 
     const styles = {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100vw",
-        height: "100vh",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "rgba(0,0,0,.15)",
         ...userStyles
     }
-
     const container_styles = {
-        padding: "3em 5em",
-        marginBottom: "5em",
-        borderRadius: "1em",
-        border: "1px solid var(--line-color)",
-        backgroundColor: "white"
+        ...userContainerStyles
     }
-
 
     const handleClose = (e) => {
         if (e.target.getAttribute("name") === "outside") {
             setIsCreating(false)
         }
     }
-
     const handleChange = (e) => {
         setState({
             ...state,
             [e.target.name]: e.target.value
         })
     }
-
     const handleSubmit = (e) => {
         e.preventDefault()
         onCreate(
@@ -80,8 +63,8 @@ const ListCreateForm = ({ style: userStyles = {}, setIsCreating, onCreate }) => 
     }
 
     return (
-        <div style={styles} name="outside" onClick={handleClose}>
-            <div style={container_styles}>
+        <div className="full-window-outside" style={styles} name="outside" onClick={handleClose}>
+            <div className="full-window-container" style={container_styles}>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <input type="text" name="title" value={state.title} onChange={handleChange} placeholder="Titre" />

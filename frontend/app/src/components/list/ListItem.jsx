@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 
 const ListItemContext = React.createContext()
 const { Provider } = ListItemContext
-const ListItem = ({ onDelete, list, onEdit, children }) => {
+const ListItem = ({ onDelete, list, onEdit, children, style: userStyles = {} }) => {
 
     const handleDeleteClick = () => {
         onDelete(list.id)
@@ -22,18 +22,12 @@ const ListItem = ({ onDelete, list, onEdit, children }) => {
     }
 
     const styles = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        border: "1px solid var(--line-color)",
-        borderRadius: "2em",
-        padding: ".5em 1em"
+        ...userStyles
     }
 
     return (
         <Provider value={value}>
-            <div style={styles}>
+            <div className="item" style={styles}>
                 {children}
             </div>
         </Provider>
@@ -45,30 +39,22 @@ const ListColor = ({ style: userStyles = {} }) => {
     const { list } = useContext(ListItemContext)
     const color = list.color;
     const styles = {
-        height: "12px",
-        width: "12px",
-        borderRadius: "50%",
         backgroundColor: color,
-        marginRight: "1em",
         ...userStyles
     }
     return (
-        <div style={styles} />
+        <div className="color" style={styles} />
     )
 }
 
 const ListInfo = ({ children, style: userStyles = {} }) => {
     const { list } = useContext(ListItemContext)
     const styles = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
         ...userStyles
     }
 
     return (
-        <Link to={"/list/" + list.id + '/'} style={styles}>
+        <Link to={"/list/" + list.id + '/'} style={styles} className="info">
             {children}
             <p>{list.title}</p>
         </Link>
@@ -77,42 +63,26 @@ const ListInfo = ({ children, style: userStyles = {} }) => {
 
 const ListParams = ({ children, style: userStyles = {} }) => {
     const styles = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
         ...userStyles
     }
 
     return (
-        <div style={styles}>
+        <div style={styles} className="params">
             {children}
         </div>
     )
 }
 
-const ListEditForm = ({ style: userStyles = {}, setIsEditing }) => {
+const ListEditForm = ({ style: userStyles = {}, setIsEditing, containerStyles: userContainerStyles = {} }) => {
 
     const { list, handleEdit } = useContext(ListItemContext)
 
     const styles = {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100vw",
-        height: "100vh",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "rgba(0,0,0,.15)",
         ...userStyles
     }
 
     const container_styles = {
-        padding: "3em 5em",
-        marginBottom: "5em",
-        borderRadius: "1em",
-        border: "1px solid var(--line-color)",
-        backgroundColor: "white"
+        ...userContainerStyles
     }
 
     const [state, setState] = useState({
@@ -139,8 +109,8 @@ const ListEditForm = ({ style: userStyles = {}, setIsEditing }) => {
     }
 
     return (
-        <div style={styles} name="outside" onClick={handleClose}>
-            <div style={container_styles}>
+        <div className="full-window-outside" style={styles} name="outside" onClick={handleClose}>
+            <div className="full-window-container" style={container_styles}>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <input type="text" name="title" value={state.title} onChange={handleChange} placeholder="Titre" />
@@ -194,7 +164,7 @@ const Usage = ({ list, onDelete, onEdit }) => {
     return (
         <ListItem list={list} onDelete={onDelete} onEdit={onEdit}>
             <ListInfo>
-                <ListColor style={{ border: "1px solid black" }} />
+                <ListColor />
             </ListInfo>
             <ListParams>
                 <ListEdit />
