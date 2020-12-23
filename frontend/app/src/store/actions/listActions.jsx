@@ -35,11 +35,12 @@ export const addList = (list) => {
 export const createList = (title, color) => {
     return dispatch => {
         axios.post(URL, {
-            headers: {
-                "Authorization": "Token " + localStorage.getItem('token')
-            },
             title: title,
             color: color
+        }, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem('token')
+            }
         }).then(res => {
             const list = res.data
             dispatch(addList(list))
@@ -82,11 +83,12 @@ export const editList = (id, title, color) => {
     return dispatch => {
         const DETAIL_URL = URL + id + '/';
         axios.patch(DETAIL_URL, {
-            headers: {
-                "Authorization": "Token " + localStorage.getItem('token')
-            },
             title: title,
             color: color
+        }, {
+            headers: {
+                "Authorization": "Token " + localStorage.getItem('token')
+            }
         })
             .then(res => {
                 dispatch(changeList(id, res.data.title, res.data.color))
