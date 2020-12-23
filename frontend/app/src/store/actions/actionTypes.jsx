@@ -8,3 +8,8 @@ export const SET_LISTS = "SET_LISTS"
 export const ADD_LIST = "ADD_LIST"
 export const REMOVE_LIST = "REMOVE_LIST"
 export const CHANGE_LIST = "CHANGE_LIST"
+
+export const SET_SUBLISTS = "SET_SUBLISTS"
+export const ADD_SUBLIST = "ADD_SUBLIST"
+export const REMOVE_SUBLIST = "REMOVE_SUBLIST"
+export const CHANGE_SUBLIST = "CHANGE_SUBLIST"

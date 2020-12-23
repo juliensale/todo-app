@@ -1,10 +1,12 @@
 import { combineReducers } from "redux"
 import authReducer from './authReducers'
 import listReducer from './listReducer'
+import sublistReducer from "./sublistReducer"
 
 const rootReducer = combineReducers({
     authentication: authReducer,
-    lists: listReducer
+    lists: listReducer,
+    sublists: sublistReducer
 
 })
 
