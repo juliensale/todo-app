@@ -13,3 +13,8 @@ export const SET_SUBLISTS = "SET_SUBLISTS"
 export const ADD_SUBLIST = "ADD_SUBLIST"
 export const REMOVE_SUBLIST = "REMOVE_SUBLIST"
 export const CHANGE_SUBLIST = "CHANGE_SUBLIST"
+
+export const SET_TASKS = "SET_TASKS"
+export const ADD_TASK = "ADD_TASK"
+export const REMOVE_TASK = "REMOVE_TASK"
+export const CHANGE_TASK = "CHANGE_TASK"
