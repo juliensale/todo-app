@@ -17,5 +17,6 @@ Temps passé:
     - Frontend List: 4h30
     - Frontend Sublist store:  30min
     - Frontend Sublist UI: 2h
+    - Frontend Tasks: 50min
 
 Total 33h30

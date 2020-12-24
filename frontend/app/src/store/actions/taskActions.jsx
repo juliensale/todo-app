@@ -57,7 +57,7 @@ export const removeTask = (id) => {
 
 export const deleteTask = (id) => {
     return dispatch => {
-        DETAIL_URL = URL + id + '/'
+        const DETAIL_URL = URL + id + '/'
         axios.delete(DETAIL_URL, {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
@@ -80,7 +80,7 @@ export const changeTask = (id, sublist, title, completed) => {
 
 export const editTask = (id, title) => {
     return dispatch => {
-        DETAIL_URL = URL + id + "/"
+        const DETAIL_URL = URL + id + "/"
         axios.patch(DETAIL_URL, {
             title: title
         }).then(res => {

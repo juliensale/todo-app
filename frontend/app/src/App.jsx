@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 import { updateLists } from "./store/actions/listActions"
 import { updateSubLists } from "./store/actions/sublistActions"
+import { updateTasks } from "./store/actions/taskActions"
 
 import loginRequired from "./HOC/LoginRequired.jsx";
 
@@ -18,6 +19,7 @@ import Signup from './components/user/Signup.jsx';
 
 import Lists from './components/list/Lists.jsx';
 import SubLists from './components/sublist/SubLists.jsx';
+import Tasks from './components/task/Tasks.jsx';
 
 
 class App extends React.Component {
@@ -37,6 +39,7 @@ class App extends React.Component {
             <Route path="/login/" component={Login} />
             <Route path="/signup/" component={Signup} />
             <Route exact path="/list/:id/" component={loginRequired(SubLists)} />
+            <Route exact path="/list/:list_id/:id/" component={loginRequired(Tasks)} />
           </Switch>
         </section>
         <Footer />
@@ -50,6 +53,7 @@ const mapDispatchToProps = (dispatch) => {
     onLoad: () => {
       dispatch(updateLists());
       dispatch(updateSubLists())
+      dispatch(updateTasks())
     }
   }
 }
