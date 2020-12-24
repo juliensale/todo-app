@@ -36,7 +36,7 @@ class App extends React.Component {
             <Route path="/settings/" component={loginRequired(Settings)} />
             <Route path="/login/" component={Login} />
             <Route path="/signup/" component={Signup} />
-            <Route path="/list/:id/" component={loginRequired(SubLists)} />
+            <Route exact path="/list/:id/" component={loginRequired(SubLists)} />
           </Switch>
         </section>
         <Footer />
