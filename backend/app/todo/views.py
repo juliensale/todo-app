@@ -59,7 +59,13 @@ class TaskViewSet(BaseItemViewSet):
         task = self.queryset.get(id=pk)
         if request.user == task.user:
             task.complete()
-            return Response(task.completed)
+            data = {
+                "id": task.id,
+                "sublist": task.sublist.id,
+                "title": task.title,
+                "completed": task.completed
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -72,7 +78,13 @@ class TaskViewSet(BaseItemViewSet):
         task = self.queryset.get(id=pk)
         if request.user == task.user:
             task.uncomplete()
-            return Response(status=status.HTTP_200_OK)
+            data = {
+                "id": task.id,
+                "sublist": task.sublist.id,
+                "title": task.title,
+                "completed": task.completed
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -90,7 +102,13 @@ class SubTaskViewSet(BaseItemViewSet):
         subtask = self.queryset.get(id=pk)
         if request.user == subtask.user:
             subtask.complete()
-            return Response(status=status.HTTP_200_OK)
+            data = {
+                "id": subtask.id,
+                "task": subtask.task.id,
+                "title": subtask.title,
+                "completed": subtask.completed
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -103,6 +121,12 @@ class SubTaskViewSet(BaseItemViewSet):
         subtask = self.queryset.get(id=pk)
         if request.user == subtask.user:
             subtask.uncomplete()
-            return Response(status=status.HTTP_200_OK)
+            data = {
+                "id": subtask.id,
+                "task": subtask.task.id,
+                "title": subtask.title,
+                "completed": subtask.completed
+            }
+            return Response(data=data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
