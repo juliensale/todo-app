@@ -11,7 +11,6 @@ import { updateTasks } from "./store/actions/taskActions"
 import loginRequired from "./HOC/LoginRequired.jsx";
 
 import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
 import Settings from './components/user/Settings.jsx';
 import Login from './components/user/Login.jsx';
 import Signup from './components/user/Signup.jsx';
@@ -26,6 +25,10 @@ class App extends React.Component {
 
   componentDidMount() {
     this.props.onLoad()
+
+    if (localStorage.getItem("dark") === null) {
+      localStorage.setItem("dark", false)
+    }
   }
 
   render() {
@@ -42,7 +45,6 @@ class App extends React.Component {
             <Route exact path="/list/:list_id/:id/" component={loginRequired(Tasks)} />
           </Switch>
         </section>
-        <Footer />
       </BrowserRouter>
     );
   }

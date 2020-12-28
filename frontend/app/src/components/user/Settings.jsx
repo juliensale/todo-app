@@ -1,98 +1,203 @@
 import Axios from 'axios';
-import React, { Component } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import API_URL from '../../store/actions/apiUrl'
+import { Link } from "react-router-dom"
 
-class Settings extends Component {
+import { connect } from 'react-redux'
+import * as authActions from '../../store/actions/authActions'
 
-    state = {
+
+const settingsContext = React.createContext()
+const { Provider } = settingsContext
+const Settings = ({ onLogout, children }) => {
+    const handleLogout = () => {
+        onLogout()
+    }
+
+    const value = {
+        handleLogout
+    }
+
+    return (
+        <Provider value={value}>
+            <h1>
+                <Link to="/"> {"<"} </Link>
+                Options
+            </h1>
+            {children}
+
+        </Provider>
+    )
+
+}
+
+const SettingsDarkMode = () => {
+    const [dark, setDark] = useState(localStorage.getItem('dark') === "true")
+
+    const handleChange = () => {
+        setDark(!dark)
+        localStorage.setItem("dark", dark)
+    }
+
+    return (
+        <div>
+            <h2>Thème Jour/Nuit</h2>
+            <input type="checkbox" checked={dark} onChange={handleChange} />
+        </div>
+    )
+}
+
+const SettingsProfile = () => {
+    const [state, setState] = useState({
         loading: true,
         error: null,
         username: '',
         email: '',
-        password1: '',
-        password2: '',
-        name: '',
-    }
+        name: ''
+    })
 
-    URL = API_URL + 'users/me/'
+    const URL = API_URL + 'users/me/'
 
-
-
-    componentDidMount() {
-        Axios.get(this.URL, {
+    useEffect(() => {
+        Axios.get(URL, {
             headers: {
                 "Authorization": "Token " + localStorage.getItem('token')
             }
-        })
-            .then(res => {
-                this.setState({
-                    loading: false,
-                    username: res.data.username,
-                    email: res.data.email,
-                    name: res.data.name
-                })
-            }).catch(err => this.setState({
-                error: "Il y a une erreur",
-                loading: false
-            }))
-    }
+        }).then(res => {
+            setState({
+                loading: false,
+                username: res.data.username,
+                email: res.data.email,
+                name: res.data.name
+            })
+        }).catch(err => setState({
+            error: "Il y a une erreur",
+            loading: false
+        }))
+    }, [])
 
-    handleChange = (e) => {
-        this.setState({
+    const handleChange = (e) => {
+        setState({
+            ...state,
             [e.target.name]: e.target.value
         });
     };
 
-    handleSubmitProfile = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
-        Axios.patch(this.URL, {
-            username: this.state.username,
-            email: this.state.email,
-            name: this.state.name
+        Axios.patch(URL, {
+            username: state.username,
+            email: state.email,
+            name: state.name
+        }, {
+            headers: {
+                Authorization: "Token " + localStorage.getItem("token")
+            }
         })
-        console.log(this.state)
     };
 
-    password_valid = () => {
-        return this.state.password1 === this.state.password2 && this.state.password1 !== ''
+
+    return (
+        <div className="form-container">
+            {
+                state.loading
+                    ? <p>Chargement...</p>
+                    : (
+                        <form onSubmit={handleSubmit}>
+                            <h2>Édition du profil</h2>
+
+                            {state.error}
+                            <input type="text" name="username" value={state.username} placeholder="Pseudo" onChange={handleChange} />
+                            <input type="email" name="email" value={state.email} placeholder="E-mail" onChange={handleChange} />
+                            <input type="text" name="name" value={state.name} placeholder="Nom complet (optionnel)" onChange={handleChange} />
+                            <button>Enregistrer</button>
+                        </form>
+                    )
+            }
+        </div>
+    )
+}
+
+const SettingsPassword = () => {
+    const [state, setState] = useState({
+        password1: '',
+        password2: '',
+
+    })
+
+    const URL = API_URL + 'users/me/'
+
+
+    const handleChange = (e) => {
+        setState({
+            ...state,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const password_valid = () => {
+        return state.password1 === state.password2 && state.password1 !== ''
     }
 
-    handleSubmitPassword = (e) => {
+    const handleSubmitPassword = (e) => {
         e.preventDefault()
-        if (this.password_valid()) {
-            Axios.patch(this.URL, {
-                password: this.state.password1
+        if (password_valid()) {
+            Axios.patch(URL, {
+                password: state.password1
+            }, {
+                headers: {
+                    Authorization: "Token " + localStorage.getItem("token")
+                }
             })
         }
     }
 
+    const missMatchError = password_valid() ? null : <p className="error">Les mots de passe diffèrent</p>
 
-    render() {
+    return (
+        <div className="form-container">
+            <form onSubmit={handleSubmitPassword}>
+                <h2>Changer de mot de passe</h2>
+                <input type="password" name="password1" value={state.password1} placeholder="Mot de passe" onChange={handleChange} />
+                {missMatchError}
+                <input type="password" name="password2" value={state.password2} placeholder="Mot de passe (confirmation)" onChange={handleChange} />
+                <button>Enregistrer</button>
+            </form>
+        </div >
+    )
+}
 
-        const loading = this.state.loading ? <p>Chargement...</p> : null
-        const missMatchError = this.password_valid() ? null : <p className="error">Les mots de passe diffèrent</p>
+const SettingsDisconnect = () => {
+    const { handleLogout } = useContext(settingsContext)
 
-        return (
-            <div className="form-container">
-                {loading}
-                {this.state.error}
-                <form onSubmit={this.handleSubmitProfile}>
-                    <h1>Édition du profil</h1>
-                    <input type="text" name="username" value={this.state.username} placeholder="Pseudo" onChange={this.handleChange} />
-                    <input type="email" name="email" value={this.state.email} placeholder="E-mail" onChange={this.handleChange} />
-                    <input type="text" name="name" value={this.state.name} placeholder="Nom complet (optionnel)" onChange={this.handleChange} />
-                    <button>Enregistrer</button>
-                </form>
-                <form onSubmit={this.handleSubmitPassword}>
-                    <h1>Changer de mot de passe</h1>
-                    <input type="password" name="password1" value={this.state.password1} placeholder="Mot de passe" onChange={this.handleChange} />
-                    {missMatchError}
-                    <input type="password" name="password2" value={this.state.password2} placeholder="Mot de passe (confirmation)" onChange={this.handleChange} />
-                    <button>Enregistrer</button>
-                </form>
-            </div>
-        )
+    const handleClick = () => {
+        handleLogout()
+    }
+
+    return (
+        <button className="disconnect-button" onClick={handleClick}>
+            Déconnexion
+        </button>
+    )
+}
+
+const Usage = (props) => {
+
+    return (
+        <Settings {...props}>
+            <SettingsDarkMode />
+            <SettingsProfile />
+            <SettingsPassword />
+            <SettingsDisconnect />
+        </Settings>
+    )
+}
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLogout: () => dispatch(authActions.logout())
     }
 }
 
-export default Settings;
+export default connect(null, mapDispatchToProps)(Usage);
