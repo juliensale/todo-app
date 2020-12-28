@@ -1,0 +1,9 @@
+* {
+    --background: rgba(242, 248, 255, 1);
+    --text-color: rgba(77, 76, 95, 1);
+    --line-color: rgba(186, 188, 209, 1);
+    --item-background-color: rgba(255, 255, 255, 1);
+    --item-text-color: rgba(77, 76, 95, 1);
+    --button-color: rgba(54, 131, 238, 1);
+    --button-text-color: rgba(230, 238, 255, 1);
+}

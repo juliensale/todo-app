@@ -17,6 +17,11 @@ ul {
     list-style-type: none;
 }
 
+#root {
+    background-color: var(--background);
+    color: var(--text-color);
+}
+
 section {
     padding: 0 35vw;
     display: flex;
@@ -24,6 +29,8 @@ section {
     align-items: center;
     justify-content: flex-start;
     min-height: calc(100vh - 3em);
+    background-color: var(--background);
+    color: var(--text-color);
 }
 
 .error {

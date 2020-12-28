@@ -17,6 +17,11 @@ ul {
   list-style-type: none;
 }
 
+#root {
+  background-color: var(--background);
+  color: var(--text-color);
+}
+
 section {
   padding: 0 35vw;
   display: -webkit-box;
@@ -33,6 +38,8 @@ section {
       -ms-flex-pack: start;
           justify-content: flex-start;
   min-height: calc(100vh - 3em);
+  background-color: var(--background);
+  color: var(--text-color);
 }
 
 .error {
@@ -69,6 +76,7 @@ section {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
+  background-color: transparent;
 }
 
 .nav-container .nav-content ul {
@@ -305,7 +313,7 @@ section {
   width: 100%;
   margin-top: .3em;
   padding: .3em .7em;
-  color: var(--text-color);
+  color: var(--button-text-color);
   background-color: var(--button-color);
   border-radius: .3em;
   border: 1px solid var(--button-color);
