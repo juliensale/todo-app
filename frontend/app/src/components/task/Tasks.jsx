@@ -8,7 +8,7 @@ const Tasks = (props) => {
     var tasks = null;
     const sublist_id = props.match.params.id;
     if (props.tasks[0] !== undefined) {
-        tasks = props.tasks.filter(task => task.sublist === parseInt(sublist_id)).map(task => <li><TaskItem key={task.id} task={task} /></li>)
+        tasks = props.tasks.filter(task => task.sublist === parseInt(sublist_id)).map(task => <li key={task.id}><TaskItem task={task} /></li>)
     }
 
     return (

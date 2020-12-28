@@ -10,7 +10,7 @@ Temps passé:
     - Création User: 4h
     - Modèle list: 3h
     - Modèle sublist: 2h30
-    - Modèles task & subtask: 4h30
+    - Modèles task & subtask: 4h30 + 15min
     - Set up Frontend: 3h45
     - Frontend auth: 3h45
     - CSS : 2h

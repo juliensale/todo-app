@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 const taskItemContext = React.createContext()
 const { Provider } = taskItemContext
-const TaskItem = ({ style: userStyles = {}, task, onDelete, onEdit, children }) => {
+const TaskItem = ({ style: userStyles = {}, task, onDelete, onEdit, onComplete, onUncomplete, children }) => {
     const styles = {
         ...userStyles
     }
@@ -19,10 +19,15 @@ const TaskItem = ({ style: userStyles = {}, task, onDelete, onEdit, children }) 
         onEdit(task.id, title)
     }
 
+    const handleCompleteClick = (is_completed) => {
+        is_completed ? onUncomplete(task.id) : onComplete(task.id)
+    }
+
     const value = {
         task,
         handleDeleteClick,
-        handleEdit
+        handleEdit,
+        handleCompleteClick
     }
 
     return (
@@ -34,7 +39,7 @@ const TaskItem = ({ style: userStyles = {}, task, onDelete, onEdit, children }) 
     )
 }
 
-const TaskInfo = ({ styles: userStyles = {}, children }) => {
+const TaskInfo = ({ style: userStyles = {} }) => {
     const styles = {
         ...userStyles
     }
@@ -43,9 +48,30 @@ const TaskInfo = ({ styles: userStyles = {}, children }) => {
 
     return (
         <Link to={task.id + "/"} className="info" style={styles} >
-            {children}
             {task.title}
         </Link>
+    )
+}
+
+const TaskCompleter = ({ style: userStyles = {} }) => {
+
+    const styles = {
+        ...userStyles
+    }
+
+    const { task, handleCompleteClick } = useContext(taskItemContext)
+
+    const [isCompleted, setIsCompleted] = useState(task.completed)
+
+    const handleChange = () => {
+        setIsCompleted(!isCompleted)
+        handleCompleteClick(isCompleted)
+    }
+
+    return (
+        <div style={styles}>
+            <input type="checkbox" onChange={handleChange} checked={isCompleted} />
+        </div>
     )
 }
 
@@ -141,11 +167,11 @@ const TaskDelete = ({ style: userStyles = {} }) => {
     )
 }
 
-const Usage = ({ task, onDelete, onEdit }) => {
+const Usage = ({ task, onDelete, onEdit, onComplete, onUncomplete }) => {
     return (
-        <TaskItem task={task} onDelete={onDelete} onEdit={onEdit}>
-            <TaskInfo>
-            </TaskInfo>
+        <TaskItem task={task} onDelete={onDelete} onEdit={onEdit} onComplete={onComplete} onUncomplete={onUncomplete}>
+            <TaskCompleter />
+            <TaskInfo />
             <TaskParams>
                 <TaskEdit />
                 <TaskDelete />
@@ -157,7 +183,9 @@ const Usage = ({ task, onDelete, onEdit }) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onDelete: (id) => dispatch(taskActions.deleteTask(id)),
-        onEdit: (id, title) => dispatch(taskActions.editTask(id, title))
+        onEdit: (id, title) => dispatch(taskActions.editTask(id, title)),
+        onComplete: (id) => dispatch(taskActions.completeTask(id)),
+        onUncomplete: (id) => dispatch(taskActions.uncompleteTask(id))
     }
 }
 

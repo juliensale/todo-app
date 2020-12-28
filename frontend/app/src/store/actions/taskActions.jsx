@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as actionTypes from "./actionTypes"
 import API_URL from "./apiUrl"
-import { changeSubList } from "./sublistActions";
 
 const URL = API_URL + 'todo/tasks/'
 
@@ -83,9 +82,43 @@ export const editTask = (id, title) => {
         const DETAIL_URL = URL + id + "/"
         axios.patch(DETAIL_URL, {
             title: title
+        }, {
+            headers: {
+                Authorization: "Token " + localStorage.getItem("token")
+            }
         }).then(res => {
             const { id, sublist, title, completed } = res.data;
             dispatch(changeTask(id, sublist, title, completed))
         }).catch(err => console.log(err))
+    }
+}
+
+export const completeTask = (id) => {
+    return dispatch => {
+        const DETAIL_URL = URL + id + '/complete/';
+        axios.put(DETAIL_URL, {}, {
+            headers: {
+                Authorization: "Token " + localStorage.getItem("token")
+            }
+        })
+            .then(res => {
+                const { id, sublist, title, completed } = res.data;
+                dispatch(changeTask(id, sublist, title, completed))
+            }).catch(err => console.log(err))
+    }
+}
+
+export const uncompleteTask = (id) => {
+    return dispatch => {
+        const DETAIL_URL = URL + id + '/uncomplete/';
+        axios.put(DETAIL_URL, {}, {
+            headers: {
+                Authorization: "Token " + localStorage.getItem("token")
+            }
+        })
+            .then(res => {
+                const { id, sublist, title, completed } = res.data;
+                dispatch(changeTask(id, sublist, title, completed))
+            }).catch(err => console.log(err))
     }
 }
