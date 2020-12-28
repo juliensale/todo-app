@@ -48,13 +48,14 @@
                 border-radius: .6em;
                 font-weight: 500;
                 font-family: "Roboto";
+                color: var(--item-text-color);
             }
 
             button {
                 width: auto;
                 font-size: 1em;
                 font-weight: 500;
-                border-radius: 1.2em;
+                border-radius: .8em;
             }
         }
 
@@ -74,7 +75,7 @@
     }
 
     .disconnect-button:hover {
-        color: white;
+        color: transparent;
         background: rgb(214, 0, 0);
         transition: .2s
     }

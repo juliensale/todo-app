@@ -31,24 +31,38 @@ class App extends React.Component {
     }
   }
 
+
+
   render() {
-    return (
-      <BrowserRouter>
-        <Navbar />
-        <section>
-          <Switch>
-            <Route exact path="/" component={loginRequired(Lists)} />
-            <Route path="/settings/" component={loginRequired(Settings)} />
-            <Route path="/login/" component={Login} />
-            <Route path="/signup/" component={Signup} />
-            <Route exact path="/list/:id/" component={loginRequired(SubLists)} />
-            <Route exact path="/list/:list_id/:id/" component={loginRequired(Tasks)} />
-          </Switch>
-        </section>
-      </BrowserRouter>
+    const app = (<BrowserRouter>
+      <Navbar />
+      <section>
+        <Switch>
+          <Route exact path="/" component={loginRequired(Lists)} />
+          <Route path="/settings/" component={loginRequired(Settings)} />
+          <Route path="/login/" component={Login} />
+          <Route path="/signup/" component={Signup} />
+          <Route exact path="/list/:id/" component={loginRequired(SubLists)} />
+          <Route exact path="/list/:list_id/:id/" component={loginRequired(Tasks)} />
+        </Switch>
+      </section>
+    </BrowserRouter>
     );
+
+    if (localStorage.getItem("dark") === "true") {
+      import("./css/darkTheme.css").then(() => {
+        return app
+      })
+    } else {
+      import("./css/lightTheme.css").then(() => {
+        return app
+      })
+    }
+
+    return app
   }
 }
+
 
 const mapDispatchToProps = (dispatch) => {
   return {
