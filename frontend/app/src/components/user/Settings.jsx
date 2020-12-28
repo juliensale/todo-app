@@ -20,11 +20,14 @@ const Settings = ({ onLogout, children }) => {
 
     return (
         <Provider value={value}>
-            <h1>
+
+            <h1 className="back">
                 <Link to="/"> {"<"} </Link>
                 Options
             </h1>
-            {children}
+            <div className="settings">
+                {children}
+            </div>
 
         </Provider>
     )
@@ -36,11 +39,15 @@ const SettingsDarkMode = () => {
 
     const handleChange = () => {
         setDark(!dark)
-        localStorage.setItem("dark", dark)
+
     }
 
+    useEffect(() => {
+        localStorage.setItem("dark", dark)
+    }, [dark])
+
     return (
-        <div>
+        <div className="darkmode">
             <h2>Thème Jour/Nuit</h2>
             <input type="checkbox" checked={dark} onChange={handleChange} />
         </div>
@@ -99,13 +106,12 @@ const SettingsProfile = () => {
 
     return (
         <div className="form-container">
+            <h2>Édition du profil</h2>
             {
                 state.loading
                     ? <p>Chargement...</p>
                     : (
                         <form onSubmit={handleSubmit}>
-                            <h2>Édition du profil</h2>
-
                             {state.error}
                             <input type="text" name="username" value={state.username} placeholder="Pseudo" onChange={handleChange} />
                             <input type="email" name="email" value={state.email} placeholder="E-mail" onChange={handleChange} />
@@ -156,10 +162,11 @@ const SettingsPassword = () => {
 
     return (
         <div className="form-container">
+            <h2>Changer de mot de passe</h2>
             <form onSubmit={handleSubmitPassword}>
-                <h2>Changer de mot de passe</h2>
-                <input type="password" name="password1" value={state.password1} placeholder="Mot de passe" onChange={handleChange} />
                 {missMatchError}
+                <input type="password" name="password1" value={state.password1} placeholder="Mot de passe" onChange={handleChange} />
+
                 <input type="password" name="password2" value={state.password2} placeholder="Mot de passe (confirmation)" onChange={handleChange} />
                 <button>Enregistrer</button>
             </form>

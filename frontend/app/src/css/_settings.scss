@@ -1,0 +1,81 @@
+.settings {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    h2 {
+        width: 100%;
+        margin-top: 1.5em;
+        margin-bottom: .5em;
+    }
+
+    .darkmode {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        input {
+            width: auto;
+        }
+    }
+
+    .form-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+
+
+
+        form {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+
+            .error {
+                width: 100%;
+            }
+
+            input {
+                color: inherit;
+                border-radius: .6em;
+                font-weight: 500;
+                font-family: "Roboto";
+            }
+
+            button {
+                width: auto;
+                font-size: 1em;
+                font-weight: 500;
+                border-radius: 1.2em;
+            }
+        }
+
+    }
+
+    .disconnect-button {
+        background: transparent;
+        color: rgb(214, 0, 0);
+        border: 1px solid rgb(214, 0, 0);
+        border-radius: .6em;
+        outline: none;
+
+        font-family: "Red Hat Display";
+        font-weight: 500;
+        font-size: 1em;
+        padding: .3em .5em;
+    }
+
+    .disconnect-button:hover {
+        color: white;
+        background: rgb(214, 0, 0);
+        transition: .2s
+    }
+}

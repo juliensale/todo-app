@@ -18,7 +18,7 @@ ul {
 }
 
 section {
-  padding: 0 30vw;
+  padding: 0 35vw;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -37,14 +37,6 @@ section {
 
 .error {
   color: var(--error-color);
-}
-
-* {
-  --secondary-color: rgb(68, 86, 119);
-  --text-color: white;
-  --button-color: rgb(58, 142, 252);
-  --line-color: rgb(150, 150, 150);
-  --error-color: red;
 }
 
 .nav-container {
@@ -105,24 +97,30 @@ section {
   font-size: 1em;
 }
 
-.footer-container {
-  width: 100vw;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+.settings {
+  width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  background-color: var(--secondary-color);
-  color: var(--text-color);
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
-.footer-container .footer-content {
-  width: 90%;
-  height: 3em;
+.settings h2 {
+  width: 100%;
+  margin-top: 1.5em;
+  margin-bottom: .5em;
+}
+
+.settings .darkmode {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -136,6 +134,109 @@ section {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  width: 100%;
+}
+
+.settings .darkmode input {
+  width: auto;
+}
+
+.settings .form-container {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.settings .form-container form {
+  width: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.settings .form-container form .error {
+  width: 100%;
+}
+
+.settings .form-container form input {
+  color: inherit;
+  border-radius: .6em;
+  font-weight: 500;
+  font-family: "Roboto";
+}
+
+.settings .form-container form button {
+  width: auto;
+  font-size: 1em;
+  font-weight: 500;
+  border-radius: 1.2em;
+}
+
+.settings .disconnect-button {
+  background: transparent;
+  color: #d60000;
+  border: 1px solid #d60000;
+  border-radius: .6em;
+  outline: none;
+  font-family: "Red Hat Display";
+  font-weight: 500;
+  font-size: 1em;
+  padding: .3em .5em;
+}
+
+.settings .disconnect-button:hover {
+  color: white;
+  background: #d60000;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+.back {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  font-family: "Red Hat Display";
+  font-weight: 800;
+  font-size: 2em;
+}
+
+.back a {
+  font-size: 1.4em;
+  margin-right: .2em;
+  margin-left: -.8em;
+  font-family: "Red Hat Display";
 }
 
 .form-container {
