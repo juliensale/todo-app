@@ -46,8 +46,8 @@
 }
 
 .create-button {
-    color: white;
-    background-color: rgb(76, 170, 22);
+    color: var(--button-text-color);
+    background-color: var(--button-color);
     border-radius: 50%;
     border: none;
     outline: none;
@@ -61,9 +61,57 @@
     box-shadow: 0 0 0 rgba(0, 0, 0, .4);
 }
 
-.create-button:hover {
-    transition: .2s;
-    transform: scale(1.1);
-    box-shadow: 0 0 7px rgba(0, 0, 0, .4);
+.dark-container {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
 
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark-dark {
+        position: absolute;
+        top: -.5em;
+        left: 0;
+        height: 2.5em;
+        width: 4.5em;
+        background-color: rgba(15, 26, 38, 1);
+        border-radius: 2em;
+        border: 2px solid rgba(107, 108, 120, 1);
+        color: rgb(235, 188, 60);
+    }
+
+    input:checked~.checkmark-dark {
+        background: rgba(230, 238, 255, 1);
+        transition: .2s
+    }
+
+    .checkmark-dark::after {
+        content: "☀";
+        height: calc(2.5em - 4px);
+        width: calc(2.5em - 4px);
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: rgba(54, 131, 238, 1);
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: .2s;
+    }
+
+    input:checked~.checkmark-dark::after {
+        transition: .2s;
+        transform: translateX(2em);
+        background: rgba(15, 26, 38, 1);
+        content: "🌙";
+
+    }
 }

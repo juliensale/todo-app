@@ -75,7 +75,7 @@
     }
 
     .disconnect-button:hover {
-        color: transparent;
+        color: var(--background);
         background: rgb(214, 0, 0);
         transition: .2s
     }

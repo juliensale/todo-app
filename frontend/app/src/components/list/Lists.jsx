@@ -10,7 +10,7 @@ const Lists = (props) => {
     }
     return (
         <div className="item-list">
-            <h1>Listes</h1>
+            <h1 className="main-title">Listes</h1>
             <ul>{lists}</ul>
             <ListCreate />
         </div>

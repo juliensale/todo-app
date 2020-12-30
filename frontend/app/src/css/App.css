@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@100;300;400;500;700;900&display=swap");
 * {
@@ -215,7 +216,7 @@ section {
 }
 
 .settings .disconnect-button:hover {
-  color: transparent;
+  color: var(--background);
   background: #d60000;
   -webkit-transition: .2s;
   transition: .2s;
@@ -237,7 +238,7 @@ section {
       -ms-flex-pack: left;
           justify-content: left;
   font-family: "Red Hat Display";
-  font-weight: 800;
+  font-weight: 600;
   font-size: 2em;
 }
 
@@ -401,8 +402,8 @@ section {
 }
 
 .create-button {
-  color: white;
-  background-color: #4caa16;
+  color: var(--button-text-color);
+  background-color: var(--button-color);
   border-radius: 50%;
   border: none;
   outline: none;
@@ -418,13 +419,71 @@ section {
           box-shadow: 0 0 0 rgba(0, 0, 0, 0.4);
 }
 
-.create-button:hover {
+.dark-container {
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.dark-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.dark-container .checkmark-dark {
+  position: absolute;
+  top: -.5em;
+  left: 0;
+  height: 2.5em;
+  width: 4.5em;
+  background-color: #0f1a26;
+  border-radius: 2em;
+  border: 2px solid #6b6c78;
+  color: #ebbc3c;
+}
+
+.dark-container input:checked ~ .checkmark-dark {
+  background: #e6eeff;
   -webkit-transition: .2s;
   transition: .2s;
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
-  -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
-          box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+}
+
+.dark-container .checkmark-dark::after {
+  content: "☀";
+  height: calc(2.5em - 4px);
+  width: calc(2.5em - 4px);
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: #3683ee;
+  background: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+.dark-container input:checked ~ .checkmark-dark::after {
+  -webkit-transition: .2s;
+  transition: .2s;
+  -webkit-transform: translateX(2em);
+          transform: translateX(2em);
+  background: #0f1a26;
+  content: "🌙";
 }
 
 .item-list {
@@ -441,7 +500,12 @@ section {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 40%;
+  width: 100%;
+}
+
+.item-list .main-title {
+  font-weight: 400;
+  margin-bottom: 2em;
 }
 
 .item-list ul {
@@ -467,9 +531,11 @@ section {
       -ms-flex-pack: justify;
           justify-content: space-between;
   border: 1px solid var(--line-color);
-  border-radius: 1em;
+  border-radius: 1.5em;
   padding: .5em 1em;
   margin: .3em 0;
+  background-color: var(--item-background-color);
+  color: var(--item-text-color);
 }
 
 .item-list ul li .item .info {
@@ -484,6 +550,7 @@ section {
       -ms-flex-align: center;
           align-items: center;
   width: 100%;
+  font-size: 1.2em;
 }
 
 .item-list ul li .item .info .color {

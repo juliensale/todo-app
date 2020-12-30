@@ -39,6 +39,7 @@ const SettingsDarkMode = () => {
 
     const handleChange = () => {
         setDark(!dark)
+        window.location.reload()
 
     }
 
@@ -49,7 +50,10 @@ const SettingsDarkMode = () => {
     return (
         <div className="darkmode">
             <h2>Thème Jour/Nuit</h2>
-            <input type="checkbox" checked={dark} onChange={handleChange} />
+            <label className="dark-container">
+                <input type="checkbox" checked={dark} onChange={handleChange} />
+                <span className="checkmark-dark"></span>
+            </label>
         </div>
     )
 }
@@ -81,7 +85,7 @@ const SettingsProfile = () => {
             error: "Il y a une erreur",
             loading: false
         }))
-    }, [])
+    }, [URL])
 
     const handleChange = (e) => {
         setState({
