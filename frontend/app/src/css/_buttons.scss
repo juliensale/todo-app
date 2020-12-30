@@ -115,3 +115,55 @@
 
     }
 }
+
+.complete-container {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    margin-right: 2em;
+
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark-complete {
+        position: absolute;
+        top: -.15em;
+        left: 0;
+        height: 1.5em;
+        width: 1.5em;
+        background-color: var(--background-color);
+        border-radius: 50%;
+        border: 1px solid var(--line-color);
+        color: var(--button-text-color);
+    }
+
+    .checkmark-complete::after {
+        content: "";
+        position: absolute;
+        display: none;
+
+        left: .5em;
+        top: .25em;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    .checkmark-complete::after {
+        display: block;
+    }
+
+    input:checked~.checkmark-complete {
+        background-color: rgba(23, 56, 97, 1);
+    }
+
+}

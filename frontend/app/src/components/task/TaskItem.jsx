@@ -8,7 +8,10 @@ const taskItemContext = React.createContext()
 const { Provider } = taskItemContext
 const TaskItem = ({ style: userStyles = {}, task, onDelete, onEdit, onComplete, onUncomplete, children }) => {
     const styles = {
-        ...userStyles
+        ...userStyles,
+        background: task.completed ? ('var(--button-color') : ('var(--item-background-color)'),
+        color: task.completed ? ('var(--button-text-color') : ('var(--item-text-color)')
+
     }
 
     const handleDeleteClick = () => {
@@ -47,9 +50,9 @@ const TaskInfo = ({ style: userStyles = {} }) => {
     const { task } = useContext(taskItemContext)
 
     return (
-        <Link to={task.id + "/"} className="info" style={styles} >
+        <div className="info" style={styles} >
             {task.title}
-        </Link>
+        </div>
     )
 }
 
@@ -70,7 +73,10 @@ const TaskCompleter = ({ style: userStyles = {} }) => {
 
     return (
         <div style={styles}>
-            <input type="checkbox" onChange={handleChange} checked={isCompleted} />
+            <label className="complete-container">
+                <input type="checkbox" onChange={handleChange} checked={isCompleted} />
+                <span className="checkmark-complete"></span>
+            </label>
         </div>
     )
 }

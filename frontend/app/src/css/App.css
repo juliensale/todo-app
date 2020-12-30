@@ -486,6 +486,58 @@ section {
   content: "🌙";
 }
 
+.complete-container {
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  margin-right: 2em;
+}
+
+.complete-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.complete-container .checkmark-complete {
+  position: absolute;
+  top: -.15em;
+  left: 0;
+  height: 1.5em;
+  width: 1.5em;
+  background-color: var(--background-color);
+  border-radius: 50%;
+  border: 1px solid var(--line-color);
+  color: var(--button-text-color);
+}
+
+.complete-container .checkmark-complete::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: .5em;
+  top: .25em;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.complete-container .checkmark-complete::after {
+  display: block;
+}
+
+.complete-container input:checked ~ .checkmark-complete {
+  background-color: #173861;
+}
+
 .item-list {
   display: -webkit-box;
   display: -ms-flexbox;

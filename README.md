@@ -18,6 +18,6 @@ Temps passé:
     - Frontend Sublist store:  30min
     - Frontend Sublist UI: 2h
     - Frontend Tasks: 50min
-    - Application Design Figma: 45min + 45min + 45min + 15min + 1h + 45min + 1h
+    - Application Design Figma: 45min + 45min + 45min + 15min + 1h + 45min + 1h + 15min
 
 Total 33h30
