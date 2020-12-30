@@ -18,3 +18,8 @@ export const SET_TASKS = "SET_TASKS"
 export const ADD_TASK = "ADD_TASK"
 export const REMOVE_TASK = "REMOVE_TASK"
 export const CHANGE_TASK = "CHANGE_TASK"
+
+export const SET_SUBTASKS = "SET_SUBTASKS"
+export const ADD_SUBTASK = "ADD_SUBTASK"
+export const REMOVE_SUBTASK = "REMOVE_SUBTASK"
+export const CHANGE_SUBTASK = "CHANGE_SUBTASK"

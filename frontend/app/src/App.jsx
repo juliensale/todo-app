@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { updateLists } from "./store/actions/listActions"
 import { updateSubLists } from "./store/actions/sublistActions"
 import { updateTasks } from "./store/actions/taskActions"
+import { updateSubTasks } from "./store/actions/subtaskActions"
 
 import loginRequired from "./HOC/LoginRequired.jsx";
 
@@ -68,8 +69,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLoad: () => {
       dispatch(updateLists());
-      dispatch(updateSubLists())
-      dispatch(updateTasks())
+      dispatch(updateSubLists());
+      dispatch(updateTasks());
+      dispatch(updateSubTasks());
     }
   }
 }
