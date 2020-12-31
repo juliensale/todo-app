@@ -158,12 +158,15 @@
         transform: rotate(45deg);
     }
 
-    .checkmark-complete::after {
-        display: block;
-    }
 
     input:checked~.checkmark-complete {
         background-color: rgba(23, 56, 97, 1);
     }
+
+    input:checked~.checkmark-complete::after {
+        display: block;
+    }
+
+
 
 }

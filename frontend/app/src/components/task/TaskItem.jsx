@@ -1,16 +1,21 @@
 import React, { useContext, useMemo, useState } from 'react'
 import * as taskActions from '../../store/actions/taskActions'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-
+import SubTasks from "./subtask/Subtasks"
+import SubTaskForm from "./subtask/SubtaskForm"
+import SubTaskCreateForm from "./subtask/SubtaskCreateForm"
 
 const taskItemContext = React.createContext()
 const { Provider } = taskItemContext
-const TaskItem = ({ style: userStyles = {}, task, onDelete, onEdit, onComplete, onUncomplete, children }) => {
+const TaskItem = ({ style: userStyles = {}, task, subtasks, onDelete, onEdit, onComplete, onUncomplete, children }) => {
     const styles = {
         ...userStyles,
         background: task.completed ? ('var(--button-color') : ('var(--item-background-color)'),
-        color: task.completed ? ('var(--button-text-color') : ('var(--item-text-color)')
+        color: task.completed ? ('var(--button-text-color') : ('var(--item-text-color)'),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end"
 
     }
 
@@ -30,13 +35,23 @@ const TaskItem = ({ style: userStyles = {}, task, onDelete, onEdit, onComplete, 
         task,
         handleDeleteClick,
         handleEdit,
-        handleCompleteClick
+        handleCompleteClick,
+        subtasks
+    }
+
+    const divStyle = {
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "space-between"
     }
 
     return (
         <Provider value={value} >
             <div className="item" style={styles}>
-                {children}
+                <div style={divStyle}>{children}</div>
+                <SubTasks task_id={task.id} />
             </div>
         </Provider>
     )
@@ -117,7 +132,7 @@ const TaskEdit = ({ style: userStyles = {} }) => {
 
 const TaskEditForm = ({ style: userStyles = {}, containerStyle: userContainerStyles = {}, setIsEditing }) => {
 
-    const { handleEdit, task } = useContext(taskItemContext)
+    const { handleEdit, task, subtasks } = useContext(taskItemContext)
 
     const styles = {
         ...userStyles
@@ -136,6 +151,10 @@ const TaskEditForm = ({ style: userStyles = {}, containerStyle: userContainerSty
     const handleSubmit = (e) => {
         e.preventDefault()
         handleEdit(title)
+        var forms = document.getElementsByClassName('subtask-form')
+        for (let i = 0; i < forms.length; i++) {
+            forms[i].requestSubmit()
+        }
     }
 
     const handleClose = (e) => {
@@ -144,14 +163,24 @@ const TaskEditForm = ({ style: userStyles = {}, containerStyle: userContainerSty
         }
     }
 
+    var subtasks_form = null
+    if (subtasks[0] !== undefined) {
+        subtasks_form = subtasks.filter(subtask => subtask.task === task.id).map(subtask => <SubTaskForm key={"subtaskform" + subtask.key} subtask={subtask} />)
+    }
+
     return (
         <div className="full-window-outside" style={styles} name="outside" onClick={handleClose}>
             <div className="full-window-container" style={container_styles}>
                 <div className="form-container">
                     <form onSubmit={handleSubmit}>
                         <input type="text" name="title" value={title} onChange={handleChange} placeholder="Titre" />
+
                         <button>Enregistrer</button>
                     </form>
+                </div>
+                <div>
+                    {subtasks_form}
+                    <SubTaskCreateForm task_id={task.id} />
                 </div>
             </div>
         </div>
@@ -173,9 +202,9 @@ const TaskDelete = ({ style: userStyles = {} }) => {
     )
 }
 
-const Usage = ({ task, onDelete, onEdit, onComplete, onUncomplete }) => {
+const Usage = ({ task, subtasks, onDelete, onEdit, onComplete, onUncomplete }) => {
     return (
-        <TaskItem task={task} onDelete={onDelete} onEdit={onEdit} onComplete={onComplete} onUncomplete={onUncomplete}>
+        <TaskItem task={task} subtasks={subtasks} onDelete={onDelete} onEdit={onEdit} onComplete={onComplete} onUncomplete={onUncomplete}>
             <TaskCompleter />
             <TaskInfo />
             <TaskParams>
@@ -184,6 +213,12 @@ const Usage = ({ task, onDelete, onEdit, onComplete, onUncomplete }) => {
             </TaskParams>
         </TaskItem>
     )
+}
+
+const mapStateToProps = (state) => {
+    return {
+        subtasks: state.subtasks.subtasks
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -195,4 +230,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Usage)
+export default connect(mapStateToProps, mapDispatchToProps)(Usage)

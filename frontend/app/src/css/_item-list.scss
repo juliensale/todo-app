@@ -10,6 +10,22 @@
         margin-bottom: 2em;
     }
 
+
+    .subtask-list {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .subtask-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    }
+
     ul {
 
         width: 100%;
