@@ -203,6 +203,20 @@ section {
   border-radius: .8em;
 }
 
+.settings .form-container form button {
+  color: var(--button-text-color);
+  background-color: var(--button-color);
+  border: 1px solid var(--button-color);
+  padding: .3em .7em;
+}
+
+.settings .form-container form button:hover {
+  -webkit-transition: .2s;
+  transition: .2s;
+  color: var(--button-color);
+  background-color: transparent;
+}
+
 .settings .disconnect-button {
   background: transparent;
   color: #d60000;
@@ -311,25 +325,31 @@ section {
   margin-left: 1em;
 }
 
-.form-container form button {
-  width: 100%;
+.form-container form div button {
+  width: auto;
   margin-top: .3em;
   padding: .3em .7em;
   color: var(--button-text-color);
   background-color: var(--button-color);
   border-radius: .3em;
+  margin-right: .5em;
   border: 1px solid var(--button-color);
 }
 
-.form-container form button:hover {
+.form-container form div button:hover {
   -webkit-transition: .2s;
   transition: .2s;
   color: var(--button-color);
   background-color: transparent;
 }
 
-.form-container form .fake-button {
-  width: 100%;
+.form-container form div a {
+  color: var(--button-color);
+  margin-left: .2em;
+}
+
+.form-container form div .fake-button {
+  width: auto;
   margin-top: .3em;
   padding: .3em .7em;
   color: var(--button-color);
@@ -337,10 +357,16 @@ section {
   text-align: center;
   border-radius: .3em;
   border: 1px solid var(--button-color);
+  margin-right: .5em;
 }
 
-.form-container form .fake-button:hover {
+.form-container form div .fake-button:hover {
   cursor: not-allowed;
+}
+
+.form-container form div a {
+  color: var(--button-color);
+  margin-left: .2em;
 }
 
 .edit-button {

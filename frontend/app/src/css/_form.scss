@@ -31,38 +31,60 @@
             }
         }
 
-        button {
-            width: 100%;
-            margin-top: .3em;
-            padding: .3em .7em;
-            color: var(--button-text-color);
-            background-color: var(--button-color);
+        div {
+            button {
+                width: auto;
+                margin-top: .3em;
+                padding: .3em .7em;
+                color: var(--button-text-color);
+                background-color: var(--button-color);
 
-            border-radius: .3em;
-            border: 1px solid var(--button-color);
+                border-radius: .3em;
+
+                margin-right: .5em;
+
+                border: 1px solid var(--button-color);
+            }
+
+            button:hover {
+                transition: .2s;
+                color: var(--button-color);
+                background-color: transparent;
+            }
+
+            a {
+                color: var(--button-color);
+                margin-left: .2em;
+            }
+
+
         }
 
-        button:hover {
-            transition: .2s;
-            color: var(--button-color);
-            background-color: transparent;
-        }
+        div {
+            .fake-button {
+                width: auto;
+                margin-top: .3em;
+                padding: .3em .7em;
+                color: var(--button-color);
+                background-color: transparent;
+                text-align: center;
 
-        .fake-button {
-            width: 100%;
-            margin-top: .3em;
-            padding: .3em .7em;
-            color: var(--button-color);
-            background-color: transparent;
-            text-align: center;
+                border-radius: .3em;
+                border: 1px solid var(--button-color);
 
-            border-radius: .3em;
-            border: 1px solid var(--button-color);
+                margin-right: .5em;
 
-        }
 
-        .fake-button:hover {
-            cursor: not-allowed;
+            }
+
+            .fake-button:hover {
+                cursor: not-allowed;
+            }
+
+            a {
+                color: var(--button-color);
+                margin-left: .2em;
+            }
         }
     }
 }

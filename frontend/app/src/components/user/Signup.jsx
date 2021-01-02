@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as authActions from '../../store/actions/authActions'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 class Signup extends Component {
 
@@ -46,7 +47,20 @@ class Signup extends Component {
             missMatch = <p className="error">Les mots de passe sont différents</p>
         }
 
-        const button = (this.is_valid()) ? (<button>Créer un compte</button>) : (<div className="fake-button">Créer un compte</div>)
+        const button = (this.is_valid())
+            ? (
+                <div>
+                    <button>Créer un compte</button>
+                    ou
+                    <Link to="/login">se connecter</Link>
+                </div>
+            ) : (
+                <div>
+                    <div className="fake-button">Créer un compte</div>
+                    ou
+                    <Link to="/login">se connecter</Link>
+                </div>
+            )
 
         return (
             <div className="form-container">

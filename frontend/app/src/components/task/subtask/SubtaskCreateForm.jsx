@@ -21,7 +21,7 @@ const SubTaskCreateForm = ({ task_id, onCreate }) => {
 
     return (
         <form onSubmit={handleSubmit} className="subtask-create-form">
-            <input type="text" value={title} onChange={handleChange} />
+            <input type="text" value={title} onChange={handleChange} placeholder="Créer une sous-tâche" />
             <div className="button-container">
                 <button className="create-button">
                     <i className="far fa-plus" />
