@@ -30,7 +30,7 @@ const SubTaskForm = ({ style: userStyles = {}, subtask, onEdit, onDelete }) => {
 
 
     return (
-        <form className="subtask-form" style={styles} onSubmit={handleSubmit}>
+        <form className="subtask-edit-form" style={styles} onSubmit={handleSubmit}>
             <input type="text" value={title} onChange={handleChange} />
             <button className="delete-button" onClick={handleDeleteClick}>
                 <i className="far fa-trash" />

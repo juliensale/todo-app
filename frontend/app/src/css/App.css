@@ -688,15 +688,140 @@ section {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.75);
   z-index: 1;
 }
 
 .full-window-outside .full-window-container {
-  padding: 3em 5em;
+  padding: 2em 5em;
+  padding-bottom: 4.5em;
   margin-bottom: 5em;
-  border-radius: 1em;
-  border: 1px solid var(--line-color);
-  background-color: white;
+  border-radius: .8em;
+  background-color: var(--background);
+  color: var(--text-color);
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.full-window-outside .full-window-container .form-container form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.full-window-outside .full-window-container .form-container form input {
+  height: 2em;
+  font-size: 1em;
+  width: 100%;
+}
+
+.full-window-outside .full-window-container .form-container form button {
+  width: auto;
+  font-size: 1em;
+  position: absolute;
+  bottom: 2em;
+}
+
+.full-window-outside .full-window-container .subtask-forms {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  width: 75%;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-edit-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-edit-form input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+  padding: 0 .2em;
+  border-radius: .3em;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-edit-form button {
+  margin: 0;
+  padding: 0;
+  margin-left: .5em;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-create-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: .5em;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-create-form input {
+  width: 100%;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-create-form .button-container {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-create-form .button-container button {
+  margin-left: .5em;
+  height: 1.3em;
+  width: 1.3em;
 }
 /*# sourceMappingURL=App.css.map */

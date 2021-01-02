@@ -214,7 +214,7 @@ const TaskEditForm = ({ style: userStyles = {}, containerStyle: userContainerSty
                         <button>Enregistrer</button>
                     </form>
                 </div>
-                <div>
+                <div className="subtask-forms">
                     {subtasks_form}
                     <SubTaskCreateForm task_id={task.id} />
                 </div>
