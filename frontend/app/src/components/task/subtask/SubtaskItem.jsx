@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext } from 'react'
 import * as subtaskActions from '../../../store/actions/subtaskActions'
 import * as taskActions from '../../../store/actions/taskActions'
 import { connect } from 'react-redux'
@@ -23,12 +23,10 @@ const SubTaskItem = ({ style: userStyles = {}, task, subtask, onComplete, onUnco
 
     }
 
-    const value = useMemo(() => {
-        return {
-            subtask,
-            handleCompleteClick
-        }
-    }, [subtask])
+    const value = {
+        subtask,
+        handleCompleteClick
+    }
 
     return (
         <Provider value={value} >

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import * as taskActions from '../../store/actions/taskActions'
 import * as subtaskActions from '../../store/actions/subtaskActions'
 import { connect } from 'react-redux'
@@ -57,7 +57,7 @@ const TaskItem = ({ style: userStyles = {}, task, subtasks, onDelete, onEdit, on
             attached_subtasks = subtasks.filter(subtask => subtask.task === task.id)
         }
         attached_subtasks.forEach(subtask => {
-            bool = bool && subtask.completed || subtask.id === id
+            bool = (subtask.id === id) || (bool && subtask.completed)
 
         })
 
@@ -68,15 +68,13 @@ const TaskItem = ({ style: userStyles = {}, task, subtasks, onDelete, onEdit, on
 
 
 
-    const value = useMemo(() => {
-        return {
-            task,
-            handleDeleteClick,
-            handleEdit,
-            handleCompleteClick,
-            subtasks
-        }
-    }, [task, handleDeleteClick, handleEdit, subtasks])
+    const value = {
+        task,
+        handleDeleteClick,
+        handleEdit,
+        handleCompleteClick,
+        subtasks
+    }
 
     const divStyle = {
         display: "flex",
@@ -201,7 +199,7 @@ const TaskEditForm = ({ style: userStyles = {}, containerStyle: userContainerSty
 
     var subtasks_form = null
     if (subtasks[0] !== undefined) {
-        subtasks_form = subtasks.filter(subtask => subtask.task === task.id).map(subtask => <SubTaskForm key={"subtaskform" + subtask.key} subtask={subtask} />)
+        subtasks_form = subtasks.filter(subtask => subtask.task === task.id).map(subtask => <SubTaskForm key={"subtaskform" + subtask.id} subtask={subtask} />)
     }
 
     return (

@@ -10,7 +10,7 @@ Temps passé:
     - Création User: 4h
     - Modèle list: 3h
     - Modèle sublist: 2h30
-    - Modèles task & subtask: 4h30 + 15min
+    - Modèles task & subtask: 4h45
     - Set up Frontend: 3h45
     - Frontend auth: 3h45
     - CSS : 2h
@@ -18,9 +18,9 @@ Temps passé:
     - Frontend Sublist store:  30min
     - Frontend Sublist UI: 2h
     - Frontend Tasks: 50min
-    - Application Design Figma: 45min + 45min + 45min + 15min + 1h + 45min + 1h + 15min
+    - Application Design Figma: 5h30
     - Frontend subtasks store: 15min
-    - Frontend subtasks UI: 15min + 15min + 50min + 45min + 45min + 10min
-    - CSS : 30min
+    - Frontend subtasks UI: 3h
+    - CSS : 30min + 50min
 
-Total 33h30
+Total 44h50

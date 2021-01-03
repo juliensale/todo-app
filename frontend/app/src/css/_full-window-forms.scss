@@ -94,12 +94,22 @@
                     width: fit-content;
 
                     button {
-
+                        padding: 0;
                         margin-left: .5em;
                         height: 1.3em;
                         width: 1.3em;
+                        cursor: pointer
                     }
+
+                    button:hover {
+                        background-color: var(--button-color);
+                        color: var(--button-text-color);
+                    }
+
+
+
                 }
+
             }
         }
     }

@@ -47,6 +47,21 @@ section {
   color: var(--error-color);
 }
 
+button {
+  color: var(--button-text-color);
+  background-color: var(--button-color);
+  border: 1px solid var(--button-color);
+  border-radius: .3em;
+  padding: .3em .7em;
+}
+
+button:hover {
+  -webkit-transition: .2s;
+  transition: .2s;
+  color: var(--button-color);
+  background-color: transparent;
+}
+
 .nav-container {
   width: 100%;
   -webkit-box-align: center;
@@ -201,20 +216,6 @@ section {
   font-size: 1em;
   font-weight: 500;
   border-radius: .8em;
-}
-
-.settings .form-container form button {
-  color: var(--button-text-color);
-  background-color: var(--button-color);
-  border: 1px solid var(--button-color);
-  padding: .3em .7em;
-}
-
-.settings .form-container form button:hover {
-  -webkit-transition: .2s;
-  transition: .2s;
-  color: var(--button-color);
-  background-color: transparent;
 }
 
 .settings .disconnect-button {
@@ -614,6 +615,7 @@ section {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
+  margin: .1em 0;
 }
 
 .item-list ul {
@@ -846,8 +848,15 @@ section {
 }
 
 .full-window-outside .full-window-container .subtask-forms .subtask-create-form .button-container button {
+  padding: 0;
   margin-left: .5em;
   height: 1.3em;
   width: 1.3em;
+  cursor: pointer;
+}
+
+.full-window-outside .full-window-container .subtask-forms .subtask-create-form .button-container button:hover {
+  background-color: var(--button-color);
+  color: var(--button-text-color);
 }
 /*# sourceMappingURL=App.css.map */
