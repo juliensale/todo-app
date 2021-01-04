@@ -444,6 +444,12 @@ button:hover {
           transform: scale(1);
   -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4);
           box-shadow: 0 0 0 rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: var(--button-color);
+  color: var(--button-text-color);
 }
 
 .dark-container {
@@ -853,10 +859,5 @@ button:hover {
   height: 1.3em;
   width: 1.3em;
   cursor: pointer;
-}
-
-.full-window-outside .full-window-container .subtask-forms .subtask-create-form .button-container button:hover {
-  background-color: var(--button-color);
-  color: var(--button-text-color);
 }
 /*# sourceMappingURL=App.css.map */
