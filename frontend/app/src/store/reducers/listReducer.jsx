@@ -20,6 +20,15 @@ const addList = (state, action) => {
     })
 }
 
+const changeListComplete = (state, action) => {
+    var lists = [...state.lists];
+    const index = lists.findIndex(list => list.id === action.id)
+    lists[index] = action.list
+    return updateObject(state, {
+        lists: lists
+    })
+}
+
 const removeList = (state, action) => {
     var lists = [...state.lists];
     const id = action.id;
@@ -51,6 +60,7 @@ const listReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_LISTS: return setLists(state, action);
         case actionTypes.ADD_LIST: return addList(state, action);
+        case actionTypes.CHANGE_LIST_COMPLETE: return changeListComplete(state, action)
         case actionTypes.REMOVE_LIST: return removeList(state, action);
         case actionTypes.CHANGE_LIST: return changeList(state, action);
         default:

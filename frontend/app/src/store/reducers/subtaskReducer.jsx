@@ -19,6 +19,15 @@ const addSubTask = (state, action) => {
     })
 }
 
+const changeSubTaskComplete = (state, action) => {
+    var subtasks = [...state.subtasks]
+    const index = subtasks.findIndex(subtask => subtask.id === action.id)
+    subtasks[index] = action.subtask
+    return updateObject(state, {
+        sutasks: subtasks
+    })
+}
+
 const removeSubTask = (state, action) => {
     var subtasks = [...state.subtasks]
     const index = subtasks.findIndex(subtask => subtask.id === action.id)
@@ -30,13 +39,11 @@ const removeSubTask = (state, action) => {
 
 const changeSubTask = (state, action) => {
     var subtasks = [...state.subtasks]
-    const modified_subtask = {
-        id: action.id,
-        task: action.task,
-        title: action.title,
-        completed: action.completed
-    }
     const index = subtasks.findIndex(subtask => subtask.id === action.id)
+    const modified_subtask = {
+        ...subtasks[index],
+        ...action.args
+    }
     subtasks[index] = modified_subtask
     return updateObject(state, {
         subtasks: subtasks
@@ -47,6 +54,7 @@ const subTaskReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_SUBTASKS: return setSubTasks(state, action);
         case actionTypes.ADD_SUBTASK: return addSubTask(state, action);
+        case actionTypes.CHANGE_SUBTASK_COMPLETE: return changeSubTaskComplete(state, action);
         case actionTypes.REMOVE_SUBTASK: return removeSubTask(state, action);
         case actionTypes.CHANGE_SUBTASK: return changeSubTask(state, action);
         default:

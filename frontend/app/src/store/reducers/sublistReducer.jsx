@@ -21,6 +21,15 @@ const addSubList = (state, action) => {
     })
 }
 
+const changeSublistComplete = (state, action) => {
+    let sublists = [...state.sublists]
+    const index = sublists.findIndex(sublist => sublist.id === action.id)
+    sublists[index] = action.sublist
+    return updateObject(state, {
+        sublists: sublists
+    })
+}
+
 const removeSubList = (state, action) => {
     let sublists = [...state.sublists];
     const index = sublists.findIndex(sublist => sublist.id === action.id)
@@ -33,12 +42,15 @@ const removeSubList = (state, action) => {
 
 const changeSubList = (state, action) => {
     let sublists = [...state.sublists];
+
+    const index = sublists.findIndex(sublist => sublist.id === action.id);
+
     const modified_sublist = {
         id: action.id,
-        list: action.list,
+        list: sublists[index].list,
         title: action.title
     }
-    const index = sublists.findIndex(sublist => sublist.id === action.id);
+
     sublists[index] = modified_sublist;
 
     return updateObject(state, {
@@ -50,6 +62,7 @@ const sublistReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_SUBLISTS: return setSubLists(state, action);
         case actionTypes.ADD_SUBLIST: return addSubList(state, action);
+        case actionTypes.CHANGE_SUBLIST_COMPLETE: return changeSublistComplete(state, action)
         case actionTypes.REMOVE_SUBLIST: return removeSubList(state, action);
         case actionTypes.CHANGE_SUBLIST: return changeSubList(state, action);
 

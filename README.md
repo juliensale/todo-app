@@ -21,6 +21,7 @@ Temps passé:
     - Application Design Figma: 5h30
     - Frontend subtasks store: 15min
     - Frontend subtasks UI: 3h
-    - CSS : 30min + 50min
+    - CSS : 30min + 50min + 10min
+    - Store: 40min  + 40min
 
 Total 44h50

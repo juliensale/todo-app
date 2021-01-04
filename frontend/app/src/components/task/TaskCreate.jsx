@@ -8,7 +8,7 @@ const TaskCreate = ({ onCreate, sublist_id }) => {
     const [isCreating, setIsCreating] = useState(false)
 
     const handleCreate = (title) => {
-        onCreate(sublist_id, title)
+        onCreate(parseInt(sublist_id), title)
     }
 
     const handleClick = () => setIsCreating(true)

@@ -32,8 +32,21 @@ export const addSubList = (sublist) => {
     }
 }
 
+export const changeSublistComplete = (id, sublist) => {
+    return {
+        type: actionTypes.CHANGE_SUBLIST_COMPLETE,
+        id: id,
+        sublist: sublist
+    }
+}
+
 export const createSubList = (list, title) => {
     return dispatch => {
+        dispatch(addSubList({
+            id: -1,
+            list: list,
+            title: title
+        }))
         axios.post(URL, {
             list: list,
             title: title
@@ -43,8 +56,8 @@ export const createSubList = (list, title) => {
             }
         }).then(res => {
             const sublist = res.data;
-            dispatch(addSubList(sublist))
-        }).catch(err => console.log(err))
+            dispatch(changeSublistComplete(-1, sublist))
+        }).catch(() => window.location.reload())
     }
 }
 
@@ -57,28 +70,27 @@ export const removeSubList = (id) => {
 
 export const deleteSubList = (id) => {
     return dispatch => {
+        dispatch(removeSubList(id))
         const DETAIL_URL = URL + id + '/';
         axios.delete(DETAIL_URL, {
             headers: {
                 Authorization: "Token " + localStorage.getItem('token')
             }
-        }).then(res => {
-            dispatch(removeSubList(id))
-        }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }
 
-export const changeSubList = (id, list, title) => {
+export const changeSubList = (id, title) => {
     return {
         type: actionTypes.CHANGE_SUBLIST,
         id: id,
-        list: list,
         title: title
     }
 }
 
 export const editSubList = (id, title) => {
     return dispatch => {
+        dispatch(changeSubList(id, title))
         const DETAIL_URL = URL + id + '/';
         axios.patch(DETAIL_URL, {
             title: title
@@ -86,9 +98,6 @@ export const editSubList = (id, title) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem('token')
             }
-        }).then(res => {
-            const list = res.data.list
-            dispatch(changeSubList(id, list, title))
-        }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }

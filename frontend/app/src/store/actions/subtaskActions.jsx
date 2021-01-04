@@ -31,8 +31,22 @@ export const addSubTask = (subtask) => {
     }
 }
 
+export const changeSubTaskComplete = (id, subtask) => {
+    return {
+        type: actionTypes.CHANGE_SUBTASK_COMPLETE,
+        id: id,
+        subtask: subtask
+    }
+}
+
 export const createSubTask = (task, title) => {
     return dispatch => {
+        dispatch(addSubTask({
+            id: -1,
+            task: task,
+            title: title,
+            completed: false
+        }))
         axios.post(URL, {
             task: task,
             title: title
@@ -42,8 +56,8 @@ export const createSubTask = (task, title) => {
             }
         }).then(res => {
             const subtask = res.data;
-            dispatch(addSubTask(subtask))
-        }).catch(err => console.log(err))
+            dispatch(changeSubTaskComplete(-1, subtask))
+        }).catch(() => window.location.reload())
     }
 }
 
@@ -57,28 +71,28 @@ export const removeSubTask = (id) => {
 export const deleteSubTask = (id) => {
     return dispatch => {
         const DETAIL_URL = URL + id + '/'
+        dispatch(removeSubTask(id))
         axios.delete(DETAIL_URL, {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        }).then(res => {
-            dispatch(removeSubTask(id))
-        }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }
 
-export const changeSubTask = (id, task, title, completed) => {
+export const changeSubTask = (id, args) => {
     return {
         type: actionTypes.CHANGE_SUBTASK,
         id: id,
-        task: task,
-        title: title,
-        completed: completed
+        args: args
     }
 }
 
 export const editSubTask = (id, title) => {
     return dispatch => {
+        dispatch(changeSubTask(id, {
+            title: title
+        }))
         const DETAIL_URL = URL + id + "/"
         axios.patch(DETAIL_URL, {
             title: title
@@ -86,38 +100,34 @@ export const editSubTask = (id, title) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        }).then(res => {
-            const { id, task, title, completed } = res.data;
-            dispatch(changeSubTask(id, task, title, completed))
-        }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }
 
 export const completeSubTask = (id) => {
     return dispatch => {
+        dispatch(changeSubTask(id, {
+            completed: true
+        }))
         const DETAIL_URL = URL + id + '/complete/';
         axios.put(DETAIL_URL, {}, {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        }).then(res => {
-            const { id, task, title, completed } = res.data;
-            dispatch(changeSubTask(id, task, title, completed))
-        }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }
 
 export const uncompleteSubTask = (id) => {
     return dispatch => {
+        dispatch(changeSubTask(id, {
+            completed: false
+        }))
         const DETAIL_URL = URL + id + '/uncomplete/';
         axios.put(DETAIL_URL, {}, {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        })
-            .then(res => {
-                const { id, task, title, completed } = res.data;
-                dispatch(changeSubTask(id, task, title, completed))
-            }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }

@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onComplete: (id) => dispatch(subtaskActions.completeSubTask(id)),
         onUncomplete: (id) => dispatch(subtaskActions.uncompleteSubTask(id)),
-        onTaskUncomplete: (id, sublist, title) => dispatch(taskActions.changeTask(id, sublist, title, false))
+        onTaskUncomplete: (id) => dispatch(taskActions.changeTask(id, { completed: false }))
     }
 }
 

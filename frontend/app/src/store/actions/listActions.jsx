@@ -32,8 +32,22 @@ export const addList = (list) => {
     }
 }
 
+export const changeListComplete = (id, list) => {
+    return {
+        type: actions.CHANGE_LIST_COMPLETE,
+        id: id,
+        list: list
+    }
+}
+
 export const createList = (title, color) => {
     return dispatch => {
+        dispatch(addList({
+            id: -1,
+            title: title,
+            color: color
+        }))
+
         axios.post(URL, {
             title: title,
             color: color
@@ -43,11 +57,12 @@ export const createList = (title, color) => {
             }
         }).then(res => {
             const list = res.data
-            dispatch(addList(list))
-        }).catch(err => console.log(err))
+            dispatch(changeListComplete(-1, list))
+        }).catch(() => {
+            window.location.reload()
+        })
     }
 }
-
 
 export const removeList = (id) => {
     return {
@@ -58,15 +73,13 @@ export const removeList = (id) => {
 
 export const deleteList = (id) => {
     return dispatch => {
+        dispatch(removeList(id))
         const DETAIL_URL = URL + id + '/';
         axios.delete(DETAIL_URL, {
             headers: {
                 "Authorization": "Token " + localStorage.getItem('token')
             }
-        })
-            .then(res => {
-                dispatch(removeList(id))
-            }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }
 
@@ -81,6 +94,7 @@ export const changeList = (id, title, color) => {
 
 export const editList = (id, title, color) => {
     return dispatch => {
+        dispatch(changeList(id, title, color))
         const DETAIL_URL = URL + id + '/';
         axios.patch(DETAIL_URL, {
             title: title,
@@ -89,9 +103,6 @@ export const editList = (id, title, color) => {
             headers: {
                 "Authorization": "Token " + localStorage.getItem('token')
             }
-        })
-            .then(res => {
-                dispatch(changeList(id, res.data.title, res.data.color))
-            }).catch(err => console.log(err))
+        }).catch(() => window.location.reload())
     }
 }

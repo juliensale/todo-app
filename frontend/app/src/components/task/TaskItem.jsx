@@ -35,7 +35,7 @@ const TaskItem = ({ style: userStyles = {}, task, subtasks, onDelete, onEdit, on
             if (subtasks[0] !== undefined) {
                 attached_subtasks = subtasks.filter(subtask => subtask.task === task.id)
             }
-            attached_subtasks.forEach(subtask => onSubtaskUncomplete(subtask.id, subtask.task, subtask.title))
+            attached_subtasks.forEach(subtask => onSubtaskUncomplete(subtask.id))
 
         } else {
             onComplete(task.id)
@@ -43,7 +43,7 @@ const TaskItem = ({ style: userStyles = {}, task, subtasks, onDelete, onEdit, on
             if (subtasks[0] !== undefined) {
                 attached_subtasks = subtasks.filter(subtask => subtask.task === task.id)
             }
-            attached_subtasks.forEach(subtask => onSubtaskComplete(subtask.id, subtask.task, subtask.title))
+            attached_subtasks.forEach(subtask => onSubtaskComplete(subtask.id))
         }
     }
 
@@ -62,7 +62,7 @@ const TaskItem = ({ style: userStyles = {}, task, subtasks, onDelete, onEdit, on
         })
 
 
-        bool && onSetComplete(task.id, task.sublist, task.title)
+        bool && onSetComplete(task.id)
 
     }
 
@@ -260,10 +260,10 @@ const mapDispatchToProps = (dispatch) => {
         onDelete: (id) => dispatch(taskActions.deleteTask(id)),
         onEdit: (id, title) => dispatch(taskActions.editTask(id, title)),
         onComplete: (id) => dispatch(taskActions.completeTask(id)),
-        onSetComplete: (id, sublist, title) => dispatch(taskActions.changeTask(id, sublist, title, true)),
-        onSubtaskComplete: (id, task, title) => dispatch(subtaskActions.changeSubTask(id, task, title, true)),
+        onSetComplete: (id) => dispatch(taskActions.changeTask(id, { completed: true })),
+        onSubtaskComplete: (id) => dispatch(subtaskActions.changeSubTask(id, { completed: true })),
         onUncomplete: (id) => dispatch(taskActions.uncompleteTask(id)),
-        onSubtaskUncomplete: (id, task, title) => dispatch(subtaskActions.changeSubTask(id, task, title, false))
+        onSubtaskUncomplete: (id) => dispatch(subtaskActions.changeSubTask(id, { completed: false }))
     }
 }
 
