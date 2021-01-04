@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as actionTypes from "./actionTypes"
 import API_URL from "./apiUrl"
+import errorFunction from "./errorFunction"
 
 const URL = API_URL + "todo/sublists/"
 
@@ -57,7 +58,7 @@ export const createSubList = (list, title) => {
         }).then(res => {
             const sublist = res.data;
             dispatch(changeSublistComplete(-1, sublist))
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
 
@@ -76,7 +77,7 @@ export const deleteSubList = (id) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem('token')
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
 
@@ -98,6 +99,6 @@ export const editSubList = (id, title) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem('token')
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }

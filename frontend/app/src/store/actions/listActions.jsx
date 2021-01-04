@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as actions from "./actionTypes"
 import API_URL from "./apiUrl"
+import errorFunction from "./errorFunction"
 
 const URL = API_URL + 'todo/lists/'
 
@@ -79,7 +80,7 @@ export const deleteList = (id) => {
             headers: {
                 "Authorization": "Token " + localStorage.getItem('token')
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
 
@@ -96,6 +97,7 @@ export const editList = (id, title, color) => {
     return dispatch => {
         dispatch(changeList(id, title, color))
         const DETAIL_URL = URL + id + '/';
+
         axios.patch(DETAIL_URL, {
             title: title,
             color: color
@@ -103,6 +105,6 @@ export const editList = (id, title, color) => {
             headers: {
                 "Authorization": "Token " + localStorage.getItem('token')
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }

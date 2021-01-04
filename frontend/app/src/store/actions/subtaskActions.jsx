@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as actionTypes from "./actionTypes"
 import API_URL from "./apiUrl"
+import errorFunction from "./errorFunction"
 
 const URL = API_URL + 'todo/subtasks/'
 
@@ -57,7 +58,7 @@ export const createSubTask = (task, title) => {
         }).then(res => {
             const subtask = res.data;
             dispatch(changeSubTaskComplete(-1, subtask))
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
 
@@ -76,7 +77,7 @@ export const deleteSubTask = (id) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
 
@@ -100,7 +101,7 @@ export const editSubTask = (id, title) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
 
@@ -114,7 +115,7 @@ export const completeSubTask = (id) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
 
@@ -128,6 +129,6 @@ export const uncompleteSubTask = (id) => {
             headers: {
                 Authorization: "Token " + localStorage.getItem("token")
             }
-        }).catch(() => window.location.reload())
+        }).catch(() => errorFunction())
     }
 }
