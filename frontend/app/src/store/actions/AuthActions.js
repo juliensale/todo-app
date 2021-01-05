@@ -1,6 +1,10 @@
 import axios from "axios";
 import * as actions from "./actionTypes"
 import API_URL from "./apiUrl"
+import { updateLists } from "./listActions"
+import { updateSubLists } from "./sublistActions"
+import { updateTasks } from "./taskActions"
+import { updateSubTasks } from "./subtaskActions"
 
 export const authStart = () => ({
     type: actions.AUTH_START
@@ -31,6 +35,12 @@ export const authLogin = (email, password) => {
             const token = res.data.token
             localStorage.setItem('token', token)
             dispatch(authSuccess(token))
+            window.location.pathname = "/"
+            dispatch(updateLists())
+            dispatch(updateSubLists())
+            dispatch(updateTasks())
+            dispatch(updateSubTasks())
+
         }).catch(error => {
             dispatch(authFail(error))
         })

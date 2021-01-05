@@ -36,8 +36,6 @@ class Signup extends Component {
                 this.state.password1,
                 this.state.name
             )
-        } else {
-            console.log('les mots de passe different')
         }
     }
 
