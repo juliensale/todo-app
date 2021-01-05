@@ -71,13 +71,15 @@ export const removeSubTask = (id) => {
 
 export const deleteSubTask = (id) => {
     return dispatch => {
-        const DETAIL_URL = URL + id + '/'
-        dispatch(removeSubTask(id))
-        axios.delete(DETAIL_URL, {
-            headers: {
-                Authorization: "Token " + localStorage.getItem("token")
-            }
-        }).catch(() => errorFunction())
+        if (id !== -1) {
+            const DETAIL_URL = URL + id + '/'
+            dispatch(removeSubTask(id))
+            axios.delete(DETAIL_URL, {
+                headers: {
+                    Authorization: "Token " + localStorage.getItem("token")
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }
 
@@ -91,44 +93,50 @@ export const changeSubTask = (id, args) => {
 
 export const editSubTask = (id, title) => {
     return dispatch => {
-        dispatch(changeSubTask(id, {
-            title: title
-        }))
-        const DETAIL_URL = URL + id + "/"
-        axios.patch(DETAIL_URL, {
-            title: title
-        }, {
-            headers: {
-                Authorization: "Token " + localStorage.getItem("token")
-            }
-        }).catch(() => errorFunction())
+        if (id !== -1) {
+            dispatch(changeSubTask(id, {
+                title: title
+            }))
+            const DETAIL_URL = URL + id + "/"
+            axios.patch(DETAIL_URL, {
+                title: title
+            }, {
+                headers: {
+                    Authorization: "Token " + localStorage.getItem("token")
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }
 
 export const completeSubTask = (id) => {
     return dispatch => {
-        dispatch(changeSubTask(id, {
-            completed: true
-        }))
-        const DETAIL_URL = URL + id + '/complete/';
-        axios.put(DETAIL_URL, {}, {
-            headers: {
-                Authorization: "Token " + localStorage.getItem("token")
-            }
-        }).catch(() => errorFunction())
+        if (id !== -1) {
+            dispatch(changeSubTask(id, {
+                completed: true
+            }))
+            const DETAIL_URL = URL + id + '/complete/';
+            axios.put(DETAIL_URL, {}, {
+                headers: {
+                    Authorization: "Token " + localStorage.getItem("token")
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }
 
 export const uncompleteSubTask = (id) => {
     return dispatch => {
-        dispatch(changeSubTask(id, {
-            completed: false
-        }))
-        const DETAIL_URL = URL + id + '/uncomplete/';
-        axios.put(DETAIL_URL, {}, {
-            headers: {
-                Authorization: "Token " + localStorage.getItem("token")
-            }
-        }).catch(() => errorFunction())
+        if (id !== -1) {
+            dispatch(changeSubTask(id, {
+                completed: false
+            }))
+            const DETAIL_URL = URL + id + '/uncomplete/';
+            axios.put(DETAIL_URL, {}, {
+                headers: {
+                    Authorization: "Token " + localStorage.getItem("token")
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }

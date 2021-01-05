@@ -74,13 +74,15 @@ export const removeList = (id) => {
 
 export const deleteList = (id) => {
     return dispatch => {
-        dispatch(removeList(id))
-        const DETAIL_URL = URL + id + '/';
-        axios.delete(DETAIL_URL, {
-            headers: {
-                "Authorization": "Token " + localStorage.getItem('token')
-            }
-        }).catch(() => errorFunction())
+        if (id !== -1) {
+            dispatch(removeList(id))
+            const DETAIL_URL = URL + id + '/';
+            axios.delete(DETAIL_URL, {
+                headers: {
+                    "Authorization": "Token " + localStorage.getItem('token')
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }
 
@@ -95,16 +97,18 @@ export const changeList = (id, title, color) => {
 
 export const editList = (id, title, color) => {
     return dispatch => {
-        dispatch(changeList(id, title, color))
-        const DETAIL_URL = URL + id + '/';
+        if (id !== -1) {
+            dispatch(changeList(id, title, color))
+            const DETAIL_URL = URL + id + '/';
 
-        axios.patch(DETAIL_URL, {
-            title: title,
-            color: color
-        }, {
-            headers: {
-                "Authorization": "Token " + localStorage.getItem('token')
-            }
-        }).catch(() => errorFunction())
+            axios.patch(DETAIL_URL, {
+                title: title,
+                color: color
+            }, {
+                headers: {
+                    "Authorization": "Token " + localStorage.getItem('token')
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }

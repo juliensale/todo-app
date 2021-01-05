@@ -71,13 +71,15 @@ export const removeSubList = (id) => {
 
 export const deleteSubList = (id) => {
     return dispatch => {
-        dispatch(removeSubList(id))
-        const DETAIL_URL = URL + id + '/';
-        axios.delete(DETAIL_URL, {
-            headers: {
-                Authorization: "Token " + localStorage.getItem('token')
-            }
-        }).catch(() => errorFunction())
+        if (id !== -1) {
+            dispatch(removeSubList(id))
+            const DETAIL_URL = URL + id + '/';
+            axios.delete(DETAIL_URL, {
+                headers: {
+                    Authorization: "Token " + localStorage.getItem('token')
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }
 
@@ -91,14 +93,16 @@ export const changeSubList = (id, title) => {
 
 export const editSubList = (id, title) => {
     return dispatch => {
-        dispatch(changeSubList(id, title))
-        const DETAIL_URL = URL + id + '/';
-        axios.patch(DETAIL_URL, {
-            title: title
-        }, {
-            headers: {
-                Authorization: "Token " + localStorage.getItem('token')
-            }
-        }).catch(() => errorFunction())
+        if (id !== -1) {
+            dispatch(changeSubList(id, title))
+            const DETAIL_URL = URL + id + '/';
+            axios.patch(DETAIL_URL, {
+                title: title
+            }, {
+                headers: {
+                    Authorization: "Token " + localStorage.getItem('token')
+                }
+            }).catch(() => errorFunction())
+        }
     }
 }
