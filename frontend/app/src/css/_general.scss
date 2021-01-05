@@ -52,3 +52,11 @@ button:hover {
     color: var(--button-color);
     background-color: transparent;
 }
+
+
+@media (max-width : 991px) {
+    section {
+        padding: 0 5%;
+        padding-bottom: 1em;
+    }
+}

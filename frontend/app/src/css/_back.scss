@@ -17,3 +17,9 @@
         font-family: "Red Hat Display";
     }
 }
+
+@media (max-width: 991px) {
+    .back a {
+        margin-left: 0;
+    }
+}
