@@ -23,5 +23,6 @@ Temps passé:
     - Frontend subtasks UI: 3h
     - CSS : 30min + 50min + 10min + 5min + 30min
     - Store: 40min  + 40min + 25min + 5min
+    - Upload Serveur: 3h30 + 1h + 1h +30min + 45min
 
 Total 44h50

@@ -17,6 +17,7 @@ const SubTaskCreateForm = ({ task_id, onCreate }) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         handleCreate(title)
+        setTitle('')
     }
 
     return (
