@@ -57,7 +57,7 @@ const TaskItem = ({ style: userStyles = {}, task, subtasks, onDelete, onEdit, on
             attached_subtasks = subtasks.filter(subtask => subtask.task === task.id)
         }
         attached_subtasks.forEach(subtask => {
-            bool = (subtask.id === id) || (bool && subtask.completed)
+            bool = bool && (subtask.id === id || subtask.completed)
 
         })
 
