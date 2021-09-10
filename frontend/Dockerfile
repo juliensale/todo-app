@@ -12,4 +12,4 @@ RUN npm install
 
 RUN adduser -D user
 USER user
-CMD [ "npm","start" ]
+CMD [ "yarn","start" ]
