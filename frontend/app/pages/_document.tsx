@@ -26,7 +26,7 @@ class MyDocument extends Document {
 
 	render() {
 		return (
-			<Html lang="en">
+			<Html>
 				<Head>
 					<link rel="stylesheet" href="/fonts/fonts.css" />
 
