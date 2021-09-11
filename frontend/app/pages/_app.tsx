@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { createTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
-import { CssBaseline, darken } from '@material-ui/core'
+import { CssBaseline } from '@material-ui/core'
 import { getTheme } from '../components/Theme'
+import Layout from '../components/Layout/Layout'
 
 
 
@@ -20,7 +21,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Component {...pageProps} />
+      <Layout darkMode={darkMode} setDarkMode={setDarkMode}>
+        <Component {...pageProps} />
+      </Layout>
     </ThemeProvider>
 
 
