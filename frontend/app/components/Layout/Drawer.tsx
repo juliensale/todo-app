@@ -33,21 +33,21 @@ type ContextType = {
 	drawerOpen: boolean,
 	closeDrawer: () => void,
 	darkMode: boolean,
-	setDarkMode: React.Dispatch<React.SetStateAction<boolean>>
+	switchDarkMode: () => void
 }
 const DrawerContext = React.createContext({} as ContextType)
 const { Provider } = DrawerContext
 
 const Drawer: FC = ({ children }) => {
-	const { drawerOpen, closeDrawer, darkMode, setDarkMode } = useContext(NavigationContext)
+	const { drawerOpen, closeDrawer, darkMode, switchDarkMode } = useContext(NavigationContext)
 	const classes = useStyles()
 	const value = useMemo(() => ({
 		classes,
 		drawerOpen,
 		closeDrawer,
 		darkMode,
-		setDarkMode
-	}), [classes, drawerOpen, closeDrawer, darkMode, setDarkMode])
+		switchDarkMode
+	}), [classes, drawerOpen, closeDrawer, darkMode, switchDarkMode])
 
 	return (
 		<Provider value={value}>

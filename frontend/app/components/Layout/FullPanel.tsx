@@ -32,19 +32,19 @@ const useStyles = makeStyles((theme: Theme) => {
 type ContextType = {
 	classes: ClassNameMap,
 	darkMode: boolean,
-	setDarkMode: React.Dispatch<React.SetStateAction<boolean>>
+	switchDarkMode: () => void
 }
 const FullPanelContext = React.createContext({} as ContextType)
 const { Provider } = FullPanelContext
 
 const FullPanel: FC = ({ children }) => {
-	const { darkMode, setDarkMode } = useContext(NavigationContext)
+	const { darkMode, switchDarkMode } = useContext(NavigationContext)
 	const classes = useStyles()
 	const value = useMemo(() => ({
 		classes,
 		darkMode,
-		setDarkMode
-	}), [classes, darkMode, setDarkMode])
+		switchDarkMode
+	}), [classes, darkMode, switchDarkMode])
 
 	return (
 		<Provider value={value}>
@@ -63,20 +63,14 @@ const Logo: FC = () => {
 }
 
 const DarkModeSwitcher: FC = () => {
-	const { classes, darkMode, setDarkMode } = useContext(FullPanelContext)
-	const switchMode = () => {
-		try {
-			localStorage.setItem('dark-mode', darkMode ? 'false' : 'true')
-		} catch { }
-		setDarkMode(!darkMode)
-	}
+	const { classes, darkMode, switchDarkMode } = useContext(FullPanelContext)
 
 	return (
 		<div className={classes.switchContainer} title="Set Dark Mode">
 			<Switch
 				color="primary"
 				checked={darkMode}
-				onChange={switchMode}
+				onChange={switchDarkMode}
 			/>
 			<MoonIcon className={classes.moon} />
 		</div>

@@ -36,21 +36,21 @@ const useStyles = makeStyles((theme: Theme) => {
 type ContextType = {
 	classes: ClassNameMap,
 	darkMode: boolean,
-	setDarkMode: React.Dispatch<React.SetStateAction<boolean>>,
+	switchDarkMode: () => void,
 	openDrawer: () => void
 }
 const ReducedPanelContext = React.createContext({} as ContextType)
 const { Provider } = ReducedPanelContext
 
 const ReducedPanel: FC = ({ children }) => {
-	const { darkMode, setDarkMode, openDrawer } = useContext(NavigationContext)
+	const { darkMode, switchDarkMode, openDrawer } = useContext(NavigationContext)
 	const classes = useStyles()
 	const value = useMemo(() => ({
 		classes,
 		darkMode,
-		setDarkMode,
+		switchDarkMode,
 		openDrawer
-	}), [classes, darkMode, setDarkMode, openDrawer])
+	}), [classes, darkMode, switchDarkMode, openDrawer])
 
 	return (
 		<Provider value={value}>
@@ -83,16 +83,10 @@ const DrawerBurger: FC = () => {
 }
 
 const DarkModeSwitcher: FC = () => {
-	const { classes, darkMode, setDarkMode } = useContext(ReducedPanelContext)
-	const switchMode = () => {
-		try {
-			localStorage.setItem('dark-mode', darkMode ? 'false' : 'true')
-		} catch { }
-		setDarkMode(!darkMode)
-	}
+	const { classes, darkMode, switchDarkMode } = useContext(ReducedPanelContext)
 
 	return (
-		<ClickBox onClick={switchMode}>
+		<ClickBox onClick={switchDarkMode}>
 			<MoonIcon className={classes.moon} />
 		</ClickBox>
 	)

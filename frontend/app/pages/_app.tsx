@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { createTheme } from '@material-ui/core/styles'
@@ -11,6 +11,12 @@ import Layout from '../components/Layout/Layout'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [darkMode, setDarkMode] = useState(false)
+  const switchDarkMode = useCallback(() => {
+    try {
+      localStorage.setItem('dark-mode', darkMode ? 'false' : 'true')
+    } catch { }
+    setDarkMode(!darkMode)
+  }, [darkMode])
   useEffect(() => {
     try {
       setDarkMode(localStorage.getItem('dark-mode') === 'true')
@@ -21,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Layout darkMode={darkMode} setDarkMode={setDarkMode}>
+      <Layout darkMode={darkMode} switchDarkMode={switchDarkMode}>
         <Component {...pageProps} />
       </Layout>
     </ThemeProvider>
