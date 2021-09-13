@@ -3,7 +3,6 @@ import { ClassNameMap } from "@material-ui/styles";
 import { useContext } from "react"
 import { NavigationContext } from "./Navigation"
 import { Box, ButtonBase, createStyles, makeStyles, Theme } from '@material-ui/core'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Brightness2 as MoonIcon } from '@material-ui/icons';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
@@ -11,8 +10,13 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import LockIcon from '@material-ui/icons/Lock';
 
 const useStyles = makeStyles((theme: Theme) => {
-	const darkTheme = theme.palette.type === 'dark'
 	return createStyles({
+		container: {
+			width: theme.spacing(5),
+			height: '100%',
+			display: 'flex',
+			flexDirection: 'column'
+		},
 		logoContainer: {
 			display: 'grid',
 			placeItems: 'center',
@@ -30,8 +34,8 @@ const useStyles = makeStyles((theme: Theme) => {
 		},
 		clickBox: {
 			padding: '.5em',
-			borderBottom: `1px solid ${theme.palette.divider}`
-
+			borderBottom: `1px solid ${theme.palette.divider}`,
+			width: '100%'
 		},
 		firstBox: {
 			borderTop: `1px solid ${theme.palette.divider}`
@@ -60,7 +64,9 @@ const ReducedPanel: FC = ({ children }) => {
 
 	return (
 		<Provider value={value}>
-			{children}
+			<div className={classes.container}>
+				{children}
+			</div>
 		</Provider>
 	)
 }
