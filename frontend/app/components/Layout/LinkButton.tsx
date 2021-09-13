@@ -25,14 +25,14 @@ type Props = {
 const LinkButton: FC<Props> = ({ href, children, style = {}, className = '' }) => {
 	const classes = useStyles()
 	return (
-		<ButtonBase className={className ? `${className} ${classes.buttonBase}` : classes.buttonBase} style={style}>
+		<Link href={href}>
+			<ButtonBase className={className ? `${className} ${classes.buttonBase}` : classes.buttonBase} style={style}>
 
-			<Link href={href}>
 				<Typography color="primary" >
 					{children}
 				</Typography>
-			</Link>
-		</ButtonBase>
+			</ButtonBase>
+		</Link>
 	)
 }
 
