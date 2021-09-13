@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { NavigationContext } from "./Navigation"
-import { ButtonBase, Container, createStyles, makeStyles, Switch, Theme } from '@material-ui/core'
+import { Container, createStyles, makeStyles, Switch, Theme } from '@material-ui/core'
 import Image from 'next/image'
 import { Brightness2 as MoonIcon } from '@material-ui/icons';
 import React, { FC, useMemo } from 'react';
@@ -91,9 +91,7 @@ const User: FC = () => {
 			className={classes.linksContainer}
 			style={{
 				marginBottom: 0,
-				marginTop: 'auto',
-				display: 'flex',
-				flexDirection: 'column'
+				marginTop: 'auto'
 			}}
 		>
 			<LinkButton href="/login" className={classes.firstLink}>Login</LinkButton>

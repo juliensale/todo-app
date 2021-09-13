@@ -34,7 +34,7 @@ const Navigation: FC<NavigationProps> = ({ children, darkMode, switchDarkMode })
 
 	return (
 		<Provider value={value}>
-			<Paper style={{ height: '100vh' }}>
+			<Paper style={{ height: '100vh', display: 'flex', flexDirection: 'column' }} elevation={2}>
 				{children}
 			</Paper>
 		</Provider>
