@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type Props = {
 
 }
-const Login: FC<Props> = () => {
+const Signup: FC<Props> = () => {
 	const classes = useStyles()
 	return (
 		<PageForm>
@@ -31,13 +31,15 @@ const Login: FC<Props> = () => {
 				color="primary"
 				variant="h1"
 			>
-				Login
+				Signup
 			</Typography>
 			<TextField className={classes.input} label="Email" type="email" required />
+			<TextField className={classes.input} label="Username" required />
 			<TextField className={classes.input} label="Password" type="password" required />
+			<TextField className={classes.input} label="Password (confirm)" type="password" required />
 			<Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
 		</PageForm>
 	)
 }
 
-export default Login
+export default Signup
