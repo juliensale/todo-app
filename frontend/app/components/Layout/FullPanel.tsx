@@ -1,13 +1,11 @@
 import { useContext } from "react"
 import { NavigationContext } from "./Navigation"
-import { Container, createStyles, makeStyles, Switch, Theme } from '@material-ui/core'
+import { ButtonBase, Container, createStyles, makeStyles, Switch, Theme } from '@material-ui/core'
 import Image from 'next/image'
 import { Brightness2 as MoonIcon } from '@material-ui/icons';
-
-
-
 import React, { FC, useMemo } from 'react';
 import { ClassNameMap } from "@material-ui/styles";
+import LinkButton from "./LinkButton";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -25,6 +23,15 @@ const useStyles = makeStyles((theme: Theme) => {
 		},
 		moon: {
 			color: '#ffa200'
+		},
+		linksContainer: {
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'center',
+			justifyContent: 'flex-start'
+		},
+		firstLink: {
+			borderTop: `1px solid ${theme.palette.divider}`
 		}
 	})
 })
@@ -77,16 +84,35 @@ const DarkModeSwitcher: FC = () => {
 	)
 }
 
+const User: FC = () => {
+	const { classes } = useContext(FullPanelContext)
+	return (
+		<div
+			className={classes.linksContainer}
+			style={{
+				marginBottom: 0,
+				marginTop: 'auto',
+				display: 'flex',
+				flexDirection: 'column'
+			}}
+		>
+			<LinkButton href="/login" className={classes.firstLink}>Login</LinkButton>
+			<LinkButton href="/signup">Signup</LinkButton>
+		</div>
+	)
+}
+
 type UsageProps = {
 
 }
 const Usage: FC<UsageProps> = (props) => {
 	return (
 		<FullPanel {...props}>
-			<Container>
+			<Container >
 				<Logo />
 				<DarkModeSwitcher />
 			</Container>
+			<User />
 		</FullPanel>
 	)
 }
