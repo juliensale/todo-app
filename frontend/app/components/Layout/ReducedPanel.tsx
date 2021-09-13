@@ -4,8 +4,11 @@ import { useContext } from "react"
 import { NavigationContext } from "./Navigation"
 import { Box, ButtonBase, createStyles, makeStyles, Theme } from '@material-ui/core'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Brightness2 as MoonIcon } from '@material-ui/icons';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import LockIcon from '@material-ui/icons/Lock';
 
 const useStyles = makeStyles((theme: Theme) => {
 	const darkTheme = theme.palette.type === 'dark'
@@ -29,6 +32,9 @@ const useStyles = makeStyles((theme: Theme) => {
 			padding: '.5em',
 			borderBottom: `1px solid ${theme.palette.divider}`
 
+		},
+		firstBox: {
+			borderTop: `1px solid ${theme.palette.divider}`
 		}
 	})
 })
@@ -73,6 +79,24 @@ const ClickBox: FC<ClickBoxProps> = ({ children, onClick }) => {
 	)
 }
 
+type LinkBoxProps = {
+	children: React.ReactNode,
+	href: string,
+	style?: {},
+	className?: string
+}
+const LinkBox: FC<LinkBoxProps> = ({ children, href, style = {}, className = '' }) => {
+	const { classes } = useContext(ReducedPanelContext)
+	return (
+		<Link href={href}>
+			<ButtonBase className={className ? `${className} ${classes.clickBox}` : classes.clickBox} style={style}>
+				{children}
+
+			</ButtonBase>
+		</Link>
+	)
+}
+
 const DrawerBurger: FC = () => {
 	const { openDrawer } = useContext(ReducedPanelContext)
 	return (
@@ -92,6 +116,26 @@ const DarkModeSwitcher: FC = () => {
 	)
 }
 
+const User: FC = () => {
+	const { classes } = useContext(ReducedPanelContext)
+	return (
+		<div
+			className={classes.linksContainer}
+			style={{
+				marginBottom: 0,
+				marginTop: 'auto'
+			}}
+		>
+			<LinkBox href="/login" className={classes.firstBox}>
+				<LockIcon color="primary" />
+			</LinkBox>
+			<LinkBox href="/signup">
+				<PersonAddIcon color="primary" />
+			</LinkBox>
+		</div>
+	)
+}
+
 type UsageProps = {
 
 }
@@ -100,6 +144,7 @@ const Usage: FC<UsageProps> = (props) => {
 		<ReducedPanel {...props}>
 			<DrawerBurger />
 			<DarkModeSwitcher />
+			<User />
 		</ReducedPanel>
 	)
 }
