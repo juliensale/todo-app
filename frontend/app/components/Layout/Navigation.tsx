@@ -1,8 +1,13 @@
-import { Paper, useMediaQuery } from '@material-ui/core';
+import { Paper, Theme, useMediaQuery } from '@material-ui/core';
 import React, { FC, useMemo, useState } from 'react';
 import FullPanel from './FullPanel'
 import ReducedPanel from './ReducedPanel'
 import Drawer from './Drawer'
+import { useTheme } from '@material-ui/styles';
+
+export const getNavWidth: (isMediaPhone: boolean, theme: Theme) => number = (isMediaPhone, theme) => {
+	return isMediaPhone ? theme.spacing(5) : theme.spacing(15)
+}
 
 type ContextType = {
 	drawerOpen: boolean,
@@ -17,9 +22,10 @@ const { Provider } = NavigationContext
 type NavigationProps = {
 	children: React.ReactNode | React.ReactNode[]
 	darkMode: boolean,
-	switchDarkMode: () => void
+	switchDarkMode: () => void,
+	isMediaPhone: boolean
 }
-const Navigation: FC<NavigationProps> = ({ children, darkMode, switchDarkMode }) => {
+const Navigation: FC<NavigationProps> = ({ children, darkMode, switchDarkMode, isMediaPhone }) => {
 
 	const [drawerOpen, setDrawerOpen] = useState(false)
 	const openDrawer = () => { setDrawerOpen(true) }
@@ -32,9 +38,22 @@ const Navigation: FC<NavigationProps> = ({ children, darkMode, switchDarkMode })
 		switchDarkMode
 	}), [drawerOpen, openDrawer, closeDrawer, darkMode, switchDarkMode])
 
+	const theme: Theme = useTheme()
+
 	return (
 		<Provider value={value}>
-			<Paper style={{ height: '100vh', display: 'flex', flexDirection: 'column' }} elevation={2}>
+			<Paper
+				style={{
+					display: 'flex',
+					position: 'fixed',
+					top: 0,
+					bottom: 0,
+					left: 0,
+					flexDirection: 'column',
+					width: getNavWidth(isMediaPhone, theme)
+				}}
+				elevation={2}
+			>
 				{children}
 			</Paper>
 		</Provider>
@@ -48,7 +67,7 @@ type UsageProps = {
 const Usage: FC<UsageProps> = (props) => {
 	const isMediaPhone = useMediaQuery('(max-width:700px)')
 	return (
-		<Navigation {...props}>
+		<Navigation {...props} isMediaPhone={isMediaPhone}>
 			{
 				isMediaPhone
 					? <>
