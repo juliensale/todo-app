@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		placeItems: 'center',
 		borderBottom: `1px solid ${theme.palette.divider}`,
 		transition: '.2s',
+		'&:hover': {
+			background: theme.palette.action.hover
+		}
 	},
 }))
 
