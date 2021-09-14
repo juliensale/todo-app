@@ -1,9 +1,13 @@
-import { Button, CircularProgress, createStyles, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
+import { Button, CircularProgress, createStyles, makeStyles, TextField, Theme, Typography, FormControl, IconButton, Input } from '@material-ui/core'
 import React, { FC, useReducer } from 'react'
 import { getLoginFormReducer, LoginFormState } from '../reducers/loginReducer'
 import PageForm from '../components/Forms/PageForm'
 import axios from 'axios'
 import useSWR from 'swr'
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	title: {
@@ -13,7 +17,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginLeft: -theme.spacing(2)
 	},
 	input: {
-		marginBottom: theme.spacing(2)
+		marginBottom: theme.spacing(2),
+		width: '100%'
 	},
 	button: {
 		marginTop: theme.spacing(3),
@@ -38,6 +43,7 @@ const Login: FC<Props> = () => {
 			message: '',
 			open: false
 		},
+		showPassword: false,
 		error: false,
 		loading: false
 	}
@@ -79,6 +85,16 @@ const Login: FC<Props> = () => {
 		dispatch({ type: "closeSnack" })
 	}
 
+	const handleClickShowPassword = () => {
+		dispatch({
+			type: "passwordVisibility",
+			value: !state.showPassword
+		})
+	}
+
+	const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+	}
 
 	return (
 		<PageForm
@@ -94,7 +110,21 @@ const Login: FC<Props> = () => {
 				Login
 			</Typography>
 			<TextField className={classes.input} label="Email" type="email" name="email" required value={state.data.email} onChange={handleChange} />
-			<TextField className={classes.input} label="Password" type="password" name="password" required value={state.data.password} onChange={handleChange} />
+			<FormControl >
+				<InputLabel required>Password</InputLabel>
+				<Input className={classes.input} type={state.showPassword ? "text" : "password"} required name="password" value={state.data.password} onChange={handleChange} endAdornment={
+					<InputAdornment position="end">
+						<IconButton
+							aria-label="toggle password visibility"
+							onClick={handleClickShowPassword}
+							onMouseDown={handleMouseDownPassword}
+							edge="end"
+						>
+							{state.showPassword ? <Visibility /> : <VisibilityOff />}
+						</IconButton>
+					</InputAdornment>
+				} />
+			</FormControl>
 			{state.loading
 				? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
 				: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>

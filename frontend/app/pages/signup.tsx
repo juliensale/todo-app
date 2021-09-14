@@ -1,9 +1,13 @@
-import { Button, CircularProgress, Container, createStyles, makeStyles, Paper, TextField, Theme, Typography } from '@material-ui/core'
+import { Button, CircularProgress, createStyles, makeStyles, TextField, Theme, Typography, IconButton, Input, FormControl } from '@material-ui/core'
 import axios from 'axios'
 import { FC, useReducer } from 'react'
 import useSWR from 'swr'
 import PageForm from '../components/Forms/PageForm'
 import { getSignupFormReducer, SignupFormState } from '../reducers/signupReducer'
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	title: {
@@ -13,7 +17,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginLeft: -theme.spacing(2)
 	},
 	input: {
-		marginBottom: theme.spacing(2)
+		marginBottom: theme.spacing(2),
+		width: '100%'
 	},
 	button: {
 		marginTop: theme.spacing(3),
@@ -40,6 +45,10 @@ const Signup: FC<Props> = () => {
 			severity: 'success',
 			message: '',
 			open: false
+		},
+		showPasswords: {
+			password1: false,
+			password2: false
 		},
 		passwordMatch: true,
 		error: false,
@@ -101,6 +110,13 @@ const Signup: FC<Props> = () => {
 		dispatch({ type: "closeSnack" })
 	}
 
+	const handleClickShowPassword = (name: 'password1' | 'password2') => () => {
+		dispatch({ type: "passwordVisibility", password: name, value: !state.showPasswords[name] })
+	}
+	const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+	}
+
 	return (
 		<PageForm
 			onSubmit={handleSubmit}
@@ -117,8 +133,36 @@ const Signup: FC<Props> = () => {
 			<TextField className={classes.input} label="Email" type="email" required name="email" value={state.data.email} onChange={handleChange} />
 			<TextField className={classes.input} label="Username" required name="username" value={state.data.username} onChange={handleChange} />
 			{state.passwordMatch ? null : <Typography color="error" variant="caption">The passwords do not match.</Typography>}
-			<TextField className={classes.input} label="Password" type="password" required name="password1" value={state.data.password1} onChange={handleChange} />
-			<TextField className={classes.input} label="Password (confirm)" type="password" required name="password2" value={state.data.password2} onChange={handleChange} />
+			<FormControl >
+				<InputLabel required>Password</InputLabel>
+				<Input className={classes.input} type={state.showPasswords.password1 ? "text" : "password"} required name="password1" value={state.data.password1} onChange={handleChange} endAdornment={
+					<InputAdornment position="end">
+						<IconButton
+							aria-label="toggle password visibility"
+							onClick={handleClickShowPassword('password1')}
+							onMouseDown={handleMouseDownPassword}
+							edge="end"
+						>
+							{state.showPasswords.password1 ? <Visibility /> : <VisibilityOff />}
+						</IconButton>
+					</InputAdornment>
+				} />
+			</FormControl>
+			<FormControl >
+				<InputLabel required>Password (confirm)</InputLabel>
+				<Input className={classes.input} type={state.showPasswords.password2 ? "text" : "password"} required name="password2" value={state.data.password2} onChange={handleChange} endAdornment={
+					<InputAdornment position="end">
+						<IconButton
+							aria-label="toggle password visibility"
+							onClick={handleClickShowPassword('password2')}
+							onMouseDown={handleMouseDownPassword}
+							edge="end"
+						>
+							{state.showPasswords.password1 ? <Visibility /> : <VisibilityOff />}
+						</IconButton>
+					</InputAdornment>
+				} />
+			</FormControl>
 			{
 				state.loading
 					? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>

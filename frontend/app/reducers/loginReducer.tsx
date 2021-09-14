@@ -10,16 +10,22 @@ export type LoginFormState = {
 		message: string,
 		open: boolean
 	},
+	showPassword: boolean,
 	error: boolean,
 	loading: boolean
 }
 export const getLoginFormReducer = (initialState: LoginFormState) => {
 	return (state: LoginFormState, action: any) => {
+		const newState = { ...state }
 		switch (action.type) {
 			case "patch":
-				const newState = { ...state }
 				newState.data = { ...newState.data, ...action.data }
 				return newState;
+
+			case "passwordVisibility":
+				newState.showPassword = action.value
+				return newState
+
 
 			case "loadingStart":
 				return {

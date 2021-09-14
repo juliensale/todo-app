@@ -7,6 +7,10 @@ export type SignupFormState = {
 		password1: string,
 		password2: string
 	},
+	showPasswords: {
+		password1: boolean,
+		password2: boolean
+	},
 	snack: {
 		severity: Color,
 		message: string,
@@ -18,13 +22,18 @@ export type SignupFormState = {
 }
 export const getSignupFormReducer = (initialState: SignupFormState) => {
 	return (state: SignupFormState, action: any) => {
+		const newState = { ...state }
 		switch (action.type) {
 			case "patch":
-				const newState = { ...state }
 				newState.data = { ...newState.data, ...action.data }
 				newState.passwordMatch = newState.data.password1 === newState.data.password2
 				return newState;
-
+			case "passwordVisibility":
+				if (action.password === 'password1' || action.password === 'password2') {
+					newState.showPasswords[action.password as ('password1' | 'password2')] = action.value
+					console.log(newState.showPasswords.password1)
+				}
+				return newState
 			case "loadingStart":
 				return {
 					...state,
