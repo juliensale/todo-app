@@ -1,5 +1,5 @@
-import { Button, CircularProgress, Container, createStyles, makeStyles, Paper, TextField, Theme, Typography } from '@material-ui/core'
-import React, { FC, useReducer } from 'react'
+import { Button, CircularProgress, createStyles, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
+import React, { FC, useEffect, useReducer } from 'react'
 import { getLoginFormReducer, LoginFormState } from '../reducers/loginReducer'
 import PageForm from '../components/Forms/PageForm'
 import axios from 'axios'
@@ -33,6 +33,11 @@ const Login: FC<Props> = () => {
 			email: '',
 			password: ''
 		},
+		snack: {
+			severity: 'info',
+			message: '',
+			open: false
+		},
 		error: false,
 		loading: false
 	}
@@ -58,23 +63,32 @@ const Login: FC<Props> = () => {
 						type: "login",
 						token: res.data.token
 					})
-					// Snackbar success
 					console.log('success')
 				})
 				.catch(() => {
 					dispatch({ type: "error" })
-					// Snackbar success
 					console.log('error')
 				})
 		} catch {
 			dispatch({ type: "noCookie" })
-			// Snackbar Error
 			console.log('No cookie')
 		}
 	}
 
+	const closeSnackBar = (e?: React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		dispatch({ type: "closeSnack" })
+	}
+
+
 	return (
-		<PageForm onSubmit={handleSubmit}>
+		<PageForm
+			onSubmit={handleSubmit}
+			snackBarData={state.snack}
+			closeSnackBar={closeSnackBar}
+		>
 			<Typography
 				className={classes.title}
 				color="primary"

@@ -1,5 +1,7 @@
-import { Container, createStyles, makeStyles, Paper, Theme } from '@material-ui/core'
+import { Container, createStyles, Snackbar, makeStyles, Paper, Theme } from '@material-ui/core'
+import { Color } from '@material-ui/lab'
 import React, { FC } from 'react'
+import Alert from './Alert'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	container: {
@@ -19,19 +21,37 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 type Props = {
 	children: React.ReactNode | React.ReactNode[],
-	onSubmit?: React.FormEventHandler<HTMLFormElement>
+	onSubmit?: React.FormEventHandler<HTMLFormElement>,
+	snackBarData?: {
+		severity: Color,
+		message: string,
+		open: boolean
+	},
+	closeSnackBar?: (e?: React.SyntheticEvent, reason?: string) => void
 }
-const PageForm: FC<Props> = ({ children, onSubmit }) => {
+const PageForm: FC<Props> = ({ children, onSubmit, snackBarData, closeSnackBar }) => {
 	const classes = useStyles()
 	return (
-
-		<Container className={classes.container}>
-			<Paper className={classes.formPaper} elevation={3}>
-				<form className={classes.form} onSubmit={onSubmit}>
-					{children}
-				</form>
-			</Paper>
-		</Container>
+		<>
+			<Container className={classes.container}>
+				<Paper className={classes.formPaper} elevation={3}>
+					<form className={classes.form} onSubmit={onSubmit}>
+						{children}
+					</form>
+				</Paper>
+			</Container>
+			{snackBarData ?
+				<Snackbar
+					open={snackBarData.open}
+					onClose={closeSnackBar}
+					autoHideDuration={5000}
+					anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+				>
+					<Alert severity={snackBarData.severity}>{snackBarData.message}</Alert>
+				</Snackbar>
+				: null
+			}
+		</>
 
 	)
 }
