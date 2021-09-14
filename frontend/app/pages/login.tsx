@@ -1,5 +1,5 @@
 import { Button, CircularProgress, createStyles, makeStyles, TextField, Theme, Typography } from '@material-ui/core'
-import React, { FC, useEffect, useReducer } from 'react'
+import React, { FC, useReducer } from 'react'
 import { getLoginFormReducer, LoginFormState } from '../reducers/loginReducer'
 import PageForm from '../components/Forms/PageForm'
 import axios from 'axios'
@@ -63,15 +63,12 @@ const Login: FC<Props> = () => {
 						type: "login",
 						token: res.data.token
 					})
-					console.log('success')
 				})
 				.catch(() => {
 					dispatch({ type: "error" })
-					console.log('error')
 				})
 		} catch {
 			dispatch({ type: "noCookie" })
-			console.log('No cookie')
 		}
 	}
 
