@@ -29,7 +29,7 @@ export const getSignupFormReducer = (initialState: SignupFormState) => {
 					loading: true
 				}
 
-			case "signup":
+			case "login":
 				localStorage.setItem('authToken', action.token)
 				return {
 					...initialState,

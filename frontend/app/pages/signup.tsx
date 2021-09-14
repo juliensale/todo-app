@@ -1,5 +1,7 @@
-import { Button, Container, createStyles, makeStyles, Paper, TextField, Theme, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Container, createStyles, makeStyles, Paper, TextField, Theme, Typography } from '@material-ui/core'
+import axios from 'axios'
 import { FC, useReducer } from 'react'
+import useSWR from 'swr'
 import PageForm from '../components/Forms/PageForm'
 import { getSignupFormReducer, SignupFormState } from '../reducers/signupReducer'
 
@@ -25,6 +27,7 @@ type Props = {
 }
 const Signup: FC<Props> = () => {
 	const classes = useStyles()
+	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
 
 	const initialState: SignupFormState = {
 		data: {
@@ -53,8 +56,56 @@ const Signup: FC<Props> = () => {
 		})
 	}
 
+	const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+		e.preventDefault()
+		dispatch({ type: "loadingStart" })
+		try {
+			localStorage.setItem('authToken', '')
+			if (state.data.password1 === state.data.password2) {
+				axios.post(`${apiUrl}/users/create/`, {
+					email: state.data.email,
+					username: state.data.username,
+					password: state.data.password1
+				})
+					.then(() => {
+						axios.post(`${apiUrl}/users/token/`, {
+							email: state.data.email,
+							password: state.data.password1
+						})
+							.then(res => {
+								dispatch({
+									type: "login",
+									token: res.data.token
+								})
+							})
+							.catch(() => {
+								dispatch({ type: "error" })
+							})
+					})
+					.catch(() => {
+						dispatch({ type: "error" })
+					})
+			} else {
+				dispatch({ type: "error" })
+			}
+		} catch {
+			dispatch({ type: "noCookie" })
+		}
+	}
+
+	const closeSnackBar = (e?: React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		dispatch({ type: "closeSnack" })
+	}
+
 	return (
-		<PageForm>
+		<PageForm
+			onSubmit={handleSubmit}
+			snackBarData={state.snack}
+			closeSnackBar={closeSnackBar}
+		>
 			<Typography
 				className={classes.title}
 				color="primary"
@@ -66,7 +117,11 @@ const Signup: FC<Props> = () => {
 			<TextField className={classes.input} label="Username" required name="username" value={state.data.username} onChange={handleChange} />
 			<TextField className={classes.input} label="Password" type="password" required name="password1" value={state.data.password1} onChange={handleChange} />
 			<TextField className={classes.input} label="Password (confirm)" type="password" required name="password2" value={state.data.password2} onChange={handleChange} />
-			<Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+			{
+				state.loading
+					? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
+					: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+			}
 		</PageForm>
 	)
 }
