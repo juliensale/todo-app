@@ -8,6 +8,12 @@ import { getTheme } from '../components/Theme'
 import Layout from '../components/Layout/Layout'
 
 
+type UserContextType = {
+  authToken: string,
+  setAuthToken: React.Dispatch<React.SetStateAction<string>>
+}
+export const UserContext = React.createContext({} as UserContextType)
+const UserProvider = UserContext.Provider
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [darkMode, setDarkMode] = useState(false)
@@ -24,12 +30,28 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [])
   const theme = useMemo(() => createTheme(getTheme(darkMode)), [darkMode])
 
+  const [authToken, setAuthToken] = useState('')
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem('authToken')
+      if (token && typeof (token) === 'string') {
+        setAuthToken(token)
+      }
+    } catch { }
+  }, [])
+  const user = useMemo(() => ({
+    authToken,
+    setAuthToken
+  }), [authToken, setAuthToken])
+
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Layout darkMode={darkMode} switchDarkMode={switchDarkMode}>
-        <Component {...pageProps} />
-      </Layout>
+      <UserProvider value={user}>
+        <CssBaseline />
+        <Layout darkMode={darkMode} switchDarkMode={switchDarkMode}>
+          <Component {...pageProps} />
+        </Layout>
+      </UserProvider>
     </ThemeProvider>
 
 

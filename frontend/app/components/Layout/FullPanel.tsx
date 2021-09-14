@@ -1,11 +1,14 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { NavigationContext } from "./Navigation"
-import { Container, createStyles, makeStyles, Switch, Theme } from '@material-ui/core'
+import { Button, Container, createStyles, makeStyles, Modal, Paper, Switch, Theme, Typography } from '@material-ui/core'
 import Image from 'next/image'
 import { Brightness2 as MoonIcon } from '@material-ui/icons';
 import React, { FC, useMemo } from 'react';
 import { ClassNameMap } from "@material-ui/styles";
 import LinkButton from "./LinkButton";
+import NavButton from "./NavButton";
+import CustomModal from "../CustomModal";
+import { UserContext } from "../../pages/_app";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -32,6 +35,19 @@ const useStyles = makeStyles((theme: Theme) => {
 		},
 		firstLink: {
 			borderTop: `1px solid ${theme.palette.divider}`
+		},
+		logoutModalContainer: {
+			paddingTop: theme.spacing(3),
+			paddingBottom: theme.spacing(3)
+		},
+		logoutButtonContainer: {
+			display: 'flex',
+			marginTop: theme.spacing(3)
+		},
+		logoutButton: {
+
+			marginLeft: 'auto',
+			marginRight: 0
 		}
 	})
 })
@@ -86,6 +102,16 @@ const DarkModeSwitcher: FC = () => {
 
 const User: FC = () => {
 	const { classes } = useContext(FullPanelContext)
+	const { authToken, setAuthToken } = useContext(UserContext)
+
+	const [modalOpen, setModalOpen] = useState(false)
+	const handleLogout = () => {
+		console.log(authToken ? 'true' : 'false')
+		setAuthToken('')
+		try {
+			localStorage.removeItem('authToken')
+		} catch { }
+	}
 	return (
 		<div
 			className={classes.linksContainer}
@@ -94,8 +120,28 @@ const User: FC = () => {
 				marginTop: 'auto'
 			}}
 		>
-			<LinkButton href="/login" className={classes.firstLink}>Login</LinkButton>
-			<LinkButton href="/signup">Signup</LinkButton>
+			{authToken
+				? <>
+					<LinkButton href="/settings" className={classes.firstLink}>Settings</LinkButton>
+					<NavButton color="error" onClick={() => setModalOpen(true)}>Logout</NavButton>
+					<CustomModal open={modalOpen} handleClose={() => { setModalOpen(false) }}>
+						<Container className={classes.logoutModalContainer}>
+							<Typography>
+								You are about to logout. Do you confirm?
+							</Typography>
+							<Typography color="error" className={classes.logoutButtonContainer}>
+								<Button color="inherit" variant="outlined" className={classes.logoutButton}
+									onClick={handleLogout}
+								>Logout</Button>
+							</Typography>
+						</Container>
+					</CustomModal>
+				</>
+				: <>
+					<LinkButton href="/login" className={classes.firstLink}>Login</LinkButton>
+					<LinkButton href="/signup">Signup</LinkButton>
+				</>
+			}
 		</div>
 	)
 }

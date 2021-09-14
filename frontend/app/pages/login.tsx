@@ -1,5 +1,5 @@
 import { Button, CircularProgress, createStyles, makeStyles, TextField, Theme, Typography, FormControl, IconButton, Input } from '@material-ui/core'
-import React, { FC, useReducer } from 'react'
+import React, { FC, useContext, useReducer } from 'react'
 import { getLoginFormReducer, LoginFormState } from '../reducers/loginReducer'
 import PageForm from '../components/Forms/PageForm'
 import axios from 'axios'
@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import { UserContext } from './_app'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	title: {
@@ -33,6 +34,7 @@ type Props = {
 const Login: FC<Props> = () => {
 	const classes = useStyles()
 	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
+	const { setAuthToken } = useContext(UserContext)
 	const initialState: LoginFormState = {
 		data: {
 			email: '',
@@ -69,6 +71,7 @@ const Login: FC<Props> = () => {
 						type: "login",
 						token: res.data.token
 					})
+					setAuthToken(res.data.token)
 				})
 				.catch(() => {
 					dispatch({ type: "error" })
