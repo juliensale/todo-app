@@ -1,7 +1,9 @@
-import { Button, Container, createStyles, makeStyles, Paper, TextField, Theme, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Container, createStyles, makeStyles, Paper, TextField, Theme, Typography } from '@material-ui/core'
 import React, { FC, useReducer } from 'react'
 import { getLoginFormReducer, LoginFormState } from '../reducers/loginReducer'
 import PageForm from '../components/Forms/PageForm'
+import axios from 'axios'
+import useSWR from 'swr'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	title: {
@@ -25,16 +27,13 @@ type Props = {
 }
 const Login: FC<Props> = () => {
 	const classes = useStyles()
+	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
 	const initialState: LoginFormState = {
 		data: {
 			email: '',
 			password: ''
 		},
-		error: {
-			email: null,
-			password: null
-
-		},
+		error: false,
 		loading: false
 	}
 	const loginReducer = getLoginFormReducer(initialState)
@@ -48,9 +47,34 @@ const Login: FC<Props> = () => {
 			}
 		})
 	}
+	const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+		e.preventDefault()
+		dispatch({ type: "loadingStart" })
+		try {
+			localStorage.setItem('authToken', '')
+			axios.post(`${apiUrl}/users/token/`, state.data)
+				.then(res => {
+					dispatch({
+						type: "login",
+						token: res.data.token
+					})
+					// Snackbar success
+					console.log('success')
+				})
+				.catch(() => {
+					dispatch({ type: "error" })
+					// Snackbar success
+					console.log('error')
+				})
+		} catch {
+			dispatch({ type: "noCookie" })
+			// Snackbar Error
+			console.log('No cookie')
+		}
+	}
 
 	return (
-		<PageForm>
+		<PageForm onSubmit={handleSubmit}>
 			<Typography
 				className={classes.title}
 				color="primary"
@@ -60,7 +84,10 @@ const Login: FC<Props> = () => {
 			</Typography>
 			<TextField className={classes.input} label="Email" type="email" name="email" required value={state.data.email} onChange={handleChange} />
 			<TextField className={classes.input} label="Password" type="password" name="password" required value={state.data.password} onChange={handleChange} />
-			<Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+			{state.loading
+				? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
+				: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+			}
 		</PageForm>
 	)
 }
