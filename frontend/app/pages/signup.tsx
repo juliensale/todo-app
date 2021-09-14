@@ -41,6 +41,7 @@ const Signup: FC<Props> = () => {
 			message: '',
 			open: false
 		},
+		passwordMatch: true,
 		error: false,
 		loading: false
 	}
@@ -115,6 +116,7 @@ const Signup: FC<Props> = () => {
 			</Typography>
 			<TextField className={classes.input} label="Email" type="email" required name="email" value={state.data.email} onChange={handleChange} />
 			<TextField className={classes.input} label="Username" required name="username" value={state.data.username} onChange={handleChange} />
+			{state.passwordMatch ? null : <Typography color="error" variant="caption">The passwords do not match.</Typography>}
 			<TextField className={classes.input} label="Password" type="password" required name="password1" value={state.data.password1} onChange={handleChange} />
 			<TextField className={classes.input} label="Password (confirm)" type="password" required name="password2" value={state.data.password2} onChange={handleChange} />
 			{

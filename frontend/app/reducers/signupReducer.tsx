@@ -12,6 +12,7 @@ export type SignupFormState = {
 		message: string,
 		open: boolean
 	},
+	passwordMatch: boolean,
 	error: boolean,
 	loading: boolean
 }
@@ -21,6 +22,7 @@ export const getSignupFormReducer = (initialState: SignupFormState) => {
 			case "patch":
 				const newState = { ...state }
 				newState.data = { ...newState.data, ...action.data }
+				newState.passwordMatch = newState.data.password1 === newState.data.password2
 				return newState;
 
 			case "loadingStart":
