@@ -12,6 +12,7 @@ import { UserContext } from "../../pages/_app";
 import { useRouter } from "next/dist/client/router";
 import { en, fr, Translation } from '../../translations/Navigation'
 import { en as logoutEn, fr as logoutFr } from '../../translations/User/Logout'
+import Logout from "./Logout";
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -38,25 +39,6 @@ const useStyles = makeStyles((theme: Theme) => {
 		},
 		firstLink: {
 			borderTop: `1px solid ${theme.palette.divider}`
-		},
-		logoutModalContainer: {
-			paddingTop: theme.spacing(3),
-			paddingBottom: theme.spacing(3),
-			fontSize: '.9em'
-		},
-		logoutButtonContainer: {
-			display: 'flex',
-			marginTop: theme.spacing(3)
-		},
-		logoutButton: {
-
-			marginLeft: 'auto',
-			marginRight: 0
-		},
-		title: {
-			width: '100%',
-			textAlign: 'start',
-			marginBottom: theme.spacing(2)
 		},
 	})
 })
@@ -125,18 +107,10 @@ const Links: FC = () => {
 
 const User: FC = () => {
 	const { classes, translation } = useContext(FullPanelContext)
-	const router = useRouter()
-	const { locale } = router
-	const logoutTranslation = locale === 'fr' ? logoutFr : logoutEn
-	const { authToken, setAuthToken } = useContext(UserContext)
+	const { authToken } = useContext(UserContext)
+	const { openLogout } = useContext(NavigationContext)
 
-	const [modalOpen, setModalOpen] = useState(false)
-	const handleLogout = () => {
-		setAuthToken('')
-		try {
-			localStorage.removeItem('authToken')
-		} catch { }
-	}
+
 	return (
 		<div
 			className={classes.linksContainer}
@@ -148,20 +122,7 @@ const User: FC = () => {
 			{authToken
 				? <>
 					<LinkButton href="/settings" className={classes.firstLink}>{translation.settings}</LinkButton>
-					<NavButton color="error" onClick={() => setModalOpen(true)}>{translation.logout}</NavButton>
-					<CustomModal open={modalOpen} handleClose={() => { setModalOpen(false) }}>
-						<Container className={classes.logoutModalContainer}>
-							<Typography className={classes.title} variant="h1" color="error">{logoutTranslation.title}</Typography>
-							<Typography>
-								{logoutTranslation.message}
-							</Typography>
-							<Typography color="error" className={classes.logoutButtonContainer}>
-								<Button color="inherit" variant="outlined" className={classes.logoutButton}
-									onClick={handleLogout}
-								>{logoutTranslation.button}</Button>
-							</Typography>
-						</Container>
-					</CustomModal>
+					<NavButton color="error" onClick={openLogout}>{translation.logout}</NavButton>
 				</>
 				: <>
 					<LinkButton href="/login" className={classes.firstLink}>{translation.login}</LinkButton>

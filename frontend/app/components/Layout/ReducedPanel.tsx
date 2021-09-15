@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { ClassNameMap } from "@material-ui/styles";
 import { useContext } from "react"
 import { NavigationContext } from "./Navigation"
@@ -8,6 +8,11 @@ import { Brightness2 as MoonIcon } from '@material-ui/icons';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import LockIcon from '@material-ui/icons/Lock';
+import { UserContext } from '../../pages/_app';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Logout from './Logout';
+import HomeIcon from '@material-ui/icons/Home';
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -121,9 +126,21 @@ const DarkModeSwitcher: FC = () => {
 		</ClickBox>
 	)
 }
+const Links: FC = () => {
+	return (
+		<>
+			<LinkBox href="/">
+				<HomeIcon color="primary" />
+			</LinkBox>
+		</>
+	)
+}
 
 const User: FC = () => {
 	const { classes } = useContext(ReducedPanelContext)
+	const { authToken } = useContext(UserContext)
+	const { openLogout } = useContext(NavigationContext)
+
 	return (
 		<div
 			className={classes.linksContainer}
@@ -132,12 +149,25 @@ const User: FC = () => {
 				marginTop: 'auto'
 			}}
 		>
-			<LinkBox href="/login" className={classes.firstBox}>
-				<LockIcon color="primary" />
-			</LinkBox>
-			<LinkBox href="/signup">
-				<PersonAddIcon color="primary" />
-			</LinkBox>
+			{authToken
+				? <>
+					<LinkBox href="/settings" className={classes.firstBox}>
+						<SettingsIcon color="primary" />
+					</LinkBox>
+					<ClickBox onClick={openLogout}>
+						<ExitToAppIcon color="error" />
+					</ClickBox>
+				</>
+				: <>
+					<LinkBox href="/login" className={classes.firstBox}>
+						<LockIcon color="primary" />
+					</LinkBox>
+					<LinkBox href="/signup">
+						<PersonAddIcon color="primary" />
+					</LinkBox>
+				</>
+			}
+
 		</div>
 	)
 }
@@ -150,6 +180,7 @@ const Usage: FC<UsageProps> = (props) => {
 		<ReducedPanel {...props}>
 			<DrawerBurger />
 			<DarkModeSwitcher />
+			<Links />
 			<User />
 		</ReducedPanel>
 	)

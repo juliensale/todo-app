@@ -4,6 +4,7 @@ import FullPanel from './FullPanel'
 import ReducedPanel from './ReducedPanel'
 import Drawer from './Drawer'
 import { useTheme } from '@material-ui/styles';
+import Logout from './Logout';
 
 export const getNavWidth: (isMediaPhone: boolean, theme: Theme) => number = (isMediaPhone, theme) => {
 	return isMediaPhone ? theme.spacing(5) : theme.spacing(15)
@@ -14,7 +15,8 @@ type ContextType = {
 	openDrawer: () => void,
 	closeDrawer: () => void,
 	darkMode: boolean,
-	switchDarkMode: () => void
+	switchDarkMode: () => void,
+	openLogout: () => void
 }
 export const NavigationContext = React.createContext({} as ContextType)
 const { Provider } = NavigationContext
@@ -30,18 +32,25 @@ const Navigation: FC<NavigationProps> = ({ children, darkMode, switchDarkMode, i
 	const [drawerOpen, setDrawerOpen] = useState(false)
 	const openDrawer = () => { setDrawerOpen(true) }
 	const closeDrawer = () => { setDrawerOpen(false) }
+
+	const [logoutOpen, setLogoutOpen] = useState(false)
+	const openLogout = () => { setLogoutOpen(true) }
+	const closeLogout = () => { setLogoutOpen(false) }
+
 	const value = useMemo(() => ({
 		drawerOpen,
 		openDrawer,
 		closeDrawer,
 		darkMode,
-		switchDarkMode
-	}), [drawerOpen, openDrawer, closeDrawer, darkMode, switchDarkMode])
+		switchDarkMode,
+		openLogout
+	}), [drawerOpen, openDrawer, closeDrawer, darkMode, switchDarkMode, openLogout])
 
 	const theme: Theme = useTheme()
 
 	return (
 		<Provider value={value}>
+			<Logout modalOpen={logoutOpen} closeModal={closeLogout} />
 			<Paper
 				style={{
 					display: 'flex',
