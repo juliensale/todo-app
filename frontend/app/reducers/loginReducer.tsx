@@ -1,4 +1,5 @@
 import { Color } from "@material-ui/lab"
+import { Translation } from "../translations/User/Login"
 
 export type LoginFormState = {
 	data: {
@@ -14,7 +15,7 @@ export type LoginFormState = {
 	error: boolean,
 	loading: boolean
 }
-export const getLoginFormReducer = (initialState: LoginFormState) => {
+export const getLoginFormReducer = (initialState: LoginFormState, translation: Translation) => {
 	return (state: LoginFormState, action: any) => {
 		const newState = { ...state }
 		switch (action.type) {
@@ -39,17 +40,36 @@ export const getLoginFormReducer = (initialState: LoginFormState) => {
 					...initialState,
 					snack: {
 						severity: "success" as Color,
-						message: "Successful!",
+						message: translation.feedbacks.login,
 						open: true
 					}
 				}
 
 			case "error":
+				var message = translation.feedbacks.error.base
+
+				if (action.error) {
+					if (action.error.response) {
+						switch (action.error.response.status) {
+							case 400:
+								message = translation.feedbacks.error[400]
+								break;
+							case 404:
+								message = translation.feedbacks.error[404]
+								break;
+
+							case 500:
+								message = translation.feedbacks.error[500]
+								break;
+							default: break;
+						}
+					}
+				}
 				return {
 					...state,
 					snack: {
 						severity: "error" as Color,
-						message: "Error.",
+						message: message,
 						open: true
 					},
 					error: true,
@@ -60,7 +80,7 @@ export const getLoginFormReducer = (initialState: LoginFormState) => {
 					...state,
 					snack: {
 						severity: "warning" as Color,
-						message: "You must allow cookies.",
+						message: translation.feedbacks.noCookie,
 						open: true
 					},
 					error: false,

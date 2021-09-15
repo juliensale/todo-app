@@ -56,7 +56,7 @@ const Login: FC<Props> = () => {
 		error: false,
 		loading: false
 	}
-	const loginReducer = getLoginFormReducer(initialState)
+	const loginReducer = getLoginFormReducer(initialState, translation)
 	const [state, dispatch] = useReducer(loginReducer, initialState)
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +71,7 @@ const Login: FC<Props> = () => {
 		e.preventDefault()
 		dispatch({ type: "loadingStart" })
 		try {
-			localStorage.setItem('authToken', '')
+			localStorage.getItem('authToken')
 			axios.post(`${apiUrl}/users/token/`, state.data)
 				.then(res => {
 					dispatch({
@@ -80,8 +80,8 @@ const Login: FC<Props> = () => {
 					})
 					setAuthToken(res.data.token)
 				})
-				.catch(() => {
-					dispatch({ type: "error" })
+				.catch(err => {
+					dispatch({ type: "error", error: err })
 				})
 		} catch {
 			dispatch({ type: "noCookie" })
@@ -119,6 +119,7 @@ const Login: FC<Props> = () => {
 			>
 				{translation.title}
 			</Typography>
+			{state.error ? <Typography variant="caption" color="error">{translation.error}</Typography> : null}
 			<TextField className={classes.input} label={translation.fields.email} type="email" name="email" required value={state.data.email} onChange={handleChange} />
 			<FormControl >
 				<InputLabel required>{translation.fields.password}</InputLabel>
