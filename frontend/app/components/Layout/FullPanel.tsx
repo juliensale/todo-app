@@ -9,6 +9,8 @@ import LinkButton from "./LinkButton";
 import NavButton from "./NavButton";
 import CustomModal from "../CustomModal";
 import { UserContext } from "../../pages/_app";
+import { useRouter } from "next/dist/client/router";
+import { en as logoutEn, fr as logoutFr } from '../../translations/User/Logout'
 
 const useStyles = makeStyles((theme: Theme) => {
 	return createStyles({
@@ -38,7 +40,8 @@ const useStyles = makeStyles((theme: Theme) => {
 		},
 		logoutModalContainer: {
 			paddingTop: theme.spacing(3),
-			paddingBottom: theme.spacing(3)
+			paddingBottom: theme.spacing(3),
+			fontSize: '.9em'
 		},
 		logoutButtonContainer: {
 			display: 'flex',
@@ -48,7 +51,12 @@ const useStyles = makeStyles((theme: Theme) => {
 
 			marginLeft: 'auto',
 			marginRight: 0
-		}
+		},
+		title: {
+			width: '100%',
+			textAlign: 'start',
+			marginBottom: theme.spacing(2)
+		},
 	})
 })
 
@@ -102,6 +110,9 @@ const DarkModeSwitcher: FC = () => {
 
 const User: FC = () => {
 	const { classes } = useContext(FullPanelContext)
+	const router = useRouter()
+	const { locale } = router
+	const logoutTranslation = locale === 'fr' ? logoutFr : logoutEn
 	const { authToken, setAuthToken } = useContext(UserContext)
 
 	const [modalOpen, setModalOpen] = useState(false)
@@ -125,13 +136,14 @@ const User: FC = () => {
 					<NavButton color="error" onClick={() => setModalOpen(true)}>Logout</NavButton>
 					<CustomModal open={modalOpen} handleClose={() => { setModalOpen(false) }}>
 						<Container className={classes.logoutModalContainer}>
+							<Typography className={classes.title} variant="h1" color="error">{logoutTranslation.title}</Typography>
 							<Typography>
-								You are about to logout. Do you confirm?
+								{logoutTranslation.message}
 							</Typography>
 							<Typography color="error" className={classes.logoutButtonContainer}>
 								<Button color="inherit" variant="outlined" className={classes.logoutButton}
 									onClick={handleLogout}
-								>Logout</Button>
+								>{logoutTranslation.button}</Button>
 							</Typography>
 						</Container>
 					</CustomModal>

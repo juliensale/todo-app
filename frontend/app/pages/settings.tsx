@@ -1,12 +1,14 @@
 import { Button, CircularProgress, Container, createStyles, FormControl, IconButton, Input, InputAdornment, InputLabel, makeStyles, Paper, Snackbar, TextField, Theme, Typography } from '@material-ui/core'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
 import axios from 'axios'
+import { useRouter } from 'next/dist/client/router'
 import React, { FC, useContext, useEffect, useReducer } from 'react'
 import useSWR from 'swr'
 import Alert from '../components/Forms/Alert'
 import PageForm from '../components/Forms/PageForm'
 import { getSettingsFormReducer, SettingsFormState } from '../reducers/settingsReducer'
 import { UserContext } from './_app'
+import { en, fr } from '../translations/User/Settings'
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -50,6 +52,10 @@ type Props = {
 }
 const Settings: FC<Props> = () => {
 	const classes = useStyles()
+
+	const router = useRouter()
+	const { locale } = router
+	const translation = locale === "fr" ? fr : en
 	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
 	const { authToken } = useContext(UserContext)
 
@@ -170,23 +176,23 @@ const Settings: FC<Props> = () => {
 				<Paper className={classes.formPaper} elevation={3}>
 
 					<form className={classes.form} onSubmit={handleSubmitGeneral}>
-						<Typography variant="h1" color="primary" className={classes.title}>Settings</Typography>
-						<Typography variant="h2" color="primary" className={classes.subtitle}>General</Typography>
-						<TextField className={classes.input} label="Email" name="email" value={state.data.email} onChange={handleChange} required />
-						<TextField className={classes.input} label="Username" name="username" value={state.data.username} onChange={handleChange} required />
-						<TextField className={classes.input} label="Full Name" name="name" value={state.data.name} onChange={handleChange} />
+						<Typography variant="h1" color="primary" className={classes.title}>{translation.title}</Typography>
+						<Typography variant="h2" color="primary" className={classes.subtitle}>{translation.forms.general}</Typography>
+						<TextField className={classes.input} label={translation.fields.email} name="email" value={state.data.email} onChange={handleChange} required />
+						<TextField className={classes.input} label={translation.fields.username} name="username" value={state.data.username} onChange={handleChange} required />
+						<TextField className={classes.input} label={translation.fields.name} name="name" value={state.data.name} onChange={handleChange} />
 						{
 							state.loading.general
 								? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
-								: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+								: <Button className={classes.button} type="submit" color="primary" variant="contained">{translation.button}</Button>
 						}
 					</form>
 
 					<form className={classes.form} onSubmit={handleSubmitPassword}>
-						<Typography variant="h2" color="primary" className={classes.subtitle} style={{ marginTop: '1em' }}>Change Password</Typography>
+						<Typography variant="h2" color="primary" className={classes.subtitle} style={{ marginTop: '1em' }}>{translation.forms.password}</Typography>
 						{state.passwordMatch ? null : <Typography color="error" variant="caption">The passwords do not match.</Typography>}
 						<FormControl className={classes.input} >
-							<InputLabel required>Password</InputLabel>
+							<InputLabel required>{translation.fields.password1}</InputLabel>
 							<Input type={state.showPasswords.password1 ? "text" : "password"} required name="password1" value={state.data.password1} onChange={handleChange} endAdornment={
 								<InputAdornment position="end">
 									<IconButton
@@ -201,7 +207,7 @@ const Settings: FC<Props> = () => {
 							} />
 						</FormControl>
 						<FormControl className={classes.input}  >
-							<InputLabel required>Password (confirm)</InputLabel>
+							<InputLabel required>{translation.fields.password2}</InputLabel>
 							<Input type={state.showPasswords.password2 ? "text" : "password"} required name="password2" value={state.data.password2} onChange={handleChange} endAdornment={
 								<InputAdornment position="end">
 									<IconButton
@@ -218,7 +224,7 @@ const Settings: FC<Props> = () => {
 						{
 							state.loading.password
 								? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
-								: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+								: <Button className={classes.button} type="submit" color="primary" variant="contained">{translation.button}</Button>
 						}
 					</form>
 

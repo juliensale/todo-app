@@ -9,13 +9,15 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import { UserContext } from './_app'
+import { useRouter } from 'next/dist/client/router'
+import { en, fr } from '../translations/User/Signup'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	title: {
 		width: '100%',
 		textAlign: 'start',
-		marginBottom: theme.spacing(4),
-		marginLeft: -theme.spacing(2)
+		marginBottom: theme.spacing(2),
+		marginLeft: -theme.spacing(4)
 	},
 	input: {
 		marginBottom: theme.spacing(2),
@@ -33,6 +35,11 @@ type Props = {
 }
 const Signup: FC<Props> = () => {
 	const classes = useStyles()
+
+	const router = useRouter()
+	const { locale } = router
+	const translation = locale === 'fr' ? fr : en
+
 	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
 	const { setAuthToken } = useContext(UserContext)
 
@@ -131,14 +138,14 @@ const Signup: FC<Props> = () => {
 				color="primary"
 				variant="h1"
 			>
-				Signup
+				{translation.title}
 			</Typography>
-			<TextField className={classes.input} label="Email" type="email" required name="email" value={state.data.email} onChange={handleChange} />
-			<TextField className={classes.input} label="Username" required name="username" value={state.data.username} onChange={handleChange} />
+			<TextField className={classes.input} label={translation.fields.email} type="email" required name="email" value={state.data.email} onChange={handleChange} />
+			<TextField className={classes.input} label={translation.fields.username} required name="username" value={state.data.username} onChange={handleChange} />
 			{state.passwordMatch ? null : <Typography color="error" variant="caption">The passwords do not match.</Typography>}
-			<FormControl >
-				<InputLabel required>Password</InputLabel>
-				<Input className={classes.input} type={state.showPasswords.password1 ? "text" : "password"} required name="password1" value={state.data.password1} onChange={handleChange} endAdornment={
+			<FormControl className={classes.input}>
+				<InputLabel required>{translation.fields.password1}</InputLabel>
+				<Input type={state.showPasswords.password1 ? "text" : "password"} required name="password1" value={state.data.password1} onChange={handleChange} endAdornment={
 					<InputAdornment position="end">
 						<IconButton
 							aria-label="toggle password visibility"
@@ -151,9 +158,9 @@ const Signup: FC<Props> = () => {
 					</InputAdornment>
 				} />
 			</FormControl>
-			<FormControl >
-				<InputLabel required>Password (confirm)</InputLabel>
-				<Input className={classes.input} type={state.showPasswords.password2 ? "text" : "password"} required name="password2" value={state.data.password2} onChange={handleChange} endAdornment={
+			<FormControl className={classes.input}>
+				<InputLabel required>{translation.fields.password2}</InputLabel>
+				<Input type={state.showPasswords.password2 ? "text" : "password"} required name="password2" value={state.data.password2} onChange={handleChange} endAdornment={
 					<InputAdornment position="end">
 						<IconButton
 							aria-label="toggle password visibility"
@@ -169,7 +176,7 @@ const Signup: FC<Props> = () => {
 			{
 				state.loading
 					? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
-					: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+					: <Button className={classes.button} type="submit" color="primary" variant="contained">{translation.button}</Button>
 			}
 		</PageForm>
 	)

@@ -9,13 +9,15 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import { UserContext } from './_app'
+import { useRouter } from 'next/dist/client/router'
+import { en, fr } from '../translations/User/Login'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	title: {
 		width: '100%',
 		textAlign: 'start',
-		marginBottom: theme.spacing(4),
-		marginLeft: -theme.spacing(2)
+		marginBottom: theme.spacing(2),
+		marginLeft: -theme.spacing(4)
 	},
 	input: {
 		marginBottom: theme.spacing(2),
@@ -33,6 +35,11 @@ type Props = {
 }
 const Login: FC<Props> = () => {
 	const classes = useStyles()
+
+	const router = useRouter()
+	const { locale } = router
+	const translation = locale === 'fr' ? fr : en
+
 	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
 	const { setAuthToken } = useContext(UserContext)
 	const initialState: LoginFormState = {
@@ -110,11 +117,11 @@ const Login: FC<Props> = () => {
 				color="primary"
 				variant="h1"
 			>
-				Login
+				{translation.title}
 			</Typography>
-			<TextField className={classes.input} label="Email" type="email" name="email" required value={state.data.email} onChange={handleChange} />
+			<TextField className={classes.input} label={translation.fields.email} type="email" name="email" required value={state.data.email} onChange={handleChange} />
 			<FormControl >
-				<InputLabel required>Password</InputLabel>
+				<InputLabel required>{translation.fields.password}</InputLabel>
 				<Input className={classes.input} type={state.showPassword ? "text" : "password"} required name="password" value={state.data.password} onChange={handleChange} endAdornment={
 					<InputAdornment position="end">
 						<IconButton
@@ -130,7 +137,7 @@ const Login: FC<Props> = () => {
 			</FormControl>
 			{state.loading
 				? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
-				: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
+				: <Button className={classes.button} type="submit" color="primary" variant="contained">{translation.button}</Button>
 			}
 		</PageForm>
 	)
