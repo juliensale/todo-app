@@ -10,6 +10,7 @@ import NavButton from "./NavButton";
 import CustomModal from "../CustomModal";
 import { UserContext } from "../../pages/_app";
 import { useRouter } from "next/dist/client/router";
+import { en, fr, Translation } from '../../translations/Navigation'
 import { en as logoutEn, fr as logoutFr } from '../../translations/User/Logout'
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -63,19 +64,24 @@ const useStyles = makeStyles((theme: Theme) => {
 type ContextType = {
 	classes: ClassNameMap,
 	darkMode: boolean,
-	switchDarkMode: () => void
+	switchDarkMode: () => void,
+	translation: Translation
 }
 const FullPanelContext = React.createContext({} as ContextType)
 const { Provider } = FullPanelContext
 
 const FullPanel: FC = ({ children }) => {
 	const { darkMode, switchDarkMode } = useContext(NavigationContext)
+	const router = useRouter()
+	const { locale } = router
+	const translation = locale === 'fr' ? fr : en
 	const classes = useStyles()
 	const value = useMemo(() => ({
 		classes,
 		darkMode,
-		switchDarkMode
-	}), [classes, darkMode, switchDarkMode])
+		switchDarkMode,
+		translation
+	}), [classes, darkMode, switchDarkMode, translation])
 
 	return (
 		<Provider value={value}>
@@ -94,10 +100,10 @@ const Logo: FC = () => {
 }
 
 const DarkModeSwitcher: FC = () => {
-	const { classes, darkMode, switchDarkMode } = useContext(FullPanelContext)
+	const { classes, darkMode, switchDarkMode, translation } = useContext(FullPanelContext)
 
 	return (
-		<div className={classes.switchContainer} title="Set Dark Mode">
+		<div className={classes.switchContainer} title={translation.dark}>
 			<Switch
 				color="primary"
 				checked={darkMode}
@@ -108,8 +114,17 @@ const DarkModeSwitcher: FC = () => {
 	)
 }
 
+const Links: FC = () => {
+	const { classes, translation } = useContext(FullPanelContext)
+	return (
+		<>
+			<LinkButton className={classes.firstLink} href="/">{translation.home}</LinkButton>
+		</>
+	)
+}
+
 const User: FC = () => {
-	const { classes } = useContext(FullPanelContext)
+	const { classes, translation } = useContext(FullPanelContext)
 	const router = useRouter()
 	const { locale } = router
 	const logoutTranslation = locale === 'fr' ? logoutFr : logoutEn
@@ -132,8 +147,8 @@ const User: FC = () => {
 		>
 			{authToken
 				? <>
-					<LinkButton href="/settings" className={classes.firstLink}>Settings</LinkButton>
-					<NavButton color="error" onClick={() => setModalOpen(true)}>Logout</NavButton>
+					<LinkButton href="/settings" className={classes.firstLink}>{translation.settings}</LinkButton>
+					<NavButton color="error" onClick={() => setModalOpen(true)}>{translation.logout}</NavButton>
 					<CustomModal open={modalOpen} handleClose={() => { setModalOpen(false) }}>
 						<Container className={classes.logoutModalContainer}>
 							<Typography className={classes.title} variant="h1" color="error">{logoutTranslation.title}</Typography>
@@ -149,8 +164,8 @@ const User: FC = () => {
 					</CustomModal>
 				</>
 				: <>
-					<LinkButton href="/login" className={classes.firstLink}>Login</LinkButton>
-					<LinkButton href="/signup">Signup</LinkButton>
+					<LinkButton href="/login" className={classes.firstLink}>{translation.login}</LinkButton>
+					<LinkButton href="/signup">{translation.signup}</LinkButton>
 				</>
 			}
 		</div>
@@ -167,6 +182,7 @@ const Usage: FC<UsageProps> = (props) => {
 				<Logo />
 				<DarkModeSwitcher />
 			</Container>
+			<Links />
 			<User />
 		</FullPanel>
 	)
