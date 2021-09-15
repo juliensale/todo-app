@@ -161,7 +161,7 @@ const Signup: FC<Props> = () => {
 							onMouseDown={handleMouseDownPassword}
 							edge="end"
 						>
-							{state.showPasswords.password1 ? <Visibility /> : <VisibilityOff />}
+							{state.showPasswords.password2 ? <Visibility /> : <VisibilityOff />}
 						</IconButton>
 					</InputAdornment>
 				} />
