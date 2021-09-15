@@ -55,18 +55,21 @@ export const getSettingsFormReducer = (initialState: SettingsFormState, translat
 
 			case "success":
 				message = translation.feedbacks.success.base
+				var data = { ...state.data }
 				switch (action.form) {
 					case 'general':
 						message = translation.feedbacks.success.general;
 						break;
 					case 'password':
 						message = translation.feedbacks.success.password;
+						data.password1 = initialState.data.password1
+						data.password2 = initialState.data.password2
 						break;
 					default: break;
 				}
 				return {
 					...initialState,
-					data: { ...state.data },
+					data: data,
 					snack: {
 						severity: "success" as Color,
 						message: message,
