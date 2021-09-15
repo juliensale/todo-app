@@ -79,6 +79,7 @@ const Login: FC<Props> = () => {
 						token: res.data.token
 					})
 					setAuthToken(res.data.token)
+					router.push('/')
 				})
 				.catch(err => {
 					dispatch({ type: "error", error: err })

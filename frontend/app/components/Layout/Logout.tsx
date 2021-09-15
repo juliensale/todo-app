@@ -41,6 +41,7 @@ const Logout: FC<Props> = ({ modalOpen, closeModal }) => {
 	const handleLogout = () => {
 		setAuthToken('')
 		closeModal()
+		router.push('/login')
 		try {
 			localStorage.removeItem('authToken')
 		} catch { }
