@@ -1,4 +1,5 @@
 import { Color } from "@material-ui/lab"
+import { Translation } from "../translations/User/Signup"
 
 export type SignupFormState = {
 	data: {
@@ -17,10 +18,13 @@ export type SignupFormState = {
 		open: boolean
 	},
 	passwordMatch: boolean,
-	error: boolean,
+	error: {
+		email: boolean,
+		username: boolean
+	},
 	loading: boolean
 }
-export const getSignupFormReducer = (initialState: SignupFormState) => {
+export const getSignupFormReducer = (initialState: SignupFormState, translation: Translation) => {
 	return (state: SignupFormState, action: any) => {
 		const newState = { ...state }
 		switch (action.type) {
@@ -45,20 +49,49 @@ export const getSignupFormReducer = (initialState: SignupFormState) => {
 					...initialState,
 					snack: {
 						severity: "success" as Color,
-						message: "Successful!",
+						message: translation.feedbacks.success,
 						open: true
 					}
 				}
 
 			case "error":
+				var message = translation.feedbacks.error.base
+				var error = {
+					email: false,
+					username: false
+				}
+				if (action.error) {
+					if (action.error.response) {
+						switch (action.error.response.status) {
+							case 400:
+								message = translation.feedbacks.error[400];
+								if (action.error.response.data.email) {
+									error.email = true
+								}
+								if (action.error.response.data.username) {
+									error.username = true
+								}
+								break;
+							case 404:
+								message = translation.feedbacks.error[404];
+								break;
+							case 500:
+								message = translation.feedbacks.error[500];
+								break;
+							default: break;
+						}
+					} else if (action.error.type && action.error.type === 'password') {
+						message = translation.feedbacks.error.password
+					}
+				}
 				return {
 					...state,
 					snack: {
 						severity: "error" as Color,
-						message: "Error.",
+						message: message,
 						open: true
 					},
-					error: true,
+					error: error,
 					loading: false
 				}
 			case "noCookie":
@@ -66,10 +99,13 @@ export const getSignupFormReducer = (initialState: SignupFormState) => {
 					...state,
 					snack: {
 						severity: "warning" as Color,
-						message: "You must allow cookies.",
+						message: translation.feedbacks.noCookie,
 						open: true
 					},
-					error: false,
+					error: {
+						email: false,
+						username: false
+					},
 					loading: false
 				}
 

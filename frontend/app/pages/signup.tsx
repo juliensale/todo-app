@@ -63,10 +63,13 @@ const Signup: FC<Props> = () => {
 			password2: false
 		},
 		passwordMatch: true,
-		error: false,
+		error: {
+			email: false,
+			username: false
+		},
 		loading: false
 	}
-	const reducer = getSignupFormReducer(initialState)
+	const reducer = getSignupFormReducer(initialState, translation)
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +85,7 @@ const Signup: FC<Props> = () => {
 		e.preventDefault()
 		dispatch({ type: "loadingStart" })
 		try {
-			localStorage.setItem('authToken', '')
+			localStorage.getItem('authToken')
 			if (state.data.password1 === state.data.password2) {
 				axios.post(`${apiUrl}/users/create/`, {
 					email: state.data.email,
@@ -101,15 +104,15 @@ const Signup: FC<Props> = () => {
 								})
 								setAuthToken(res.data.token)
 							})
-							.catch(() => {
-								dispatch({ type: "error" })
+							.catch(err => {
+								dispatch({ type: "error", error: err })
 							})
 					})
-					.catch(() => {
-						dispatch({ type: "error" })
+					.catch(err => {
+						dispatch({ type: "error", error: err })
 					})
 			} else {
-				dispatch({ type: "error" })
+				dispatch({ type: "error", error: { type: "password" } })
 			}
 		} catch {
 			dispatch({ type: "noCookie" })
@@ -143,9 +146,11 @@ const Signup: FC<Props> = () => {
 			>
 				{translation.title}
 			</Typography>
+			{state.error.email ? <Typography variant="caption" color="error">{translation.error.email}</Typography> : null}
 			<TextField className={classes.input} label={translation.fields.email} type="email" required name="email" value={state.data.email} onChange={handleChange} />
+			{state.error.username ? <Typography variant="caption" color="error">{translation.error.username}</Typography> : null}
 			<TextField className={classes.input} label={translation.fields.username} required name="username" value={state.data.username} onChange={handleChange} />
-			{state.passwordMatch ? null : <Typography color="error" variant="caption">The passwords do not match.</Typography>}
+			{state.passwordMatch ? null : <Typography color="error" variant="caption">{translation.error.password}</Typography>}
 			<FormControl className={classes.input}>
 				<InputLabel required>{translation.fields.password1}</InputLabel>
 				<Input type={state.showPasswords.password1 ? "text" : "password"} required name="password1" value={state.data.password1} onChange={handleChange} endAdornment={
