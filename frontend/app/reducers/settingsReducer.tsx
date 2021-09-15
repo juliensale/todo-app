@@ -36,7 +36,6 @@ export const getSettingsFormReducer = (initialState: SettingsFormState) => {
 			case "passwordVisibility":
 				if (action.password === 'password1' || action.password === 'password2') {
 					newState.showPasswords[action.password as ('password1' | 'password2')] = action.value
-					console.log(newState.showPasswords.password1)
 				}
 				return newState
 

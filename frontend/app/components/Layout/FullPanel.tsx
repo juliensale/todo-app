@@ -106,7 +106,6 @@ const User: FC = () => {
 
 	const [modalOpen, setModalOpen] = useState(false)
 	const handleLogout = () => {
-		console.log(authToken ? 'true' : 'false')
 		setAuthToken('')
 		try {
 			localStorage.removeItem('authToken')
