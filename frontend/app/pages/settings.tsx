@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginBottom: theme.spacing(2),
 		width: '100%'
 	},
+	smallLabel: {
+		fontSize: theme.spacing(1.8)
+	},
 	button: {
 		marginTop: theme.spacing(3),
 		marginRight: 0,
@@ -207,7 +210,7 @@ const Settings: FC<Props> = () => {
 							} />
 						</FormControl>
 						<FormControl className={classes.input}  >
-							<InputLabel required>{translation.fields.password2}</InputLabel>
+							<InputLabel className={classes.smallLabel} required>{translation.fields.password2}</InputLabel>
 							<Input type={state.showPasswords.password2 ? "text" : "password"} required name="password2" value={state.data.password2} onChange={handleChange} endAdornment={
 								<InputAdornment position="end">
 									<IconButton
