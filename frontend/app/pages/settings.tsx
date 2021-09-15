@@ -79,7 +79,10 @@ const Settings: FC<Props> = () => {
 			message: '',
 			open: false
 		},
-		error: false,
+		error: {
+			email: false,
+			username: false
+		},
 		passwordMatch: true,
 		loading: {
 			general: false,
@@ -87,7 +90,7 @@ const Settings: FC<Props> = () => {
 		}
 	}
 
-	const reducer = getSettingsFormReducer(initialState)
+	const reducer = getSettingsFormReducer(initialState, translation)
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 	const authFetcher = (url: string, token: string) => {
@@ -145,7 +148,7 @@ const Settings: FC<Props> = () => {
 				.then(() => {
 					dispatch({ type: "success", form: "general" })
 				})
-				.catch(() => { dispatch({ type: "error", form: "general" }) })
+				.catch(err => { dispatch({ type: "error", form: "general", error: err }) })
 
 		} catch {
 			dispatch({ type: "noCookie" })
@@ -166,7 +169,15 @@ const Settings: FC<Props> = () => {
 					}
 				})
 					.then(() => dispatch({ type: "success", form: "password" }))
-					.catch(() => dispatch({ type: "error", form: "password" }))
+					.catch(err => dispatch({ type: "error", form: "password", error: err }))
+			} else {
+				dispatch({
+					type: "error",
+					form: "password",
+					error: {
+						type: "password"
+					}
+				})
 			}
 		} catch {
 			dispatch({ type: "noCookie" })
@@ -181,7 +192,9 @@ const Settings: FC<Props> = () => {
 					<form className={classes.form} onSubmit={handleSubmitGeneral}>
 						<Typography variant="h1" color="primary" className={classes.title}>{translation.title}</Typography>
 						<Typography variant="h2" color="primary" className={classes.subtitle}>{translation.forms.general}</Typography>
+						{state.error.email ? <Typography variant="caption" color="error">{translation.error.email}</Typography> : null}
 						<TextField className={classes.input} label={translation.fields.email} name="email" value={state.data.email} onChange={handleChange} required />
+						{state.error.username ? <Typography variant="caption" color="error">{translation.error.username}</Typography> : null}
 						<TextField className={classes.input} label={translation.fields.username} name="username" value={state.data.username} onChange={handleChange} required />
 						<TextField className={classes.input} label={translation.fields.name} name="name" value={state.data.name} onChange={handleChange} />
 						{
@@ -193,7 +206,7 @@ const Settings: FC<Props> = () => {
 
 					<form className={classes.form} onSubmit={handleSubmitPassword}>
 						<Typography variant="h2" color="primary" className={classes.subtitle} style={{ marginTop: '1em' }}>{translation.forms.password}</Typography>
-						{state.passwordMatch ? null : <Typography color="error" variant="caption">The passwords do not match.</Typography>}
+						{state.passwordMatch ? null : <Typography color="error" variant="caption">{translation.error.password}</Typography>}
 						<FormControl className={classes.input} >
 							<InputLabel required>{translation.fields.password1}</InputLabel>
 							<Input type={state.showPasswords.password1 ? "text" : "password"} required name="password1" value={state.data.password1} onChange={handleChange} endAdornment={

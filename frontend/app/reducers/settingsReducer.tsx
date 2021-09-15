@@ -1,4 +1,5 @@
 import { Color } from "@material-ui/lab"
+import { Translation } from "../translations/User/Settings"
 
 export type SettingsFormState = {
 	data: {
@@ -18,15 +19,19 @@ export type SettingsFormState = {
 		open: boolean
 	},
 	passwordMatch: boolean,
-	error: boolean,
+	error: {
+		email: boolean,
+		username: boolean
+	},
 	loading: {
 		general: boolean,
 		password: boolean
 	}
 }
-export const getSettingsFormReducer = (initialState: SettingsFormState) => {
+export const getSettingsFormReducer = (initialState: SettingsFormState, translation: Translation) => {
 	const reducer: (state: SettingsFormState, action: any) => SettingsFormState = (state, action) => {
 		const newState = { ...state }
+		let message = ''
 		switch (action.type) {
 			case "patch":
 				newState.data = { ...newState.data, ...action.data }
@@ -49,12 +54,22 @@ export const getSettingsFormReducer = (initialState: SettingsFormState) => {
 				}
 
 			case "success":
+				message = translation.feedbacks.success.base
+				switch (action.form) {
+					case 'general':
+						message = translation.feedbacks.success.general;
+						break;
+					case 'password':
+						message = translation.feedbacks.success.password;
+						break;
+					default: break;
+				}
 				return {
 					...initialState,
 					data: { ...state.data },
 					snack: {
 						severity: "success" as Color,
-						message: "Success!",
+						message: message,
 						open: true
 					},
 					loading: {
@@ -64,14 +79,44 @@ export const getSettingsFormReducer = (initialState: SettingsFormState) => {
 				}
 
 			case "error":
+				message = translation.feedbacks.error.base
+				var error = {
+					email: false,
+					username: false
+				}
+				if (action.error) {
+					if (action.error.response) {
+						switch (action.error.response.status) {
+							case 400:
+								message = translation.feedbacks.error[400];
+								if (action.error.response.data.email) {
+									error.email = true
+								}
+								if (action.error.response.data.username) {
+									error.username = true
+								}
+								break;
+							case 404:
+								message = translation.feedbacks.error[404];
+								break;
+							case 500:
+								message = translation.feedbacks.error[500];
+								break;
+							default: break;
+						}
+					} else if (action.error.type && action.error.type === 'password') {
+						message = translation.feedbacks.error.password
+					}
+
+				}
 				return {
 					...state,
 					snack: {
 						severity: "error" as Color,
-						message: "Error.",
+						message: message,
 						open: true
 					},
-					error: true,
+					error: error,
 					loading: {
 						...state.loading,
 						[action.form]: false
@@ -83,10 +128,13 @@ export const getSettingsFormReducer = (initialState: SettingsFormState) => {
 					...state,
 					snack: {
 						severity: "warning" as Color,
-						message: "You must allow cookies.",
+						message: translation.feedbacks.noCookie,
 						open: true
 					},
-					error: false,
+					error: {
+						email: false,
+						username: false
+					},
 					loading: {
 						general: false,
 						password: false
