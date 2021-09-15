@@ -52,11 +52,15 @@ export const getSettingsFormReducer = (initialState: SettingsFormState) => {
 			case "success":
 				return {
 					...initialState,
-					...state.data,
+					data: { ...state.data },
 					snack: {
 						severity: "success" as Color,
 						message: "Success!",
 						open: true
+					},
+					loading: {
+						...state.loading,
+						[action.form]: false
 					}
 				}
 

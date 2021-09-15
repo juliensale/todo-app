@@ -1,9 +1,12 @@
 import { Button, CircularProgress, Container, createStyles, FormControl, IconButton, Input, InputAdornment, InputLabel, makeStyles, Paper, Snackbar, TextField, Theme, Typography } from '@material-ui/core'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
-import React, { FC, useReducer } from 'react'
+import axios from 'axios'
+import React, { FC, useContext, useEffect, useReducer } from 'react'
+import useSWR from 'swr'
 import Alert from '../components/Forms/Alert'
 import PageForm from '../components/Forms/PageForm'
 import { getSettingsFormReducer, SettingsFormState } from '../reducers/settingsReducer'
+import { UserContext } from './_app'
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -47,6 +50,8 @@ type Props = {
 }
 const Settings: FC<Props> = () => {
 	const classes = useStyles()
+	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
+	const { authToken } = useContext(UserContext)
 
 	const initialState: SettingsFormState = {
 		data: {
@@ -76,6 +81,24 @@ const Settings: FC<Props> = () => {
 	const reducer = getSettingsFormReducer(initialState)
 	const [state, dispatch] = useReducer(reducer, initialState)
 
+	const authFetcher = (url: string, token: string) => {
+		return axios.get(url, { headers: { Authorization: `Token ${token}` } }).then(res => res.data)
+	}
+	const userData = useSWR([`${apiUrl}/users/me`, authToken], authFetcher).data
+	useEffect(() => {
+		if (userData) {
+			dispatch({
+				type: 'patch',
+				data: {
+					email: userData.email,
+					username: userData.username,
+					name: userData.name
+				}
+			})
+		}
+	}, [userData])
+
+
 	const closeSnackBar = () => {
 		dispatch({ type: 'closeSnack' })
 	}
@@ -96,12 +119,57 @@ const Settings: FC<Props> = () => {
 		event.preventDefault();
 	}
 
+	const handleSubmitGeneral: React.FormEventHandler<HTMLFormElement> = (e) => {
+		e.preventDefault()
+		dispatch({ type: "loadingStart", form: "general" })
+		try {
+			const authToken = localStorage.getItem('authToken')
+			axios.patch(`${apiUrl}/users/me/`, {
+				email: state.data.email,
+				username: state.data.username,
+				name: state.data.name
+			}, {
+				headers: {
+					"Authorization": `Token ${authToken}`
+				}
+			})
+				.then(() => {
+					dispatch({ type: "success", form: "general" })
+				})
+				.catch(() => { dispatch({ type: "error", form: "general" }) })
+
+		} catch {
+			dispatch({ type: "noCookie" })
+		}
+	}
+
+	const handleSubmitPassword: React.FormEventHandler<HTMLFormElement> = (e) => {
+		e.preventDefault()
+		dispatch({ type: "loadingStart", form: "password" })
+		try {
+			const authToken = localStorage.getItem('authToken')
+			if (state.passwordMatch) {
+				axios.patch(`${apiUrl}/users/me/`, {
+					password: state.data.password1
+				}, {
+					headers: {
+						"Authorization": `Token ${authToken}`
+					}
+				})
+					.then(() => dispatch({ type: "success", form: "password" }))
+					.catch(() => dispatch({ type: "error", form: "password" }))
+			}
+		} catch {
+			dispatch({ type: "noCookie" })
+		}
+	}
 
 	return (
 		<>
 			<Container className={classes.container}>
 				<Paper className={classes.formPaper} elevation={3}>
-					<form className={classes.form} >
+
+					<form className={classes.form} onSubmit={handleSubmitGeneral}>
 						<Typography variant="h1" color="primary" className={classes.title}>Settings</Typography>
 						<Typography variant="h2" color="primary" className={classes.subtitle}>General</Typography>
 						<TextField className={classes.input} label="Email" name="email" value={state.data.email} onChange={handleChange} required />
@@ -113,8 +181,10 @@ const Settings: FC<Props> = () => {
 								: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
 						}
 					</form>
-					<form className={classes.form} >
+
+					<form className={classes.form} onSubmit={handleSubmitPassword}>
 						<Typography variant="h2" color="primary" className={classes.subtitle} style={{ marginTop: '1em' }}>Change Password</Typography>
+						{state.passwordMatch ? null : <Typography color="error" variant="caption">The passwords do not match.</Typography>}
 						<FormControl className={classes.input} >
 							<InputLabel required>Password</InputLabel>
 							<Input type={state.showPasswords.password1 ? "text" : "password"} required name="password1" value={state.data.password1} onChange={handleChange} endAdornment={
@@ -151,8 +221,11 @@ const Settings: FC<Props> = () => {
 								: <Button className={classes.button} type="submit" color="primary" variant="contained">Submit</Button>
 						}
 					</form>
+
 				</Paper>
 			</Container>
+
+
 			{state.snack ?
 				<Snackbar
 					open={state.snack.open}
