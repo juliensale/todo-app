@@ -11,8 +11,9 @@ type Props = {
 const Layout: FC<Props> = ({ children, darkMode, switchDarkMode }) => {
 	const isMediaPhone = useMediaQuery('(max-width:700px)')
 	const theme: Theme = useTheme()
+	const navWidth = getNavWidth(isMediaPhone, theme)
 	return (
-		<div style={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', marginLeft: getNavWidth(isMediaPhone, theme) }}>
+		<div style={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', width: `calc(100vw - ${navWidth}px)`, marginLeft: navWidth }}>
 			<Navigation darkMode={darkMode} switchDarkMode={switchDarkMode} />
 			{children}
 		</div>
