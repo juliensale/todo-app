@@ -59,7 +59,9 @@ const Navigation: FC<NavigationProps> = ({ children, darkMode, switchDarkMode, i
 					bottom: 0,
 					left: 0,
 					flexDirection: 'column',
-					width: getNavWidth(isMediaPhone, theme)
+					width: getNavWidth(isMediaPhone, theme),
+					borderRadius: 0,
+					zIndex: 1
 				}}
 				elevation={2}
 			>
