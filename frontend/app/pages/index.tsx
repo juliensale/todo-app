@@ -1,4 +1,4 @@
-import { Box, Button, Fab, Paper, Snackbar, TextField, Theme, useMediaQuery } from '@material-ui/core';
+import { Box, Button, Fab, FormControl, Input, InputLabel, Paper, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
 import { ClassNameMap, createStyles, makeStyles, useTheme } from '@material-ui/styles';
 import React, { FC, useContext, useMemo, useReducer } from 'react';
 import LoginRequired from '../components/Layout/LoginRequired';
@@ -22,17 +22,30 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		bottom: 0,
 		right: 0,
 		boxShadow: theme.shadows[4],
-		height: theme.spacing(11.5)
+		height: theme.spacing(11.5),
+		padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`
 	},
 	createForm: {
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		gap: theme.spacing(2),
-		width: '100%'
+		gap: theme.spacing(1),
+		width: '100%',
+		height: '100%'
 	},
 	input: {
 		width: 'min(75%, 50em)'
+	},
+	colorPickerContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		height: '100%',
+		margin: `0 ${theme.spacing(2)}px`
+	},
+	colorPicker: {
+		width: '120%'
 	},
 	snackBar: {
 		bottom: theme.spacing(12.5)
@@ -140,7 +153,14 @@ const CreateListForm: FC = () => {
 			<Box className={classes.createFormPaper} style={{ left: navWidth }}>
 				<form className={classes.createForm} onSubmit={handleSubmit}>
 					<TextField className={classes.input} variant="outlined" name="title" label={translation.create} value={state.data.title} onChange={handleChange} />
-					<Fab color="primary" type="submit"><AddIcon /></Fab>
+					{isMediaPhone ? null :
+						<div className={classes.colorPickerContainer}>
+							<label><Typography variant="caption" color="textSecondary">{translation.color}</Typography></label>
+							<input className={classes.colorPicker} type="color" name="color" value={state.data.color} onChange={handleChange} />
+						</div>
+					}
+
+					<Fab className={classes.plusbutton} color="primary" type="submit"><AddIcon /></Fab>
 				</form>
 				{state.snack ?
 					<Snackbar

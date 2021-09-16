@@ -17,7 +17,7 @@ export type Translation = {
 
 export const en: Translation = {
 	create: "Create a list",
-	color: "Pick a color",
+	color: "Color",
 	feedbacks: {
 		create: {
 			success: "List created!",
@@ -34,7 +34,7 @@ export const en: Translation = {
 
 export const fr: Translation = {
 	create: "Créer une liste",
-	color: "Choisissez une couleur",
+	color: "Couleur",
 	feedbacks: {
 		create: {
 			success: "Liste créée!",
