@@ -111,8 +111,11 @@ const Settings: FC<Props> = () => {
 	}, [userData])
 
 
-	const closeSnackBar = () => {
-		dispatch({ type: 'closeSnack' })
+	const closeSnackBar = (e?: React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		dispatch({ type: "closeSnack" })
 	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
