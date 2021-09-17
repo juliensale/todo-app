@@ -1,18 +1,15 @@
 import { Color } from "@material-ui/lab"
+import React from "react"
 import { Translation } from '../../translations/List'
+import { SnackAction } from "../snackReducer"
 
 export type ListCreateFormState = {
 	data: {
 		title: string,
 		color: string
-	},
-	snack: {
-		severity: Color,
-		message: string,
-		open: boolean
 	}
 }
-export const getListCreateFormReducer = (initialState: ListCreateFormState, translation: Translation) => {
+export const getListCreateFormReducer = (initialState: ListCreateFormState, translation: Translation, dispatchSnack: React.Dispatch<SnackAction>) => {
 	return (state: ListCreateFormState, action: any) => {
 		const newState = { ...state }
 		switch (action.type) {
@@ -27,15 +24,11 @@ export const getListCreateFormReducer = (initialState: ListCreateFormState, tran
 				}
 
 			case "success":
-				return {
-					...state,
-					snack: {
-						severity: "success" as Color,
-						message: translation.feedbacks.create.success,
-						open: true
-					}
-				}
-
+				dispatchSnack({
+					type: "success",
+					message: translation.feedbacks.create.success
+				})
+				return state
 			case "error":
 				var message = translation.feedbacks.baseError
 
@@ -56,32 +49,19 @@ export const getListCreateFormReducer = (initialState: ListCreateFormState, tran
 						}
 					}
 				}
-				return {
-					...state,
-					snack: {
-						severity: "error" as Color,
-						message: message,
-						open: true
-					}
-				}
+				dispatchSnack({
+					type: "error",
+					message: message
+				})
+
+				return state
 			case "noCookie":
-				return {
-					...state,
-					snack: {
-						severity: "warning" as Color,
-						message: translation.feedbacks.noCookie,
-						open: true
-					}
-				}
+				dispatchSnack({ type: "noCookie", message: "" })
+				return state
 
 			case "closeSnack":
-				return {
-					...state,
-					snack: {
-						...state.snack,
-						open: false
-					}
-				}
+				dispatchSnack({ type: "closeSnack", message: "" })
+				return state
 
 			default: return state
 		}

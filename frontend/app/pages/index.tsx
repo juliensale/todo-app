@@ -18,6 +18,7 @@ import ItemButton from '../components/ItemLists/ItemButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CustomModal from '../components/CustomModal';
+import { getSnackReducer, SnackType, SnackAction } from '../reducers/snackReducer';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -85,7 +86,9 @@ type ContextType = {
 	translation: Translation,
 	apiUrl: string,
 	authToken: string,
-	lists: List[] | undefined
+	lists: List[] | undefined,
+	dispatchSnack: React.Dispatch<SnackAction>
+
 }
 const HomeContext = React.createContext({} as ContextType)
 const { Provider } = HomeContext
@@ -103,20 +106,44 @@ const Home: FC<HomeProps> = ({ children }) => {
 
 	const lists: List[] | undefined = useSWR([`${apiUrl}/todo/lists/`, authToken], authFetcher).data
 
+	const initialSnack: SnackType = {
+		severity: "info",
+		message: "",
+		open: false
+	}
+
+	const snackReducer = getSnackReducer(initialSnack, translation)
+	const [snack, dispatchSnack] = useReducer(snackReducer, initialSnack)
+	const closeSnackBar = () => {
+		dispatchSnack({ type: "closeSnack", message: "" })
+	}
 
 	const value = useMemo(() => ({
 		classes,
 		translation,
 		apiUrl,
 		authToken,
-		lists
-	}), [classes, translation, apiUrl, authToken, lists])
+		lists,
+		dispatchSnack
+	}), [classes, translation, apiUrl, authToken, lists, dispatchSnack])
 
 	return (
 		<Provider value={value}>
 			<LoginRequired>
 				{children}
 			</LoginRequired>
+			{snack ?
+				<Snackbar
+					className={classes.snackBar}
+					open={snack.open}
+					onClose={closeSnackBar}
+					autoHideDuration={5000}
+					anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+				>
+					<Alert severity={snack.severity}>{snack.message}</Alert>
+				</Snackbar>
+				: null
+			}
 		</Provider>
 	)
 }
@@ -186,7 +213,7 @@ const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> 
 }
 
 const CreateListForm: FC = () => {
-	const { classes, translation, apiUrl, authToken, lists } = useContext(HomeContext)
+	const { classes, translation, dispatchSnack, apiUrl, authToken, lists } = useContext(HomeContext)
 
 	const isMediaPhone = useMediaQuery('(max-width: 700px)')
 	const theme: Theme = useTheme()
@@ -196,14 +223,9 @@ const CreateListForm: FC = () => {
 		data: {
 			title: '',
 			color: '#000000'
-		},
-		snack: {
-			severity: 'info',
-			message: '',
-			open: false
 		}
 	}
-	const reducer = getListCreateFormReducer(initialState, translation)
+	const reducer = getListCreateFormReducer(initialState, translation, dispatchSnack)
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 
@@ -271,18 +293,6 @@ const CreateListForm: FC = () => {
 
 					<Fab className={classes.plusbutton} color="primary" type="submit"><AddIcon /></Fab>
 				</form>
-				{state.snack ?
-					<Snackbar
-						className={classes.snackBar}
-						open={state.snack.open}
-						onClose={closeSnackBar}
-						autoHideDuration={5000}
-						anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-					>
-						<Alert severity={state.snack.severity}>{state.snack.message}</Alert>
-					</Snackbar>
-					: null
-				}
 			</Box>
 		</>
 	)
