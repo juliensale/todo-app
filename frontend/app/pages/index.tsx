@@ -1,6 +1,6 @@
 import { Box, Button, Fab, FormControl, Input, InputLabel, Paper, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
 import { ClassNameMap, createStyles, makeStyles, useTheme } from '@material-ui/styles';
-import React, { FC, useContext, useMemo, useReducer } from 'react';
+import React, { FC, useContext, useEffect, useMemo, useReducer } from 'react';
 import LoginRequired from '../components/Layout/LoginRequired';
 import { getNavWidth } from '../components/Layout/Navigation';
 import AddIcon from '@material-ui/icons/Add'
@@ -11,6 +11,12 @@ import useSWR from 'swr';
 import axios from 'axios';
 import { UserContext } from './_app';
 import Alert from '../components/Forms/Alert';
+import authFetcher from '../components/authFetcher';
+import { List } from '../types/dbObjects';
+import Item from '../components/ItemLists/Item';
+import ItemButton from '../components/ItemLists/ItemButton';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -49,7 +55,18 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 	},
 	snackBar: {
 		bottom: theme.spacing(12.5)
-	}
+	},
+	listTitle: {
+		marginLeft: theme.spacing(4)
+	},
+	buttonContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: '100%'
+	},
+	icon: { display: 'grid', placeItems: 'center' }
 }))
 
 
@@ -57,7 +74,8 @@ type ContextType = {
 	classes: ClassNameMap,
 	translation: Translation,
 	apiUrl: string,
-	authToken: string
+	authToken: string,
+	lists: List[] | undefined
 }
 const HomeContext = React.createContext({} as ContextType)
 const { Provider } = HomeContext
@@ -73,13 +91,16 @@ const Home: FC<HomeProps> = ({ children }) => {
 	const { locale } = router
 	const translation = locale === 'fr' ? fr : en
 
+	const lists: List[] | undefined = useSWR([`${apiUrl}/todo/lists/`, authToken], authFetcher).data
+
 
 	const value = useMemo(() => ({
 		classes,
 		translation,
 		apiUrl,
-		authToken
-	}), [classes, translation, apiUrl, authToken])
+		authToken,
+		lists
+	}), [classes, translation, apiUrl, authToken, lists])
 
 	return (
 		<Provider value={value}>
@@ -91,6 +112,28 @@ const Home: FC<HomeProps> = ({ children }) => {
 }
 
 
+const ListList: FC = () => {
+	const { translation, classes, lists } = useContext(HomeContext)
+	const listList = useMemo(() => lists?.map(list => <ListItem key={`list-${list.id}`} list={list} />), [lists])
+	return (
+		<div style={{ width: '100%' }}>
+			{listList}
+		</div>
+	)
+}
+
+const ListItem: FC<{ list: List }> = ({ list }) => {
+	const { classes, translation } = useContext(HomeContext)
+	return (
+		<Item style={{ color: list.color }} href={`/list/${list.id}`}>
+			<Typography color="inherit" className={classes.listTitle} > {list.title}</Typography>
+			<div className={classes.buttonContainer}>
+				<ItemButton stopPropagation title="Edit"><MoreHorizIcon className={classes.icon} /></ItemButton>
+				<ItemButton noHoverEffect title="See list"><ChevronRightIcon className={classes.icon} /></ItemButton>
+			</div>
+		</Item>
+	)
+}
 
 
 const CreateListForm: FC = () => {
@@ -103,7 +146,7 @@ const CreateListForm: FC = () => {
 	const initialState: ListCreateFormState = {
 		data: {
 			title: '',
-			color: '#000'
+			color: '#000000'
 		},
 		snack: {
 			severity: 'info',
@@ -186,6 +229,7 @@ type UsageProps = {
 const Usage: FC<UsageProps> = (props) => {
 	return (
 		<Home {...props}>
+			<ListList />
 			<CreateListForm />
 		</Home>
 	)
