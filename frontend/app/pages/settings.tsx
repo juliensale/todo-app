@@ -9,6 +9,7 @@ import PageForm from '../components/Forms/PageForm'
 import { getSettingsFormReducer, SettingsFormState } from '../reducers/settingsReducer'
 import { UserContext } from './_app'
 import { en, fr } from '../translations/User/Settings'
+import authFetcher from '../components/authFetcher'
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -93,9 +94,6 @@ const Settings: FC<Props> = () => {
 	const reducer = getSettingsFormReducer(initialState, translation)
 	const [state, dispatch] = useReducer(reducer, initialState)
 
-	const authFetcher = (url: string, token: string) => {
-		return axios.get(url, { headers: { Authorization: `Token ${token}` } }).then(res => res.data)
-	}
 	const userData = useSWR([`${apiUrl}/users/me`, authToken], authFetcher).data
 	useEffect(() => {
 		if (userData) {
