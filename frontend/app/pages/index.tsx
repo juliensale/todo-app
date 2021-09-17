@@ -1,13 +1,13 @@
-import { Box, Button, Fab, FormControl, Input, InputLabel, Paper, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
+import { Box, Fab, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
 import { ClassNameMap, createStyles, makeStyles, useTheme } from '@material-ui/styles';
-import React, { FC, useContext, useEffect, useMemo, useReducer } from 'react';
+import React, { FC, useContext, useMemo, useReducer } from 'react';
 import LoginRequired from '../components/Layout/LoginRequired';
 import { getNavWidth } from '../components/Layout/Navigation';
 import AddIcon from '@material-ui/icons/Add'
 import { useRouter } from 'next/dist/client/router';
 import { en, fr, Translation } from '../translations/List'
 import { getListCreateFormReducer, ListCreateFormState } from '../reducers/List/createReducer';
-import useSWR from 'swr';
+import useSWR, { mutate, trigger } from 'swr';
 import axios from 'axios';
 import { UserContext } from './_app';
 import Alert from '../components/Forms/Alert';
@@ -137,7 +137,7 @@ const ListItem: FC<{ list: List }> = ({ list }) => {
 
 
 const CreateListForm: FC = () => {
-	const { classes, translation, apiUrl, authToken } = useContext(HomeContext)
+	const { classes, translation, apiUrl, authToken, lists } = useContext(HomeContext)
 
 	const isMediaPhone = useMediaQuery('(max-width: 700px)')
 	const theme: Theme = useTheme()
@@ -170,6 +170,18 @@ const CreateListForm: FC = () => {
 	const handleSubmit: React.FormEventHandler = (e) => {
 		e.preventDefault()
 		dispatch({ type: "create" })
+		mutate(
+			[`${apiUrl}/todo/lists/`, authToken],
+			[
+				...(lists || []),
+				{
+					id: Math.random(),
+					title: state.data.title,
+					color: state.data.color
+
+				}
+			]
+		)
 		axios.post(`${apiUrl}/todo/lists/`, {
 			title: state.data.title,
 			color: state.data.color
@@ -180,8 +192,12 @@ const CreateListForm: FC = () => {
 		})
 			.then(() => {
 				dispatch({ type: "success" })
+				trigger([`${apiUrl}/todo/lists/`, authToken],)
 			})
-			.catch(err => dispatch({ type: "error", error: err }))
+			.catch(err => {
+				dispatch({ type: "error", error: err })
+				trigger([`${apiUrl}/todo/lists/`, authToken],)
+			})
 
 	}
 
