@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		right: 0,
 		boxShadow: theme.shadows[4],
 		height: theme.spacing(11.5),
-		padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`
+		padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
+		zIndex: 2,
+		background: theme.palette.background.paper
 	},
 	createForm: {
 		display: 'flex',
@@ -55,6 +57,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 	},
 	snackBar: {
 		bottom: theme.spacing(12.5)
+	},
+	itemContainer: {
+		width: '100%',
+		marginBottom: theme.spacing(23)
 	},
 	listTitle: {
 		marginLeft: theme.spacing(4)
@@ -116,7 +122,7 @@ const ListList: FC = () => {
 	const { translation, classes, lists } = useContext(HomeContext)
 	const listList = useMemo(() => lists?.map(list => <ListItem key={`list-${list.id}`} list={list} />), [lists])
 	return (
-		<div style={{ width: '100%' }}>
+		<div className={classes.itemContainer}>
 			{listList}
 		</div>
 	)
