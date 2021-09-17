@@ -1,6 +1,6 @@
-import { Box, Fab, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
+import { Box, Button, Fab, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
 import { ClassNameMap, createStyles, makeStyles, useTheme } from '@material-ui/styles';
-import React, { FC, useContext, useMemo, useReducer } from 'react';
+import React, { FC, useContext, useMemo, useReducer, useState } from 'react';
 import LoginRequired from '../components/Layout/LoginRequired';
 import { getNavWidth } from '../components/Layout/Navigation';
 import AddIcon from '@material-ui/icons/Add'
@@ -17,6 +17,7 @@ import Item from '../components/ItemLists/Item';
 import ItemButton from '../components/ItemLists/ItemButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import CustomModal from '../components/CustomModal';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -72,7 +73,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		justifyContent: 'center',
 		height: '100%'
 	},
-	icon: { display: 'grid', placeItems: 'center' }
+	icon: { display: 'grid', placeItems: 'center' },
+	deleteButton: {
+		color: theme.palette.error.main
+	}
 }))
 
 
@@ -130,17 +134,49 @@ const ListList: FC = () => {
 
 const ListItem: FC<{ list: List }> = ({ list }) => {
 	const { classes, translation } = useContext(HomeContext)
+	const [modalOpen, setModalOpen] = useState(false)
 	return (
-		<Item style={{ color: list.color }} href={`/list/${list.id}`}>
-			<Typography color="inherit" className={classes.listTitle} > {list.title}</Typography>
-			<div className={classes.buttonContainer}>
-				<ItemButton stopPropagation title="Edit"><MoreHorizIcon className={classes.icon} /></ItemButton>
-				<ItemButton noHoverEffect title="See list"><ChevronRightIcon className={classes.icon} /></ItemButton>
-			</div>
-		</Item>
+		<>
+			<Item style={{ color: list.color }} href={`/list/${list.id}`}>
+				<Typography color="inherit" className={classes.listTitle} > {list.title}</Typography>
+				<div className={classes.buttonContainer}>
+					<ItemButton stopPropagation title="Options" onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
+					<ItemButton noHoverEffect title="See list"><ChevronRightIcon className={classes.icon} /></ItemButton>
+				</div>
+			</Item>
+			<ListModal list={list} modalOpen={modalOpen} closeModal={() => setModalOpen(false)} />
+		</>
 	)
 }
 
+const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> = ({ list, modalOpen, closeModal }) => {
+
+	const { classes, translation, apiUrl, authToken, lists } = useContext(HomeContext)
+
+	const handleDelete = () => {
+		mutate(
+			[`${apiUrl}/todo/lists/`, authToken],
+			(lists || []).filter(item => item.id !== list.id),
+			false
+		)
+		axios.delete(`${apiUrl}/todo/lists/${list.id}/`, {
+			headers: {
+				"Authorization": `Token ${authToken}`
+			}
+		})
+			.then(() => { trigger([`${apiUrl}/todo/lists/`, authToken]) })
+			.catch(() => { trigger([`${apiUrl}/todo/lists/`, authToken]) })
+
+	}
+
+	return (
+		<CustomModal open={modalOpen} handleClose={closeModal}>
+			<Typography variant="h1" color="primary">{list.title}</Typography>
+
+			<Button variant="outlined" color="inherit" onClick={handleDelete} className={classes.deleteButton}>Delete</Button>
+		</CustomModal>
+	)
+}
 
 const CreateListForm: FC = () => {
 	const { classes, translation, apiUrl, authToken, lists } = useContext(HomeContext)
@@ -186,7 +222,8 @@ const CreateListForm: FC = () => {
 					color: state.data.color
 
 				}
-			]
+			],
+			false
 		)
 		axios.post(`${apiUrl}/todo/lists/`, {
 			title: state.data.title,
