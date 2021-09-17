@@ -126,9 +126,16 @@ const ListList: FC = () => {
 	const { translation, classes, lists } = useContext(HomeContext)
 	const listList = useMemo(() => lists?.map(list => <ListItem key={`list-${list.id}`} list={list} />), [lists])
 	return (
-		<div className={classes.itemContainer}>
-			{listList}
-		</div>
+		(lists && lists[0])
+			? (
+				<div className={classes.itemContainer}>
+					{listList}
+				</div>
+			) : (
+				<div>
+					There is no list. Use the form below to create one.
+				</div>
+			)
 	)
 }
 
