@@ -23,6 +23,18 @@ import { getSnackReducer, SnackType, SnackAction } from '../reducers/snackReduce
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
+	noListContainer: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		justifyContent: "center",
+		width: '100%',
+		padding: theme.spacing(3),
+		gap: theme.spacing(2),
+		'& > *': {
+			textAlign: 'center'
+		}
+	},
 	createFormPaper: {
 		display: 'flex',
 		alignItems: 'center',
@@ -199,8 +211,9 @@ const ListList: FC = () => {
 					{listList}
 				</div>
 			) : (
-				<div>
-					There is no list. Use the form below to create one.
+				<div className={classes.noListContainer}>
+					<Typography color="primary" variant="h4">{translation.noList[0]}</Typography>
+					<Typography variant="body1">{translation.noList[1]}</Typography>
 				</div>
 			)
 	)

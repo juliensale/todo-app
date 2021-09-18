@@ -30,7 +30,8 @@ export type Translation = {
 	seeList: string,
 	delete: string,
 	edit: string,
-	submit: string
+	submit: string,
+	noList: [string, string]
 }
 
 export const en: Translation = {
@@ -65,7 +66,11 @@ export const en: Translation = {
 	seeList: "See List",
 	delete: "Delete",
 	edit: "Edit",
-	submit: "Submit"
+	submit: "Submit",
+	noList: [
+		"There is no List yet.",
+		'Add a title and click the "+" button in the form below to create one.'
+	]
 };
 
 export const fr: Translation = {
@@ -100,5 +105,9 @@ export const fr: Translation = {
 	seeList: "Voir la liste",
 	delete: "Supprimer",
 	edit: "Modifier",
-	submit: 'Envoyer'
+	submit: 'Envoyer',
+	noList: [
+		"Il n'y a pas encore de Liste.",
+		'Ajoutez un titre et cliquez sur le bouton "+" dans le formulaire ci-dessous pour en créer une.'
+	]
 }
