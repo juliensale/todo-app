@@ -35,7 +35,7 @@ export const getSnackReducer = (initialSnack: SnackType, translation: Translatio
 
 			case "closeSnack":
 				return {
-					...initialSnack,
+					...snack,
 					open: false
 				}
 			default:
