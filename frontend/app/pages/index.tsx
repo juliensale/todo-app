@@ -75,8 +75,44 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		height: '100%'
 	},
 	icon: { display: 'grid', placeItems: 'center' },
+	optionsContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		padding: theme.spacing(4)
+	},
+	optionsTitle: {
+		width: '100%',
+		textAlign: 'start',
+		marginBottom: theme.spacing(1),
+		marginLeft: -theme.spacing(2)
+	},
 	deleteButton: {
-		color: theme.palette.error.main
+		color: theme.palette.error.main,
+		marginLeft: 'auto',
+		marginRight: 0,
+		marginTop: theme.spacing(4),
+		width: theme.spacing(13)
+	},
+	editForm: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'flex-start',
+		justifyContent: 'center'
+	},
+	editButton: {
+		marginLeft: 'auto',
+		marginRight: 0,
+		marginTop: theme.spacing(1),
+		width: theme.spacing(13)
+	},
+	editInput: {
+		width: '100%',
+		marginBottom: theme.spacing(3),
+		display: 'flex'
+	},
+	editColor: {
+		width: '100%',
+		marginLeft: theme.spacing(1)
 	}
 }))
 
@@ -214,10 +250,29 @@ const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> 
 
 	return (
 		<CustomModal open={modalOpen} handleClose={closeModal}>
-			<Typography variant="h1" color="primary">{list.title}</Typography>
-
-			<Button variant="outlined" color="inherit" onClick={handleDelete} className={classes.deleteButton}>{translation.delete}</Button>
+			<div className={classes.optionsContainer}>
+				<Typography className={classes.optionsTitle} variant="h1" color="primary">{translation.edit}</Typography>
+				<ListEditForm list={list} />
+				<Button variant="outlined" color="inherit" onClick={handleDelete} className={classes.deleteButton}>{translation.delete}</Button>
+			</div>
 		</CustomModal>
+	)
+}
+
+const ListEditForm: FC<{ list: List }> = ({ list }) => {
+	const { classes, translation } = useContext(HomeContext)
+	const handleSubmit: React.FormEventHandler = (e) => {
+		e.preventDefault()
+	}
+	return (
+		<form onSubmit={handleSubmit} className={classes.editForm}>
+			<TextField className={classes.editInput} label={translation.title} name="title" />
+			<div className={classes.editInput}>
+				<label>{translation.color}:</label>
+				<input className={classes.editColor} type="color" name="color" />
+			</div>
+			<Button type="submit" color="primary" variant="contained" className={classes.editButton}>{translation.submit}</Button>
+		</form>
 	)
 }
 

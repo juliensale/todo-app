@@ -1,5 +1,6 @@
 export type Translation = {
 	create: string,
+	title: string
 	color: string,
 	feedbacks: {
 		create: {
@@ -19,11 +20,14 @@ export type Translation = {
 	},
 	options: string,
 	seeList: string,
-	delete: string
+	delete: string,
+	edit: string,
+	submit: string
 }
 
 export const en: Translation = {
 	create: "Create a list",
+	title: "Title",
 	color: "Color",
 	feedbacks: {
 		create: {
@@ -43,11 +47,14 @@ export const en: Translation = {
 	},
 	options: "Options",
 	seeList: "See List",
-	delete: "Delete"
+	delete: "Delete",
+	edit: "Edit",
+	submit: "Submit"
 };
 
 export const fr: Translation = {
 	create: "Créer une liste",
+	title: "Titre",
 	color: "Couleur",
 	feedbacks: {
 		create: {
@@ -67,5 +74,7 @@ export const fr: Translation = {
 	},
 	options: "Options",
 	seeList: "Voir la liste",
-	delete: "Supprimer"
+	delete: "Supprimer",
+	edit: "Modifier",
+	submit: 'Envoyer'
 }
