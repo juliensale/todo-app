@@ -314,7 +314,7 @@ const ListEditForm: FC<{ list: List }> = ({ list }) => {
 	}
 	return (
 		<form onSubmit={handleSubmit} className={classes.editForm}>
-			<TextField className={classes.editInput} label={translation.title} name="title" value={state.data.title} onChange={handleChange} />
+			<TextField required className={classes.editInput} label={translation.title} name="title" value={state.data.title} onChange={handleChange} />
 			<div className={classes.editInput}>
 				<label>{translation.color}:</label>
 				<input className={classes.editColor} type="color" name="color" value={state.data.color} onChange={handleChange} />
@@ -389,7 +389,7 @@ const CreateListForm: FC = () => {
 		<>
 			<Box className={classes.createFormPaper} style={{ left: navWidth }}>
 				<form className={classes.createForm} onSubmit={handleSubmit}>
-					<TextField className={classes.input} variant="outlined" name="title" label={translation.create} value={state.data.title} onChange={handleChange} />
+					<TextField required className={classes.input} variant="outlined" name="title" label={translation.create} value={state.data.title} onChange={handleChange} />
 					{isMediaPhone ? null :
 						<div className={classes.colorPickerContainer}>
 							<label><Typography variant="caption" color="textSecondary">{translation.color}</Typography></label>
