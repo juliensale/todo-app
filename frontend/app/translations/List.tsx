@@ -11,6 +11,14 @@ export type Translation = {
 				'500': string
 			}
 		},
+		edit: {
+			success: string,
+			error: {
+				'400': string,
+				'404': string,
+				'500': string
+			}
+		},
 		delete: {
 			success: string,
 			error: string
@@ -38,6 +46,14 @@ export const en: Translation = {
 				'500': 'Server error.'
 			}
 		},
+		edit: {
+			success: "List edited!",
+			error: {
+				'400': 'Bad request.',
+				'404': 'Server loading.',
+				'500': 'Server error.'
+			}
+		},
 		delete: {
 			success: "Deleted!",
 			error: "The list could not be deleted."
@@ -59,6 +75,14 @@ export const fr: Translation = {
 	feedbacks: {
 		create: {
 			success: "Liste créée!",
+			error: {
+				'400': 'Mauvaise requête.',
+				'404': 'Serveur en cours de chargement.',
+				'500': 'Erreur serveur.'
+			}
+		},
+		edit: {
+			success: "Liste modifiée!",
 			error: {
 				'400': 'Mauvaise requête.',
 				'404': 'Serveur en cours de chargement.',

@@ -7,6 +7,7 @@ import AddIcon from '@material-ui/icons/Add'
 import { useRouter } from 'next/dist/client/router';
 import { en, fr, Translation } from '../translations/List'
 import { getListCreateFormReducer, ListCreateFormState } from '../reducers/List/createReducer';
+import { getListEditFormReducer, ListEditFormState } from '../reducers/List/editReducer';
 import useSWR, { mutate, trigger } from 'swr';
 import axios from 'axios';
 import { UserContext } from './_app';
@@ -260,16 +261,63 @@ const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> 
 }
 
 const ListEditForm: FC<{ list: List }> = ({ list }) => {
-	const { classes, translation } = useContext(HomeContext)
+	const { apiUrl, authToken, classes, translation, dispatchSnack, lists } = useContext(HomeContext)
+
+	const initialState: ListEditFormState = {
+		data: {
+			title: list.title,
+			color: list.color
+		}
+	}
+	const editReducer = getListEditFormReducer(initialState, translation, dispatchSnack)
+	const [state, dispatch] = useReducer(editReducer, initialState)
+
+	const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		dispatch({
+			type: "patch",
+			data: {
+				[e.target.name]: e.target.value
+			}
+		})
+	}
+
 	const handleSubmit: React.FormEventHandler = (e) => {
 		e.preventDefault()
+		mutate(
+			[`${apiUrl}/todo/lists/`, authToken],
+			[...lists!].map(item => {
+				let newList = { ...item }
+				if (item.id === list.id) {
+					newList.title = state.data.title;
+					newList.color = state.data.color
+				}
+				return newList
+			}),
+			false
+		)
+		axios.patch(`${apiUrl}/todo/lists/${list.id}/`, {
+			title: state.data.title,
+			color: state.data.color
+		}, {
+			headers: {
+				"Authorization": `Token ${authToken}`
+			}
+		})
+			.then(() => {
+				dispatch({ type: "success" })
+				trigger([`${apiUrl}/todo/lists/`, authToken],)
+			})
+			.catch(err => {
+				dispatch({ type: "error", error: err })
+				trigger([`${apiUrl}/todo/lists/`, authToken],)
+			})
 	}
 	return (
 		<form onSubmit={handleSubmit} className={classes.editForm}>
-			<TextField className={classes.editInput} label={translation.title} name="title" />
+			<TextField className={classes.editInput} label={translation.title} name="title" value={state.data.title} onChange={handleChange} />
 			<div className={classes.editInput}>
 				<label>{translation.color}:</label>
-				<input className={classes.editColor} type="color" name="color" />
+				<input className={classes.editColor} type="color" name="color" value={state.data.color} onChange={handleChange} />
 			</div>
 			<Button type="submit" color="primary" variant="contained" className={classes.editButton}>{translation.submit}</Button>
 		</form>
