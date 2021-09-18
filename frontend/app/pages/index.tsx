@@ -178,8 +178,8 @@ const ListItem: FC<{ list: List }> = ({ list }) => {
 			<Item style={{ color: list.color }} href={`/list/${list.id}`}>
 				<Typography color="inherit" className={classes.listTitle} > {list.title}</Typography>
 				<div className={classes.buttonContainer}>
-					<ItemButton stopPropagation title="Options" onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
-					<ItemButton noHoverEffect title="See list"><ChevronRightIcon className={classes.icon} /></ItemButton>
+					<ItemButton stopPropagation title={translation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
+					<ItemButton noHoverEffect title={translation.seeList}><ChevronRightIcon className={classes.icon} /></ItemButton>
 				</div>
 			</Item>
 			<ListModal list={list} modalOpen={modalOpen} closeModal={closeModal} />
@@ -216,7 +216,7 @@ const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> 
 		<CustomModal open={modalOpen} handleClose={closeModal}>
 			<Typography variant="h1" color="primary">{list.title}</Typography>
 
-			<Button variant="outlined" color="inherit" onClick={handleDelete} className={classes.deleteButton}>Delete</Button>
+			<Button variant="outlined" color="inherit" onClick={handleDelete} className={classes.deleteButton}>{translation.delete}</Button>
 		</CustomModal>
 	)
 }

@@ -16,7 +16,10 @@ export type Translation = {
 		}
 		noCookie: string,
 		baseError: string
-	}
+	},
+	options: string,
+	seeList: string,
+	delete: string
 }
 
 export const en: Translation = {
@@ -37,7 +40,10 @@ export const en: Translation = {
 		},
 		noCookie: 'You must allow cookies',
 		baseError: 'An error occured.'
-	}
+	},
+	options: "Options",
+	seeList: "See List",
+	delete: "Delete"
 };
 
 export const fr: Translation = {
@@ -58,5 +64,8 @@ export const fr: Translation = {
 		},
 		noCookie: 'Vous devez autoriser les cookies.',
 		baseError: 'Une erreur est survenue.'
-	}
+	},
+	options: "Options",
+	seeList: "Voir la liste",
+	delete: "Supprimer"
 }
