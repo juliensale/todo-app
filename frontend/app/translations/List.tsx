@@ -10,6 +10,10 @@ export type Translation = {
 				'500': string
 			}
 		},
+		delete: {
+			success: string,
+			error: string
+		}
 		noCookie: string,
 		baseError: string
 	}
@@ -27,6 +31,10 @@ export const en: Translation = {
 				'500': 'Server error.'
 			}
 		},
+		delete: {
+			success: "Deleted!",
+			error: "The list could not be deleted."
+		},
 		noCookie: 'You must allow cookies',
 		baseError: 'An error occured.'
 	}
@@ -43,6 +51,10 @@ export const fr: Translation = {
 				'404': 'Serveur en cours de chargement.',
 				'500': 'Erreur serveur.'
 			}
+		},
+		delete: {
+			success: "Supprimée!",
+			error: "La liste n'a pas pu être supprimée."
 		},
 		noCookie: 'Vous devez autoriser les cookies.',
 		baseError: 'Une erreur est survenue.'

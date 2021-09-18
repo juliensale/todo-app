@@ -114,7 +114,10 @@ const Home: FC<HomeProps> = ({ children }) => {
 
 	const snackReducer = getSnackReducer(initialSnack, translation)
 	const [snack, dispatchSnack] = useReducer(snackReducer, initialSnack)
-	const closeSnackBar = () => {
+	const closeSnackBar = (e?: React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
 		dispatchSnack({ type: "closeSnack", message: "" })
 	}
 
@@ -169,6 +172,7 @@ const ListList: FC = () => {
 const ListItem: FC<{ list: List }> = ({ list }) => {
 	const { classes, translation } = useContext(HomeContext)
 	const [modalOpen, setModalOpen] = useState(false)
+	const closeModal = () => { setModalOpen(false) }
 	return (
 		<>
 			<Item style={{ color: list.color }} href={`/list/${list.id}`}>
@@ -178,14 +182,14 @@ const ListItem: FC<{ list: List }> = ({ list }) => {
 					<ItemButton noHoverEffect title="See list"><ChevronRightIcon className={classes.icon} /></ItemButton>
 				</div>
 			</Item>
-			<ListModal list={list} modalOpen={modalOpen} closeModal={() => setModalOpen(false)} />
+			<ListModal list={list} modalOpen={modalOpen} closeModal={closeModal} />
 		</>
 	)
 }
 
 const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> = ({ list, modalOpen, closeModal }) => {
 
-	const { classes, translation, apiUrl, authToken, lists } = useContext(HomeContext)
+	const { classes, translation, dispatchSnack, apiUrl, authToken, lists } = useContext(HomeContext)
 
 	const handleDelete = () => {
 		mutate(
@@ -198,9 +202,14 @@ const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> 
 				"Authorization": `Token ${authToken}`
 			}
 		})
-			.then(() => { trigger([`${apiUrl}/todo/lists/`, authToken]) })
-			.catch(() => { trigger([`${apiUrl}/todo/lists/`, authToken]) })
-
+			.then(() => {
+				dispatchSnack({ type: 'success', message: translation.feedbacks.delete.success })
+				trigger([`${apiUrl}/todo/lists/`, authToken])
+			})
+			.catch(() => {
+				dispatchSnack({ type: 'error', message: translation.feedbacks.delete.error })
+				trigger([`${apiUrl}/todo/lists/`, authToken])
+			})
 	}
 
 	return (
@@ -273,12 +282,6 @@ const CreateListForm: FC = () => {
 
 	}
 
-	const closeSnackBar = (e?: React.SyntheticEvent, reason?: string) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		dispatch({ type: "closeSnack" })
-	}
 	return (
 		<>
 			<Box className={classes.createFormPaper} style={{ left: navWidth }}>
