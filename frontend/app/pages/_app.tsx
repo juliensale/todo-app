@@ -10,27 +10,38 @@ import Layout from '../components/Layout/Layout'
 
 type UserContextType = {
   authToken: string,
-  setAuthToken: React.Dispatch<React.SetStateAction<string>>
+  setAuthToken: React.Dispatch<React.SetStateAction<string>>,
+  hasChecked: boolean
 }
 export const UserContext = React.createContext({} as UserContextType)
 const UserProvider = UserContext.Provider
 
 function MyApp({ Component, pageProps }: AppProps) {
+
+  // Dark Mode
+
   const [darkMode, setDarkMode] = useState(false)
+
   const switchDarkMode = useCallback(() => {
     try {
       localStorage.setItem('dark-mode', darkMode ? 'false' : 'true')
     } catch { }
     setDarkMode(!darkMode)
   }, [darkMode])
+
   useEffect(() => {
     try {
       setDarkMode(localStorage.getItem('dark-mode') === 'true')
     } catch { }
   }, [])
+
   const theme = useMemo(() => createTheme(getTheme(darkMode)), [darkMode])
 
+  // Authentication
+
   const [authToken, setAuthToken] = useState('')
+  const [hasChecked, setHasChecked] = useState(false)
+
   useEffect(() => {
     try {
       const token = localStorage.getItem('authToken')
@@ -38,11 +49,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         setAuthToken(token)
       }
     } catch { }
+    setHasChecked(true)
   }, [])
+
   const user = useMemo(() => ({
     authToken,
-    setAuthToken
-  }), [authToken, setAuthToken])
+    setAuthToken,
+    hasChecked
+  }), [authToken, setAuthToken, hasChecked])
 
   return (
     <ThemeProvider theme={theme}>
