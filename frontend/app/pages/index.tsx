@@ -20,6 +20,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CustomModal from '../components/CustomModal';
 import { getSnackReducer, SnackType, SnackAction } from '../reducers/snackReducer';
+import DBLoading from '../components/DBLoading';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -205,16 +206,20 @@ const ListList: FC = () => {
 	const { translation, classes, lists } = useContext(HomeContext)
 	const listList = useMemo(() => lists?.map(list => <ListItem key={`list-${list.id}`} list={list} />), [lists])
 	return (
-		(lists && lists[0])
-			? (
-				<div className={classes.itemContainer}>
-					{listList}
-				</div>
-			) : (
-				<div className={classes.noListContainer}>
-					<Typography color="primary" variant="h4">{translation.noList[0]}</Typography>
-					<Typography variant="body1">{translation.noList[1]}</Typography>
-				</div>
+		(lists)
+			? (lists[0])
+				? (
+					<div className={classes.itemContainer}>
+						{listList}
+					</div>
+				) : (
+					<div className={classes.noListContainer}>
+						<Typography color="primary" variant="h4">{translation.noList[0]}</Typography>
+						<Typography variant="body1">{translation.noList[1]}</Typography>
+					</div>
+				)
+			: (
+				<DBLoading />
 			)
 	)
 }
