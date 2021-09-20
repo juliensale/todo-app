@@ -21,7 +21,7 @@ export type Translation = {
 		},
 		delete: {
 			success: string,
-			error: string
+			error: string,
 		}
 		noCookie: string,
 		baseError: string
@@ -29,6 +29,8 @@ export type Translation = {
 	options: string,
 	seeList: string,
 	delete: string,
+	warning: string,
+	warningMessage: [string, string, string],
 	edit: string,
 	submit: string,
 	noList: [string, string]
@@ -65,6 +67,8 @@ export const en: Translation = {
 	options: "Options",
 	seeList: "See List",
 	delete: "Delete",
+	warning: "Warning",
+	warningMessage: ["You are about to delete the following list:", "This action will result in deleting each of its sub-lists, and their content. It cannot be reversed.", "Are you sure you want to delete it?"],
 	edit: "Edit",
 	submit: "Submit",
 	noList: [
@@ -104,6 +108,8 @@ export const fr: Translation = {
 	options: "Options",
 	seeList: "Voir la liste",
 	delete: "Supprimer",
+	warning: "Attention",
+	warningMessage: ["Vous êtes sur le point de supprimer la liste suivante:", "Cette action va entraîner la suppression de chacune de ses sous-listes et de leur contenu. Cette action n'est pas réversible.", "Êtes-vous sûr(e) de vouloir la supprimer?"],
 	edit: "Modifier",
 	submit: 'Envoyer',
 	noList: [

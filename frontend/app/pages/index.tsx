@@ -21,6 +21,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CustomModal from '../components/CustomModal';
 import { getSnackReducer, SnackType, SnackAction } from '../reducers/snackReducer';
 import DBLoading from '../components/DBLoading';
+import ErrorButton from '../components/ErrorButton';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -246,6 +247,22 @@ const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> 
 
 	const { classes, translation, dispatchSnack, apiUrl, authToken, lists } = useContext(HomeContext)
 
+	const [deleteOpen, setDeleteOpen] = useState(false)
+
+	return (
+		<CustomModal open={modalOpen} handleClose={closeModal}>
+			<div className={classes.optionsContainer}>
+				<Typography className={classes.optionsTitle} variant="h1" color="primary">{translation.edit}</Typography>
+				<ListEditForm list={list} />
+				<Button variant="outlined" color="inherit" onClick={() => setDeleteOpen(true)} className={classes.deleteButton}>{translation.delete}</Button>
+			</div>
+			<ListDeleteVerification open={deleteOpen} onClose={() => { setDeleteOpen(false) }} list={list} />
+		</CustomModal>
+	)
+}
+
+const ListDeleteVerification: FC<{ list: List, open: boolean, onClose: () => void }> = ({ list, open, onClose }) => {
+	const { classes, translation, dispatchSnack, apiUrl, authToken, lists } = useContext(HomeContext)
 	const handleDelete = () => {
 		mutate(
 			[`${apiUrl}/todo/lists/`, authToken],
@@ -266,13 +283,14 @@ const ListModal: FC<{ list: List, modalOpen: boolean, closeModal: () => void }> 
 				trigger([`${apiUrl}/todo/lists/`, authToken])
 			})
 	}
-
 	return (
-		<CustomModal open={modalOpen} handleClose={closeModal}>
+		<CustomModal open={open} handleClose={onClose}>
 			<div className={classes.optionsContainer}>
-				<Typography className={classes.optionsTitle} variant="h1" color="primary">{translation.edit}</Typography>
-				<ListEditForm list={list} />
-				<Button variant="outlined" color="inherit" onClick={handleDelete} className={classes.deleteButton}>{translation.delete}</Button>
+				<Typography className={classes.optionsTitle} variant="h1" color="error">{translation.warning}</Typography>
+				<Typography variant="body1">{translation.warningMessage[0]} &nbsp; {list.title}</Typography>
+				<Typography variant="body1">{translation.warningMessage[1]}</Typography>
+				<Typography variant="body1">{translation.warningMessage[2]}</Typography>
+				<ErrorButton onClick={handleDelete} variant="outlined" className={classes.deleteButton}>{translation.delete}</ErrorButton>
 			</div>
 		</CustomModal>
 	)
