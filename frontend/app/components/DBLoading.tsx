@@ -30,8 +30,8 @@ const DBLoading: FC<Props> = () => {
 	return (
 		<div className={classes.container}>
 			<span>
-				<Typography variant="h2" color="primary">{translation.dbLoading[0]}</Typography>
-				<Typography variant="h3" color="textSecondary">{translation.dbLoading[1]}</Typography>
+				<Typography variant="h4" color="primary">{translation.dbLoading[0]}</Typography>
+				<Typography variant="body1" color="textSecondary">{translation.dbLoading[1]}</Typography>
 			</span>
 			<CircularProgress />
 		</div>
