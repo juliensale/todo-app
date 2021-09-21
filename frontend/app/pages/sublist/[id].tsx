@@ -13,7 +13,7 @@ import axios from 'axios';
 import { UserContext } from '../_app';
 import Alert from '../../components/Forms/Alert';
 import authFetcher from '../../components/authFetcher';
-import { Sublist as SublistType, Task } from '../../types/dbObjects';
+import { List as ListType, Sublist as SublistType, Task } from '../../types/dbObjects';
 import Item from '../../components/ItemLists/Item';
 import ItemButton from '../../components/ItemLists/ItemButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -132,7 +132,8 @@ type ContextType = {
 	tasks: Task[] | undefined,
 	dispatchSnack: React.Dispatch<SnackAction>,
 	sublistId: number | null | undefined,
-	motherSublist: SublistType | undefined
+	motherSublist: SublistType | undefined,
+	motherList: ListType | undefined
 }
 const SublistContext = React.createContext({} as ContextType)
 const { Provider } = SublistContext
@@ -164,6 +165,7 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 	}, [router])
 
 	const motherSublist: SublistType | undefined = useSWR([`${apiUrl}/todo/sublists/`, authToken], authFetcher).data?.find((item: SublistType) => item.id === sublistId)
+	const motherList: ListType | undefined = useSWR([`${apiUrl}/todo/lists/`, authToken], authFetcher).data?.find((item: ListType) => item.id === (motherSublist ? motherSublist.list : -1))
 	const tasks: Task[] | undefined = useSWR([`${apiUrl}/todo/tasks/`, authToken], authFetcher).data
 
 	const initialSnack: SnackType = {
@@ -189,8 +191,9 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 		tasks,
 		dispatchSnack,
 		sublistId,
-		motherSublist
-	}), [classes, translation, apiUrl, authToken, tasks, dispatchSnack, sublistId, motherSublist])
+		motherSublist,
+		motherList
+	}), [classes, translation, apiUrl, authToken, tasks, dispatchSnack, sublistId, motherSublist, motherList])
 
 	return (
 		<Provider value={value}>
@@ -215,7 +218,7 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 
 
 const TaskSublist: FC = () => {
-	const { translation, classes, tasks, sublistId, motherSublist } = useContext(SublistContext)
+	const { translation, classes, tasks, sublistId, motherSublist, motherList } = useContext(SublistContext)
 	const taskSublist = useMemo(() => {
 		if (sublistId === undefined) {
 			return undefined
@@ -234,6 +237,11 @@ const TaskSublist: FC = () => {
 				{
 					title: "Home",
 					href: "/",
+					active: false
+				},
+				{
+					title: motherList ? motherList.title : '',
+					href: `/list/${motherList ? motherList.id : -1}`,
 					active: false
 				},
 				{
