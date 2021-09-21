@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const getApiUrl = async (req: NextApiRequest, res: NextApiResponse) => {
 	if (req.method === 'GET') {
 		try {
 			const apiUrl = process.env.API_URL || ''
@@ -16,3 +16,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 	return res.status(405).json('Method Denied')
 }
+
+export default getApiUrl

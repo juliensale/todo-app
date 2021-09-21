@@ -99,7 +99,7 @@ type LinkBoxProps = {
 const LinkBox: FC<LinkBoxProps> = ({ children, href, style = {}, className = '' }) => {
 	const { classes } = useContext(ReducedPanelContext)
 	return (
-		<Link href={href}>
+		<Link href={href} passHref>
 			<ButtonBase className={className ? `${className} ${classes.clickBox}` : classes.clickBox} style={style}>
 				{children}
 

@@ -54,7 +54,7 @@ const Head: FC<Props> = ({ objectLinks, className = "", style = {} }) => {
 							</Typography>
 						) : (
 							<div key={`head-${index}`} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-								<Link href={item.href} >
+								<Link href={item.href} passHref>
 									<Typography className={classes.link} >
 										{item.title}
 									</Typography>

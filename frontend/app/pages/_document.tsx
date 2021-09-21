@@ -28,7 +28,6 @@ class MyDocument extends Document {
 		return (
 			<Html>
 				<Head>
-					<link rel="stylesheet" href="/fonts/fonts.css" />
 
 					<link rel="preload" as="font" href="/fonts/catamaran-v8-latin-300.woff2" crossOrigin="anonymous" />
 					<link rel="preload" as="font" href="/fonts/catamaran-v8-latin-500.woff2" crossOrigin="anonymous" />

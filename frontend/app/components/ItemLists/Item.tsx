@@ -26,7 +26,7 @@ type Props = {
 const Item: FC<Props> = ({ children, href, className = "", style = {} }) => {
 	const classes = useStyles()
 	return (
-		<Link href={href}>
+		<Link href={href} passHref>
 			<Box className={className ? `${className} ${classes.container}` : classes.container} style={style}>
 
 				{children}

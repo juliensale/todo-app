@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import '../styles/globals.css'
+import '../public/fonts/fonts.css'
 import type { AppProps } from 'next/app'
 import { createTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'

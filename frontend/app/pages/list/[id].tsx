@@ -224,7 +224,7 @@ const SublistList: FC = () => {
 			return null
 		}
 		return sublists?.filter(item => item.list === listId).map(sublist => <SublistItem key={`sublist-${sublist.id}`} sublist={sublist} />)
-	}, [sublists])
+	}, [sublists, listId])
 
 
 	return (

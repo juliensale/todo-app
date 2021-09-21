@@ -1,5 +1,5 @@
 import { Paper, Theme, useMediaQuery } from '@material-ui/core';
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import FullPanel from './FullPanel'
 import ReducedPanel from './ReducedPanel'
 import Drawer from './Drawer'
@@ -30,11 +30,12 @@ type NavigationProps = {
 const Navigation: FC<NavigationProps> = ({ children, darkMode, switchDarkMode, isMediaPhone }) => {
 
 	const [drawerOpen, setDrawerOpen] = useState(false)
-	const openDrawer = () => { setDrawerOpen(true) }
-	const closeDrawer = () => { setDrawerOpen(false) }
+	const openDrawer = useCallback(() => { setDrawerOpen(true) }, [setDrawerOpen])
+	const closeDrawer = useCallback(() => { setDrawerOpen(false) }, [setDrawerOpen])
+
 
 	const [logoutOpen, setLogoutOpen] = useState(false)
-	const openLogout = () => { setLogoutOpen(true) }
+	const openLogout = useCallback(() => { setLogoutOpen(true) }, [setLogoutOpen])
 	const closeLogout = () => { setLogoutOpen(false) }
 
 	const value = useMemo(() => ({

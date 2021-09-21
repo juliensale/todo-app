@@ -242,7 +242,7 @@ const TaskSublist: FC = () => {
 			return null
 		}
 		return tasks?.filter(item => item.sublist === sublistId).map(task => <TaskItem key={`task-${task.id}`} task={task} />)
-	}, [tasks])
+	}, [tasks, sublistId])
 
 
 	return (
@@ -314,7 +314,7 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 		})
 			.then(() => { trigger([`${apiUrl}/todo/tasks/`, authToken]) })
 			.catch(() => { trigger([`${apiUrl}/todo/tasks/`, authToken]) })
-	}, [task])
+	}, [task, tasks, apiUrl, authToken])
 	return (
 		<>
 			<CompleteItem className={task.completed ? classes.completedItem : ''} onClick={() => { }}>
