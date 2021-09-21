@@ -25,7 +25,8 @@ import ErrorButton from '../../components/ErrorButton';
 import ArrowButtonLink from '../../components/ArrowButtonLink';
 import Head from '../../components/ItemLists/Head';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -316,7 +317,7 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 				<div className={classes.titleContainer}>
 					<ItemButton stopPropagation onClick={handleComplete}>
 						{task.completed
-							? <RadioButtonCheckedIcon color="primary" className={classes.checked} />
+							? <CheckCircleIcon color="primary" className={classes.checked} />
 							: <RadioButtonUncheckedIcon color="action" className={classes.checked} />
 						}
 					</ItemButton>
