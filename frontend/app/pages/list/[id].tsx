@@ -22,6 +22,7 @@ import CustomModal from '../../components/CustomModal';
 import { getSnackReducer, SnackType, SnackAction } from '../../reducers/snackReducer';
 import DBLoading from '../../components/DBLoading';
 import ErrorButton from '../../components/ErrorButton';
+import ArrowButtonLink from '../../components/ArrowButtonLink';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -128,7 +129,7 @@ type ContextType = {
 	authToken: string,
 	sublists: Sublist[] | undefined,
 	dispatchSnack: React.Dispatch<SnackAction>,
-	listId: number | undefined
+	listId: number | null | undefined
 }
 const ListContext = React.createContext({} as ContextType)
 const { Provider } = ListContext
@@ -146,14 +147,17 @@ const List: FC<ListProps> = ({ children }) => {
 
 	const listId = useMemo(() => {
 		const id = router.query.id
+		if (typeof (id) === 'undefined') {
+			return undefined
+		}
 		if (typeof (id) === 'string') {
 			const parsed = parseInt(id)
 			if (isNaN(parsed)) {
-				return undefined
+				return null
 			}
 			return parsed
 		}
-		return undefined
+		return null
 	}, [router])
 
 	const sublists: Sublist[] | undefined = useSWR([`${apiUrl}/todo/sublists/`, authToken], authFetcher).data
@@ -207,25 +211,39 @@ const List: FC<ListProps> = ({ children }) => {
 
 const SublistList: FC = () => {
 	const { translation, classes, sublists, listId } = useContext(ListContext)
-	const sublistSublist = useMemo(() => {
+	const sublistList = useMemo(() => {
+		if (listId === undefined) {
+			return undefined
+		}
+		if (listId === null) {
+			return null
+		}
 		return sublists?.filter(item => item.list === listId).map(sublist => <SublistItem key={`sublist-${sublist.id}`} sublist={sublist} />)
 	}, [sublists])
+
+	useEffect(() => console.log(sublistList), [sublistList])
 	return (
-		(sublists)
-			? (sublists[0])
-				? (
-					<div className={classes.itemContainer}>
-						{sublistSublist}
-					</div>
-				) : (
-					<div className={classes.noSublistContainer}>
-						<Typography color="primary" variant="h4">{translation.noSublist[0]}</Typography>
-						<Typography variant="body1">{translation.noSublist[1]}</Typography>
-					</div>
+		(sublistList === null)
+			? (
+				<div className={classes.noSublistContainer}>
+					<Typography variant="h4" color="textSecondary">{translation.idError}</Typography>
+					<ArrowButtonLink href="/">{translation.returnHome}</ArrowButtonLink>
+				</div>
+			) : (sublistList)
+				? (sublistList[0])
+					? (
+						<div className={classes.itemContainer}>
+							{sublistList}
+						</div>
+					) : (
+						<div className={classes.noSublistContainer}>
+							<Typography color="primary" variant="h4">{translation.noSublist[0]}</Typography>
+							<Typography variant="body1">{translation.noSublist[1]}</Typography>
+						</div>
+					)
+				: (
+					<DBLoading />
 				)
-			: (
-				<DBLoading />
-			)
 	)
 }
 

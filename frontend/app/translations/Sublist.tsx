@@ -33,7 +33,8 @@ export type Translation = {
 	edit: string,
 	submit: string,
 	noSublist: [string, string],
-
+	idError: string,
+	returnHome: string
 }
 
 export const en: Translation = {
@@ -73,7 +74,9 @@ export const en: Translation = {
 	noSublist: [
 		"There is no Sublist yet.",
 		'Add a title and click the "+" button in the form below to create one.'
-	]
+	],
+	idError: "The list does not exist.",
+	returnHome: "Return to Home Page"
 };
 
 export const fr: Translation = {
@@ -113,5 +116,7 @@ export const fr: Translation = {
 	noSublist: [
 		"Il n'y a pas encore de Sous-Liste.",
 		'Ajoutez un titre et cliquez sur le bouton "+" dans le formulaire ci-dessous pour en créer une.'
-	]
+	],
+	idError: "La liste n'existe pas.",
+	returnHome: "Retourner à l'Accueil"
 }
