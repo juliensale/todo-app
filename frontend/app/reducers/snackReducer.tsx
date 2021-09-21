@@ -1,5 +1,6 @@
 import { Color } from "@material-ui/lab";
-import { Translation } from "../translations/List";
+import { Translation as ListTranslation } from "../translations/List";
+import { Translation as SublistTranslation } from "../translations/Sublist";
 
 export type SnackType = {
 	severity: Color,
@@ -11,7 +12,7 @@ export type SnackAction = {
 	message: string
 }
 
-export const getSnackReducer = (initialSnack: SnackType, translation: Translation) => {
+export const getSnackReducer = (initialSnack: SnackType, translation: ListTranslation | SublistTranslation) => {
 	return (snack: SnackType, action: SnackAction) => {
 		switch (action.type) {
 			case "success":
