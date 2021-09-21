@@ -13,7 +13,7 @@ import axios from 'axios';
 import { UserContext } from '../_app';
 import Alert from '../../components/Forms/Alert';
 import authFetcher from '../../components/authFetcher';
-import { Sublist } from '../../types/dbObjects';
+import { List as ListType, Sublist } from '../../types/dbObjects';
 import Item from '../../components/ItemLists/Item';
 import ItemButton from '../../components/ItemLists/ItemButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -23,6 +23,7 @@ import { getSnackReducer, SnackType, SnackAction } from '../../reducers/snackRed
 import DBLoading from '../../components/DBLoading';
 import ErrorButton from '../../components/ErrorButton';
 import ArrowButtonLink from '../../components/ArrowButtonLink';
+import Head from '../../components/ItemLists/Head';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		alignItems: "center",
 		justifyContent: "center",
 		width: '100%',
+		height: '100%',
 		padding: theme.spacing(3),
 		gap: theme.spacing(2),
 		'& > *': {
@@ -129,7 +131,8 @@ type ContextType = {
 	authToken: string,
 	sublists: Sublist[] | undefined,
 	dispatchSnack: React.Dispatch<SnackAction>,
-	listId: number | null | undefined
+	listId: number | null | undefined,
+	motherList: ListType | undefined
 }
 const ListContext = React.createContext({} as ContextType)
 const { Provider } = ListContext
@@ -160,6 +163,7 @@ const List: FC<ListProps> = ({ children }) => {
 		return null
 	}, [router])
 
+	const motherList: ListType | undefined = useSWR([`${apiUrl}/todo/lists/`, authToken], authFetcher).data?.find((item: ListType) => item.id === listId)
 	const sublists: Sublist[] | undefined = useSWR([`${apiUrl}/todo/sublists/`, authToken], authFetcher).data
 
 	const initialSnack: SnackType = {
@@ -184,8 +188,9 @@ const List: FC<ListProps> = ({ children }) => {
 		authToken,
 		sublists,
 		dispatchSnack,
-		listId
-	}), [classes, translation, apiUrl, authToken, sublists, dispatchSnack, listId])
+		listId,
+		motherList
+	}), [classes, translation, apiUrl, authToken, sublists, dispatchSnack, listId, motherList])
 
 	return (
 		<Provider value={value}>
@@ -210,7 +215,7 @@ const List: FC<ListProps> = ({ children }) => {
 
 
 const SublistList: FC = () => {
-	const { translation, classes, sublists, listId } = useContext(ListContext)
+	const { translation, classes, sublists, listId, motherList } = useContext(ListContext)
 	const sublistList = useMemo(() => {
 		if (listId === undefined) {
 			return undefined
@@ -221,29 +226,45 @@ const SublistList: FC = () => {
 		return sublists?.filter(item => item.list === listId).map(sublist => <SublistItem key={`sublist-${sublist.id}`} sublist={sublist} />)
 	}, [sublists])
 
+
 	useEffect(() => console.log(sublistList), [sublistList])
 	return (
-		(sublistList === null)
-			? (
-				<div className={classes.noSublistContainer}>
-					<Typography variant="h4" color="textSecondary">{translation.idError}</Typography>
-					<ArrowButtonLink href="/">{translation.returnHome}</ArrowButtonLink>
-				</div>
-			) : (sublistList)
-				? (sublistList[0])
+		<div className={classes.itemContainer}>
+			<Head objectLinks={[
+				{
+					title: "Home",
+					href: "/",
+					active: false
+				},
+				{
+					title: motherList ? motherList.title : '',
+					href: `/list/${listId}`,
+					active: true
+				}
+			]
+			} />
+
+			{
+				(sublistList === null)
 					? (
-						<div className={classes.itemContainer}>
-							{sublistList}
-						</div>
-					) : (
 						<div className={classes.noSublistContainer}>
-							<Typography color="primary" variant="h4">{translation.noSublist[0]}</Typography>
-							<Typography variant="body1">{translation.noSublist[1]}</Typography>
+							<Typography variant="h4" color="textSecondary">{translation.idError}</Typography>
+							<ArrowButtonLink href="/">{translation.returnHome}</ArrowButtonLink>
 						</div>
-					)
-				: (
-					<DBLoading />
-				)
+					) : (sublistList)
+						? (sublistList[0])
+							? sublistList
+							: (
+								<div className={classes.noSublistContainer}>
+									<Typography color="primary" variant="h4">{translation.noSublist[0]}</Typography>
+									<Typography variant="body1">{translation.noSublist[1]}</Typography>
+								</div>
+							)
+						: (
+							<DBLoading />
+						)
+			}
+		</div>
 	)
 }
 
