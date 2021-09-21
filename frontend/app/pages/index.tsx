@@ -22,6 +22,7 @@ import CustomModal from '../components/CustomModal';
 import { getSnackReducer, SnackType, SnackAction } from '../reducers/snackReducer';
 import DBLoading from '../components/DBLoading';
 import ErrorButton from '../components/ErrorButton';
+import Head from '../components/ItemLists/Head'
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		alignItems: "center",
 		justifyContent: "center",
 		width: '100%',
+		height: '100%',
 		padding: theme.spacing(3),
 		gap: theme.spacing(2),
 		'& > *': {
@@ -207,21 +209,22 @@ const ListList: FC = () => {
 	const { translation, classes, lists } = useContext(HomeContext)
 	const listList = useMemo(() => lists?.map(list => <ListItem key={`list-${list.id}`} list={list} />), [lists])
 	return (
-		(lists)
-			? (lists[0])
-				? (
-					<div className={classes.itemContainer}>
-						{listList}
-					</div>
-				) : (
-					<div className={classes.noListContainer}>
-						<Typography color="primary" variant="h4">{translation.noList[0]}</Typography>
-						<Typography variant="body1">{translation.noList[1]}</Typography>
-					</div>
+		<div className={classes.itemContainer}>
+			<Head objectLinks={[{ title: 'Home', href: '/', active: true }]} />
+			{(lists)
+				? (lists[0])
+					? listList
+					: (
+						<div className={classes.noListContainer}>
+							<Typography color="primary" variant="h4">{translation.noList[0]}</Typography>
+							<Typography variant="body1">{translation.noList[1]}</Typography>
+						</div>
+					)
+				: (
+					<DBLoading />
 				)
-			: (
-				<DBLoading />
-			)
+			}
+		</div>
 	)
 }
 
