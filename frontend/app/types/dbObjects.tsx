@@ -9,3 +9,10 @@ export type Sublist = {
 	list: number,
 	title: string
 }
+
+
+export type Task = {
+	id: number,
+	sublist: number,
+	title: string
+}
