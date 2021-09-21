@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 	},
 	link: {
 		cursor: 'pointer',
-
+		fontFamily: 'Montserrat, Verdana',
 		'&:hover': {
 			textDecoration: 'underline'
 		}
