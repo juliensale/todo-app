@@ -46,21 +46,21 @@ const Head: FC<Props> = ({ objectLinks, className = "", style = {} }) => {
 		<Box className={className ? `${className} classes.container` : classes.container} style={style}>
 			<ChevronRight />
 			{
-				objectLinks?.map(item => (
+				objectLinks?.map((item, index) => (
 					item.active
 						? (
-							<Typography className={classes.active} >
+							<Typography key={`head-${index}`} className={classes.active} >
 								{item.title}
 							</Typography>
 						) : (
-							<>
+							<div key={`head-${index}`} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 								<Link href={item.href} >
 									<Typography className={classes.link} >
 										{item.title}
 									</Typography>
 								</Link>
 								<ChevronRight />
-							</>
+							</div>
 						)
 				))
 			}
