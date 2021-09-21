@@ -14,5 +14,6 @@ export type Sublist = {
 export type Task = {
 	id: number,
 	sublist: number,
-	title: string
+	title: string,
+	completed: boolean
 }

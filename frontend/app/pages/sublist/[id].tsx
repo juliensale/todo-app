@@ -1,6 +1,6 @@
 import { Box, Button, Fab, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
 import { ClassNameMap, createStyles, makeStyles, useTheme } from '@material-ui/styles';
-import React, { FC, useContext, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import LoginRequired from '../../components/Layout/LoginRequired';
 import { getNavWidth } from '../../components/Layout/Navigation';
 import AddIcon from '@material-ui/icons/Add'
@@ -14,7 +14,7 @@ import { UserContext } from '../_app';
 import Alert from '../../components/Forms/Alert';
 import authFetcher from '../../components/authFetcher';
 import { List as ListType, Sublist as SublistType, Task } from '../../types/dbObjects';
-import Item from '../../components/ItemLists/Item';
+import CompleteItem from '../../components/ItemLists/CompleteItem';
 import ItemButton from '../../components/ItemLists/ItemButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -24,6 +24,8 @@ import DBLoading from '../../components/DBLoading';
 import ErrorButton from '../../components/ErrorButton';
 import ArrowButtonLink from '../../components/ArrowButtonLink';
 import Head from '../../components/ItemLists/Head';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -72,7 +74,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginBottom: theme.spacing(23)
 	},
 	taskTitle: {
-		marginLeft: theme.spacing(4)
+		marginLeft: theme.spacing(2)
+	},
+	titleContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: '100%',
 	},
 	buttonContainer: {
 		display: 'flex',
@@ -81,6 +90,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		justifyContent: 'center',
 		height: '100%'
 	},
+	checked: { display: 'grid', placeItems: 'center', margin: `0 ${theme.spacing(2)}px` },
 	icon: { display: 'grid', placeItems: 'center' },
 	optionsContainer: {
 		display: 'flex',
@@ -277,18 +287,47 @@ const TaskSublist: FC = () => {
 }
 
 const TaskItem: FC<{ task: Task }> = ({ task }) => {
-	const { classes, translation } = useContext(SublistContext)
+	const { classes, translation, authToken, apiUrl, tasks } = useContext(SublistContext)
 	const [modalOpen, setModalOpen] = useState(false)
 	const closeModal = () => { setModalOpen(false) }
+	const handleComplete = useCallback(() => {
+		mutate(
+			[`${apiUrl}/todo/tasks/`, authToken],
+			(tasks || []).map(item => {
+				var newTask = { ...item }
+				if (item.id === task.id) {
+					newTask.completed = !item.completed
+				}
+				return newTask
+			}),
+			false
+		)
+		const url = `${apiUrl}/todo/tasks/${task.id}/${task.completed ? 'uncomplete' : 'complete'}/`
+		axios.put(url, {}, {
+			headers: {
+				"Authorization": `Token ${authToken}`
+			}
+		})
+			.then(() => { trigger([`${apiUrl}/todo/tasks/`, authToken]) })
+			.catch(() => { trigger([`${apiUrl}/todo/tasks/`, authToken]) })
+	}, [task])
 	return (
 		<>
-			<Item href={`/task/${task.id}`}>
-				<Typography className={classes.taskTitle} > {task.title}</Typography>
+			<CompleteItem onClick={() => { }}>
+				<div className={classes.titleContainer}>
+					<ItemButton stopPropagation onClick={handleComplete}>
+						{task.completed
+							? <RadioButtonCheckedIcon color="primary" className={classes.checked} />
+							: <RadioButtonUncheckedIcon color="action" className={classes.checked} />
+						}
+					</ItemButton>
+					<Typography className={classes.taskTitle} > {task.title}</Typography>
+				</div>
 				<div className={classes.buttonContainer}>
 					<ItemButton stopPropagation title={translation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
 					<ItemButton noHoverEffect title={translation.seeTask}><ChevronRightIcon className={classes.icon} /></ItemButton>
 				</div>
-			</Item>
+			</CompleteItem>
 			<TaskModal task={task} modalOpen={modalOpen} closeModal={closeModal} />
 		</>
 	)
@@ -296,7 +335,7 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 
 const TaskModal: FC<{ task: Task, modalOpen: boolean, closeModal: () => void }> = ({ task, modalOpen, closeModal }) => {
 
-	const { classes, translation, dispatchSnack, apiUrl, authToken, tasks } = useContext(SublistContext)
+	const { classes, translation } = useContext(SublistContext)
 
 	const [deleteOpen, setDeleteOpen] = useState(false)
 
@@ -438,8 +477,9 @@ const CreateTaskForm: FC = () => {
 				...(tasks || []),
 				{
 					id: Math.random(),
-					list: sublistId,
-					title: state.data.title
+					sublist: sublistId,
+					title: state.data.title,
+					completed: false
 
 				}
 			],
@@ -447,7 +487,7 @@ const CreateTaskForm: FC = () => {
 		)
 		axios.post(`${apiUrl}/todo/tasks/`, {
 			title: state.data.title,
-			sublist: sublistId
+			sublist: sublistId,
 		}, {
 			headers: {
 				"Authorization": `Token ${authToken}`
