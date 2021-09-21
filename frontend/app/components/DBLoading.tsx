@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		alignItems: "center",
 		justifyContent: "center",
 		width: '100%',
+		height: '100%',
+		minHeight: '90vh',
 		padding: theme.spacing(3),
 		gap: theme.spacing(2),
 		'& > *': {
