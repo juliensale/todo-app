@@ -131,6 +131,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 	editColor: {
 		width: '100%',
 		marginLeft: theme.spacing(1)
+	},
+	completedItem: {
+		background: theme.palette.action.disabledBackground,
+		color: theme.palette.action.disabled
 	}
 }))
 
@@ -313,7 +317,7 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 	}, [task])
 	return (
 		<>
-			<CompleteItem onClick={() => { }}>
+			<CompleteItem className={task.completed ? classes.completedItem : ''} onClick={() => { }}>
 				<div className={classes.titleContainer}>
 					<ItemButton stopPropagation onClick={handleComplete}>
 						{task.completed
@@ -321,7 +325,7 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 							: <RadioButtonUncheckedIcon color="action" className={classes.checked} />
 						}
 					</ItemButton>
-					<Typography className={classes.taskTitle} > {task.title}</Typography>
+					<Typography className={classes.taskTitle} style={{ textDecorationLine: task.completed ? 'line-through' : 'none' }} > {task.title}</Typography>
 				</div>
 				<div className={classes.buttonContainer}>
 					<ItemButton stopPropagation title={translation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
