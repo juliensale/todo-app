@@ -227,7 +227,6 @@ const SublistList: FC = () => {
 	}, [sublists])
 
 
-	useEffect(() => console.log(sublistList), [sublistList])
 	return (
 		<div className={classes.itemContainer}>
 			<Head objectLinks={[

@@ -240,7 +240,6 @@ const TaskSublist: FC = () => {
 	}, [tasks])
 
 
-	useEffect(() => console.log(taskSublist), [taskSublist])
 	return (
 		<div className={classes.itemContainer}>
 			<Head objectLinks={[
