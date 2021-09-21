@@ -25,7 +25,7 @@ type Props = {
 const CompleteItem: FC<Props> = ({ children, onClick, className = "", style = {} }) => {
 	const classes = useStyles()
 	return (
-		<Box onClick={onClick} className={className ? `${className} classes.container` : classes.container} style={style}>
+		<Box onClick={onClick} className={className ? `${className} ${classes.container}` : classes.container} style={style}>
 
 			{children}
 		</Box>
