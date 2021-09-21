@@ -12,16 +12,18 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		padding: `${theme.spacing(2)}px ${theme.spacing(5)}px`,
+		padding: theme.spacing(2)
 	},
 	link: {
 		cursor: 'pointer',
+
 		'&:hover': {
 			textDecoration: 'underline'
 		}
 	},
 	active: {
 		cursor: 'mouse',
+		fontFamily: 'Montserrat, Verdana'
 	}
 
 }))
@@ -42,6 +44,7 @@ const Head: FC<Props> = ({ objectLinks, className = "", style = {} }) => {
 	const classes = useStyles()
 	return (
 		<Box className={className ? `${className} classes.container` : classes.container} style={style}>
+			<ChevronRight />
 			{
 				objectLinks?.map(item => (
 					item.active
