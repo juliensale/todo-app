@@ -309,10 +309,12 @@ const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
 			.then(() => {
 				dispatch({ type: "success" })
 				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
 			})
 			.catch(err => {
 				dispatch({ type: "error", error: err })
 				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
 			})
 	}
 	const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -421,10 +423,12 @@ const SubtaskDeleteVerification: FC<{ subtask: Subtask, open: boolean, onClose: 
 			.then(() => {
 				dispatchSnack({ type: 'success', message: translation.feedbacks.delete.success })
 				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
 			})
 			.catch(() => {
 				dispatchSnack({ type: 'error', message: translation.feedbacks.delete.error })
 				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
 			})
 	}
 	return (
