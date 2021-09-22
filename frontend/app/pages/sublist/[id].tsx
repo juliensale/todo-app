@@ -283,6 +283,7 @@ const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
 
 	const handleSubmit: React.FormEventHandler = (e) => {
 		e.preventDefault()
+		dispatch({ type: 'create' })
 		mutate(
 			[`${apiUrl}/todo/subtasks/`, authToken],
 			[
