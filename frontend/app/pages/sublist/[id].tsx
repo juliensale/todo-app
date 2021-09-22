@@ -76,7 +76,28 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginBottom: theme.spacing(23)
 	},
 	subtaskContainer: {
-		width: '100%'
+		width: '90%',
+		boxShadow: theme.shadows[1],
+		marginLeft: 'auto',
+		marginRight: 0,
+		overflow: 'hidden',
+		transition: '.2s'
+	},
+	subtaskCreateFormContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+		fontSize: '.9em',
+
+	},
+	'subtaskInput': {
+		width: 'auto',
+		flex: 'auto'
+	},
+	plusButton: {
+		flex: 'none'
 	},
 	taskTitle: {
 		marginLeft: theme.spacing(2)
@@ -238,11 +259,11 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 	)
 }
 
-const SubtaskList: FC<{ task: Task }> = ({ task }) => {
+const SubtaskList: FC<{ task: Task, open: boolean }> = ({ task, open }) => {
 	const { subtasks, classes } = useContext(SublistContext)
 	const subtaskList = subtasks?.filter(item => item.task === task.id).map(item => <SubtaskItem subtask={item} key={`subtask-${item.id}`} />)
 	return (
-		<div className={classes.subtaskContainer}>
+		<div className={classes.subtaskContainer} style={open ? {} : { height: 0 }}>
 			{subtaskList}
 			<SubtaskCreateForm task={task} />
 		</div>
@@ -301,10 +322,10 @@ const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
 		})
 	}
 	return (
-		<Box>
-			<form onSubmit={handleSubmit}>
-				<TextField required className={classes.input} variant="outlined" name="title" label={translation.create} value={state.data.title} onChange={handleChange} />
-				<Fab className={classes.plusbutton} color="primary" type="submit"><AddIcon /></Fab>
+		<Box className={classes.subtaskCreateFormContainer}>
+			<form onSubmit={handleSubmit} className={classes.createForm}>
+				<TextField required className={classes.subtaskInput} name="title" variant="outlined" label={translation.create} value={state.data.title} onChange={handleChange} />
+				<Fab className={classes.plusButton} size='small' color="primary" type="submit"><AddIcon /></Fab>
 			</form>
 		</Box>
 	)
@@ -459,7 +480,7 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 					<ItemButton noHoverEffect title={translation.seeTask}><ChevronRightIcon className={classes.icon} style={{ transition: '.2s', transform: open ? 'rotate(90deg)' : 'none' }} /></ItemButton>
 				</div>
 			</CompleteItem>
-			<SubtaskList task={task} />
+			<SubtaskList task={task} open={open} />
 			<TaskModal task={task} modalOpen={modalOpen} closeModal={closeModal} />
 		</>
 	)
@@ -642,7 +663,7 @@ const CreateTaskForm: FC = () => {
 				<form className={classes.createForm} onSubmit={handleSubmit}>
 					<TextField required className={classes.input} variant="outlined" name="title" label={translation.create} value={state.data.title} onChange={handleChange} />
 
-					<Fab className={classes.plusbutton} color="primary" type="submit"><AddIcon /></Fab>
+					<Fab className={classes.plusButton} color="primary" type="submit"><AddIcon /></Fab>
 				</form>
 			</Box>
 		</>
