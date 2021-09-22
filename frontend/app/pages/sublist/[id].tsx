@@ -27,6 +27,7 @@ import Head from '../../components/ItemLists/Head';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { getSubtaskCreateFormReducer, SubtaskCreateFormState } from '../../reducers/Subtask/createReducer';
+import { getSubtaskEditFormReducer, SubtaskEditFormState } from '../../reducers/Subtask/editReducer';
 
 
 
@@ -381,8 +382,118 @@ const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
 					<ItemButton stopPropagation title={translation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
 				</div>
 			</CompleteItem>
-			{/* <SubtaskModal subtask={subtask} modalOpen={modalOpen} closeModal={closeModal} /> */}
+			<SubtaskModal subtask={subtask} modalOpen={modalOpen} closeModal={closeModal} />
 		</>
+	)
+}
+
+const SubtaskModal: FC<{ subtask: Subtask, modalOpen: boolean, closeModal: () => void }> = ({ subtask, modalOpen, closeModal }) => {
+
+	const { classes, translation } = useContext(SublistContext)
+
+	const [deleteOpen, setDeleteOpen] = useState(false)
+
+	return (
+		<CustomModal open={modalOpen} handleClose={closeModal}>
+			<div className={classes.optionsContainer}>
+				<Typography className={classes.optionsTitle} variant="h1" color="primary">{translation.edit}</Typography>
+				<SubtaskEditForm subtask={subtask} />
+				<Button variant="outlined" color="inherit" onClick={() => setDeleteOpen(true)} className={classes.deleteButton}>{translation.delete}</Button>
+			</div>
+			<SubtaskDeleteVerification open={deleteOpen} onClose={() => { setDeleteOpen(false) }} subtask={subtask} />
+		</CustomModal>
+	)
+}
+
+const SubtaskDeleteVerification: FC<{ subtask: Subtask, open: boolean, onClose: () => void }> = ({ subtask, open, onClose }) => {
+	const { classes, translation, dispatchSnack, apiUrl, authToken, subtasks } = useContext(SublistContext)
+	const handleDelete = () => {
+		mutate(
+			[`${apiUrl}/todo/subtasks/`, authToken],
+			(subtasks || []).filter(item => item.id !== subtask.id),
+			false
+		)
+		axios.delete(`${apiUrl}/todo/subtasks/${subtask.id}/`, {
+			headers: {
+				"Authorization": `Token ${authToken}`
+			}
+		})
+			.then(() => {
+				dispatchSnack({ type: 'success', message: translation.feedbacks.delete.success })
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+			})
+			.catch(() => {
+				dispatchSnack({ type: 'error', message: translation.feedbacks.delete.error })
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+			})
+	}
+	return (
+		<CustomModal open={open} handleClose={onClose}>
+			<div className={classes.optionsContainer}>
+				<Typography className={classes.optionsTitle} variant="h1" color="error">{translation.warning}</Typography>
+				<Typography variant="body1">{translation.warningMessage[0]} &nbsp; {subtask.title}</Typography>
+				<Typography variant="body1">{translation.warningMessage[1]}</Typography>
+				<Typography variant="body1">{translation.warningMessage[2]}</Typography>
+				<ErrorButton onClick={handleDelete} variant="outlined" className={classes.deleteButton}>{translation.delete}</ErrorButton>
+			</div>
+		</CustomModal>
+	)
+}
+
+const SubtaskEditForm: FC<{ subtask: Subtask }> = ({ subtask }) => {
+	const { apiUrl, authToken, classes, translation, dispatchSnack, subtasks } = useContext(SublistContext)
+
+	const initialState: SubtaskEditFormState = {
+		data: {
+			title: subtask.title
+		}
+	}
+	const editReducer = getSubtaskEditFormReducer(initialState, translation, dispatchSnack)
+	const [state, dispatch] = useReducer(editReducer, initialState)
+
+	const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		dispatch({
+			type: "patch",
+			data: {
+				[e.target.name]: e.target.value
+			}
+		})
+	}
+
+	const handleSubmit: React.FormEventHandler = (e) => {
+		e.preventDefault()
+		mutate(
+			[`${apiUrl}/todo/subtasks/`, authToken],
+			[...subtasks!].map(item => {
+				let newSubtask = { ...item }
+				if (item.id === subtask.id) {
+					newSubtask.title = state.data.title;
+				}
+				return newSubtask
+			}),
+			false
+		)
+		axios.patch(`${apiUrl}/todo/subtasks/${subtask.id}/`, {
+			title: state.data.title
+		}, {
+			headers: {
+				"Authorization": `Token ${authToken}`
+			}
+		})
+			.then(() => {
+				dispatch({ type: "success" })
+				trigger([`${apiUrl}/todo/subtasks/`, authToken],)
+			})
+			.catch(err => {
+				dispatch({ type: "error", error: err })
+				trigger([`${apiUrl}/todo/subtasks/`, authToken],)
+			})
+	}
+	return (
+		<form onSubmit={handleSubmit} className={classes.editForm}>
+			<TextField required className={classes.editInput} label={translation.title} name="title" value={state.data.title} onChange={handleChange} />
+			<Button type="submit" color="primary" variant="contained" className={classes.editButton}>{translation.submit}</Button>
+		</form>
 	)
 }
 
