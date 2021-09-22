@@ -17,3 +17,10 @@ export type Task = {
 	title: string,
 	completed: boolean
 }
+
+export type Subtask = {
+	id: number,
+	task: number,
+	title: string,
+	completed: boolean
+}

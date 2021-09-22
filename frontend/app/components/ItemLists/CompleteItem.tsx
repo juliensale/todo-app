@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }))
 type Props = {
 	children: React.ReactNode | React.ReactNode[],
-	onClick: () => void,
+	onClick?: () => void,
 	className?: string,
 	style?: React.StyleHTMLAttributes<HTMLDivElement>
 }

@@ -13,7 +13,7 @@ import axios from 'axios';
 import { UserContext } from '../_app';
 import Alert from '../../components/Forms/Alert';
 import authFetcher from '../../components/authFetcher';
-import { List as ListType, Sublist as SublistType, Task } from '../../types/dbObjects';
+import { List as ListType, Sublist as SublistType, Task, Subtask } from '../../types/dbObjects';
 import CompleteItem from '../../components/ItemLists/CompleteItem';
 import ItemButton from '../../components/ItemLists/ItemButton';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -26,6 +26,7 @@ import ArrowButtonLink from '../../components/ArrowButtonLink';
 import Head from '../../components/ItemLists/Head';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { getSubtaskCreateFormReducer, SubtaskCreateFormState } from '../../reducers/Subtask/createReducer';
 
 
 
@@ -73,6 +74,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 	itemContainer: {
 		width: '100%',
 		marginBottom: theme.spacing(23)
+	},
+	subtaskContainer: {
+		width: '100%'
 	},
 	taskTitle: {
 		marginLeft: theme.spacing(2)
@@ -148,7 +152,8 @@ type ContextType = {
 	dispatchSnack: React.Dispatch<SnackAction>,
 	sublistId: number | null | undefined,
 	motherSublist: SublistType | undefined,
-	motherList: ListType | undefined
+	motherList: ListType | undefined,
+	subtasks: Subtask[] | undefined
 }
 const SublistContext = React.createContext({} as ContextType)
 const { Provider } = SublistContext
@@ -182,6 +187,7 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 	const motherSublist: SublistType | undefined = useSWR([`${apiUrl}/todo/sublists/`, authToken], authFetcher).data?.find((item: SublistType) => item.id === sublistId)
 	const motherList: ListType | undefined = useSWR([`${apiUrl}/todo/lists/`, authToken], authFetcher).data?.find((item: ListType) => item.id === (motherSublist ? motherSublist.list : -1))
 	const tasks: Task[] | undefined = useSWR([`${apiUrl}/todo/tasks/`, authToken], authFetcher).data
+	const subtasks: Subtask[] | undefined = useSWR([`${apiUrl}/todo/subtasks/`, authToken], authFetcher).data
 
 	const initialSnack: SnackType = {
 		severity: "info",
@@ -207,8 +213,9 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 		dispatchSnack,
 		sublistId,
 		motherSublist,
-		motherList
-	}), [classes, translation, apiUrl, authToken, tasks, dispatchSnack, sublistId, motherSublist, motherList])
+		motherList,
+		subtasks
+	}), [classes, translation, apiUrl, authToken, tasks, dispatchSnack, sublistId, motherSublist, motherList, subtasks])
 
 	return (
 		<Provider value={value}>
@@ -231,8 +238,124 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 	)
 }
 
+const SubtaskList: FC<{ task: Task }> = ({ task }) => {
+	const { subtasks, classes } = useContext(SublistContext)
+	const subtaskList = subtasks?.filter(item => item.task === task.id).map(item => <SubtaskItem subtask={item} key={`subtask-${item.id}`} />)
+	return (
+		<div className={classes.subtaskContainer}>
+			{subtaskList}
+			<SubtaskCreateForm task={task} />
+		</div>
+	)
+}
 
-const TaskSublist: FC = () => {
+const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
+	const { subtasks, apiUrl, authToken, classes, translation, dispatchSnack } = useContext(SublistContext)
+
+	const initialState: SubtaskCreateFormState = {
+		data: {
+			title: ''
+		}
+	}
+	const reducer = getSubtaskCreateFormReducer(initialState, translation, dispatchSnack)
+	const [state, dispatch] = useReducer(reducer, initialState)
+
+	const handleSubmit: React.FormEventHandler = (e) => {
+		e.preventDefault()
+		mutate(
+			[`${apiUrl}/todo/subtasks/`, authToken],
+			[
+				...(subtasks || []),
+				{
+					id: Math.random(),
+					task: task.id,
+					title: state.data.title,
+					completed: false
+				}
+			],
+			false
+		)
+		axios.post(`${apiUrl}/todo/subtasks/`, {
+			title: state.data.title,
+			task: task.id
+		}, {
+			headers: {
+				"Authorization": `Token ${authToken}`
+			}
+		})
+			.then(() => {
+				dispatch({ type: "success" })
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+			})
+			.catch(err => {
+				dispatch({ type: "error", error: err })
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+			})
+	}
+	const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		dispatch({
+			type: 'patch',
+			data: {
+				[e.target.name]: e.target.value
+			}
+		})
+	}
+	return (
+		<Box>
+			<form onSubmit={handleSubmit}>
+				<TextField required className={classes.input} variant="outlined" name="title" label={translation.create} value={state.data.title} onChange={handleChange} />
+				<Fab className={classes.plusbutton} color="primary" type="submit"><AddIcon /></Fab>
+			</form>
+		</Box>
+	)
+}
+
+const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
+	const { subtasks, apiUrl, authToken, classes, translation } = useContext(SublistContext)
+
+	const handleComplete = useCallback(() => {
+		mutate(
+			[`${apiUrl}/todo/subtasks/`, authToken],
+			(subtasks || []).map(item => {
+				var newSubtask = { ...item }
+				if (item.id === subtask.id) {
+					newSubtask.completed = !item.completed
+				}
+				return newSubtask
+			})
+		)
+		axios.put(`${apiUrl}/todo/subtasks/${subtask.id}/${subtask.completed ? 'uncomplete' : 'complete'}/`, {}, {
+			headers: {
+				"Authorization": `Token ${authToken}`
+			}
+		})
+	}, [subtask, subtasks, apiUrl, authToken])
+
+	const [modalOpen, setModalOpen] = useState(false)
+	const closeModal = () => { setModalOpen(false) }
+
+	return (
+		<>
+			<CompleteItem className={subtask.completed ? classes.completedItem : ''}>
+				<div className={classes.titleContainer}>
+					<ItemButton stopPropagation onClick={handleComplete}>
+						{subtask.completed
+							? <CheckCircleIcon color="primary" className={classes.checked} />
+							: <RadioButtonUncheckedIcon color="action" className={classes.checked} />
+						}
+					</ItemButton>
+					<Typography className={classes.taskTitle} style={{ textDecorationLine: subtask.completed ? 'line-through' : 'none' }} > {subtask.title}</Typography>
+				</div>
+				<div className={classes.buttonContainer}>
+					<ItemButton stopPropagation title={translation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
+				</div>
+			</CompleteItem>
+			{/* <SubtaskModal subtask={subtask} modalOpen={modalOpen} closeModal={closeModal} /> */}
+		</>
+	)
+}
+
+const TaskList: FC = () => {
 	const { translation, classes, tasks, sublistId, motherSublist, motherList } = useContext(SublistContext)
 	const taskSublist = useMemo(() => {
 		if (sublistId === undefined) {
@@ -292,6 +415,10 @@ const TaskSublist: FC = () => {
 
 const TaskItem: FC<{ task: Task }> = ({ task }) => {
 	const { classes, translation, authToken, apiUrl, tasks } = useContext(SublistContext)
+
+	const [open, setOpen] = useState(false)
+	const switchOpen = useCallback(() => { setOpen(!open) }, [open, setOpen])
+
 	const [modalOpen, setModalOpen] = useState(false)
 	const closeModal = () => { setModalOpen(false) }
 	const handleComplete = useCallback(() => {
@@ -317,7 +444,7 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 	}, [task, tasks, apiUrl, authToken])
 	return (
 		<>
-			<CompleteItem className={task.completed ? classes.completedItem : ''} onClick={() => { }}>
+			<CompleteItem className={task.completed ? classes.completedItem : ''} onClick={switchOpen}>
 				<div className={classes.titleContainer}>
 					<ItemButton stopPropagation onClick={handleComplete}>
 						{task.completed
@@ -329,9 +456,10 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 				</div>
 				<div className={classes.buttonContainer}>
 					<ItemButton stopPropagation title={translation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
-					<ItemButton noHoverEffect title={translation.seeTask}><ChevronRightIcon className={classes.icon} /></ItemButton>
+					<ItemButton noHoverEffect title={translation.seeTask}><ChevronRightIcon className={classes.icon} style={{ transition: '.2s', transform: open ? 'rotate(90deg)' : 'none' }} /></ItemButton>
 				</div>
 			</CompleteItem>
+			<SubtaskList task={task} />
 			<TaskModal task={task} modalOpen={modalOpen} closeModal={closeModal} />
 		</>
 	)
@@ -528,7 +656,7 @@ type UsageProps = {
 const Usage: FC<UsageProps> = (props) => {
 	return (
 		<Sublist {...props}>
-			<TaskSublist />
+			<TaskList />
 			<CreateTaskForm />
 		</Sublist>
 	)
