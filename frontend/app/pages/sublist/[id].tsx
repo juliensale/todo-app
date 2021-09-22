@@ -343,13 +343,22 @@ const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
 					newSubtask.completed = !item.completed
 				}
 				return newSubtask
-			})
+			}),
+			false
 		)
 		axios.put(`${apiUrl}/todo/subtasks/${subtask.id}/${subtask.completed ? 'uncomplete' : 'complete'}/`, {}, {
 			headers: {
 				"Authorization": `Token ${authToken}`
 			}
 		})
+			.then(() => {
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
+			})
+			.catch(() => {
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
+			})
 	}, [subtask, subtasks, apiUrl, authToken])
 
 	const [modalOpen, setModalOpen] = useState(false)
