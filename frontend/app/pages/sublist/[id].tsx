@@ -1,6 +1,6 @@
 import { Box, Button, Fab, Snackbar, TextField, Theme, Typography, useMediaQuery } from '@material-ui/core';
 import { ClassNameMap, createStyles, makeStyles, useTheme } from '@material-ui/styles';
-import React, { FC, useCallback, useContext, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import LoginRequired from '../../components/Layout/LoginRequired';
 import { getNavWidth } from '../../components/Layout/Navigation';
 import AddIcon from '@material-ui/icons/Add'
@@ -28,6 +28,7 @@ import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { getSubtaskCreateFormReducer, SubtaskCreateFormState } from '../../reducers/Subtask/createReducer';
 import { getSubtaskEditFormReducer, SubtaskEditFormState } from '../../reducers/Subtask/editReducer';
+import { motion, MotionConfig, useAnimation } from 'framer-motion'
 
 
 
@@ -263,11 +264,31 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 const SubtaskList: FC<{ task: Task, open: boolean }> = ({ task, open }) => {
 	const { subtasks, classes } = useContext(SublistContext)
 	const subtaskList = subtasks?.filter(item => item.task === task.id).map(item => <SubtaskItem subtask={item} key={`subtask-${item.id}`} />)
+
+	const controls = useAnimation()
+	const ref = useRef(null)
+	useEffect(() => {
+		if (open && ref.current) {
+			controls.start({ height: (ref.current as HTMLDivElement).clientHeight })
+		} else {
+			controls.start({ height: 0 })
+		}
+	}, [open])
+
 	return (
-		<div className={classes.subtaskContainer} style={open ? {} : { height: 0 }}>
-			{subtaskList}
-			<SubtaskCreateForm task={task} />
-		</div>
+		<MotionConfig transition={{ duration: .1, ease: "easeOut" }}>
+			<motion.div
+				initial={{ height: 0 }}
+				exit={{ height: 0 }}
+				animate={controls}
+				className={classes.subtaskContainer}
+			>
+				<div ref={ref}>
+					{subtaskList}
+					<SubtaskCreateForm task={task} />
+				</div>
+			</motion.div>
+		</MotionConfig>
 	)
 }
 
