@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "4pi2qr83_welvwv%u_aht-8nt76&zz*160+&vtasgg*z2-qr@("
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -133,4 +133,5 @@ STATIC_ROOT = BASE_DIR._make_child(['static', ])
 
 AUTH_USER_MODEL = 'core.User'
 
-CORS_ORIGIN_WHITELIST = ['http://192.168.99.100:3000', 'http://127.0.0.1:3000']
+CORS_ALLOWED_ORIGINS = [os.environ['FRONTEND_V1_URL'],
+                        os.environ['FRONTEND_V2_URL']]

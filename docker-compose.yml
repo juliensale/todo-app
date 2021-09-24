@@ -20,6 +20,8 @@ services:
       - DB_PASS=supersecretpassword
     depends_on: 
       - db
+    env_file:
+      - ./backend/app/.env
 
   db:
     image: postgres:13-alpine
