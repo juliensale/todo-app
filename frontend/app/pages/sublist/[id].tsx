@@ -273,7 +273,7 @@ const SubtaskList: FC<{ task: Task, open: boolean }> = ({ task, open }) => {
 		} else {
 			controls.start({ height: 0 })
 		}
-	}, [open])
+	}, [open, ref.current, controls, subtasks])
 
 	return (
 		<MotionConfig transition={{ duration: .1, ease: "easeOut" }}>
