@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["192.168.99.100"]
 
@@ -133,5 +134,15 @@ STATIC_ROOT = BASE_DIR._make_child(['static', ])
 
 AUTH_USER_MODEL = 'core.User'
 
+ALLOWED_HOSTS = [os.environ['ALLOWED_HOST']]
+
 CORS_ALLOWED_ORIGINS = [os.environ['FRONTEND_V1_URL'],
                         os.environ['FRONTEND_V2_URL']]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer'
+    ]
+}
+
+django_heroku.settings(locals())
