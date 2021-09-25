@@ -274,6 +274,10 @@ class SubTaskModelTests(TestCase):
         """Test that creating a subtask uncompletes the mother task"""
         self.task.complete()
 
+        self.task.refresh_from_db()
+        self.subtask.refresh_from_db()
+        self.subtask2.refresh_from_db()
+
         self.assertTrue(self.task.completed)
         self.assertTrue(self.subtask.completed)
         self.assertTrue(self.subtask2.completed)
@@ -284,6 +288,10 @@ class SubTaskModelTests(TestCase):
             title="sous-tâche test 3",
             completed=False
         )
+
+        self.task.refresh_from_db()
+        self.subtask.refresh_from_db()
+        self.subtask2.refresh_from_db()
 
         self.assertFalse(self.task.completed)
         self.assertTrue(self.subtask.completed)
@@ -300,12 +308,20 @@ class SubTaskModelTests(TestCase):
             completed=False
         )
 
+        self.task.refresh_from_db()
+        self.subtask.refresh_from_db()
+        self.subtask2.refresh_from_db()
+
         self.assertFalse(self.task.completed)
         self.assertTrue(self.subtask.completed)
         self.assertTrue(self.subtask2.completed)
         self.assertFalse(subtask_test.completed)
 
         subtask_test.delete()
+
+        self.task.refresh_from_db()
+        self.subtask.refresh_from_db()
+        self.subtask2.refresh_from_db()
 
         self.assertTrue(self.task.completed)
         self.assertTrue(self.subtask.completed)
