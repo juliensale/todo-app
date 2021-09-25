@@ -112,8 +112,7 @@ class Task(models.Model):
         for subtask in subtasks:
             shouldComplete = shouldComplete and subtask.completed
 
-        if shouldComplete:
-            self.complete()
+        self.set_completed(shouldComplete)
 
     def save(self, *args, **kwargs):
         if self.user == self.sublist.user:
@@ -152,12 +151,21 @@ class SubTask(models.Model):
         self.task.set_completed(False)
 
     def save(self, *args, **kwargs):
+        is_creating = self.pk is None
         if self.user == self.task.user:
             super(SubTask, self).save(*args, **kwargs)
+            if is_creating:
+                self.task.checkComplete()
+
         else:
             raise PermissionDenied(
                 "La création d'objet est restreinte à son propre compte."
             )
+
+    def delete(self):
+        mother_task = self.task
+        super(SubTask, self).delete()
+        mother_task.checkComplete()
 
     def __str__(self):
         return self.title
