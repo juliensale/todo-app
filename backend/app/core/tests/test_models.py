@@ -269,3 +269,66 @@ class SubTaskModelTests(TestCase):
         self.assertFalse(self.task.completed)
         self.subtask2.refresh_from_db()
         self.assertTrue(self.subtask2.completed)
+
+    def test_create_subtask_uncomplete_subtask(self):
+        """Test that creating a subtask uncompletes the mother task"""
+        self.task.complete()
+
+        self.assertTrue(self.task.completed)
+        self.assertTrue(self.subtask.completed)
+        self.assertTrue(self.subtask2.completed)
+
+        models.SubTask.objects.create(
+            user=self.user,
+            task=self.task,
+            title="sous-tâche test 3",
+            completed=False
+        )
+
+        self.assertFalse(self.task.completed)
+        self.assertTrue(self.subtask.completed)
+        self.assertTrue(self.subtask2.completed)
+
+    def test_delete_subtask_complete_subtask(self):
+        """Test that deleting a subtask can complete the mother task"""
+        self.task.complete()
+
+        subtask_test = models.SubTask.objects.create(
+            user=self.user,
+            task=self.task,
+            title="sous-tâche test 3",
+            completed=False
+        )
+
+        self.assertFalse(self.task.completed)
+        self.assertTrue(self.subtask.completed)
+        self.assertTrue(self.subtask2.completed)
+        self.assertFalse(subtask_test.completed)
+
+        subtask_test.delete()
+
+        self.assertTrue(self.task.completed)
+        self.assertTrue(self.subtask.completed)
+        self.assertTrue(self.subtask2.completed)
+
+    def test_delete_subtask_complete_subtask_not_bugged(self):
+        """Test that deleting a subtask does not complete the mother task everytime"""
+        self.subtask.complete()
+
+        subtask_test = models.SubTask.objects.create(
+            user=self.user,
+            task=self.task,
+            title="sous-tâche test 3",
+            completed=False
+        )
+
+        self.assertFalse(self.task.completed)
+        self.assertTrue(self.subtask.completed)
+        self.assertFalse(self.subtask2.completed)
+        self.assertFalse(subtask_test.completed)
+
+        subtask_test.delete()
+
+        self.assertFalse(self.task.completed)
+        self.assertTrue(self.subtask.completed)
+        self.assertFalse(self.subtask2.completed)
