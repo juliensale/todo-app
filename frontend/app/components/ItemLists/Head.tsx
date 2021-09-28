@@ -1,7 +1,8 @@
 import { Box, createStyles, makeStyles, Theme, Typography, useMediaQuery } from '@material-ui/core'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from '@material-ui/icons'
+import { UserContext } from '../../pages/_app'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	container: {
@@ -42,7 +43,7 @@ type Props = {
 }
 const Head: FC<Props> = ({ objectLinks, className = "", style = {} }) => {
 	const classes = useStyles()
-	const isMediaPhone = useMediaQuery('(max-width:700px)')
+	const { isMediaPhone } = useContext(UserContext)
 	return (
 		<Box className={className ? `${className} classes.container` : classes.container} style={style}>
 			{

@@ -1,6 +1,7 @@
 import { Theme, useMediaQuery } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useContext } from 'react'
+import { UserContext } from '../../pages/_app'
 import Navigation, { getNavWidth } from './Navigation'
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 	switchDarkMode: () => void
 }
 const Layout: FC<Props> = ({ children, darkMode, switchDarkMode }) => {
-	const isMediaPhone = useMediaQuery('(max-width:700px)')
+	const { isMediaPhone } = useContext(UserContext)
 	const theme: Theme = useTheme()
 	const navWidth = getNavWidth(isMediaPhone, theme)
 	return (

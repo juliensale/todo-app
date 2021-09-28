@@ -747,7 +747,7 @@ const TaskEditForm: FC<{ task: Task }> = ({ task }) => {
 const CreateTaskForm: FC = () => {
 	const { classes, translation, dispatchSnack, apiUrl, authToken, tasks, sublistId } = useContext(SublistContext)
 
-	const isMediaPhone = useMediaQuery('(max-width: 700px)')
+	const { isMediaPhone } = useContext(UserContext)
 	const theme: Theme = useTheme()
 	const navWidth = getNavWidth(isMediaPhone, theme)
 

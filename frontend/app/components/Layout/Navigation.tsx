@@ -1,10 +1,11 @@
 import { Paper, Theme, useMediaQuery } from '@material-ui/core';
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useContext, useMemo, useState } from 'react';
 import FullPanel from './FullPanel'
 import ReducedPanel from './ReducedPanel'
 import Drawer from './Drawer'
 import { useTheme } from '@material-ui/styles';
 import Logout from './Logout';
+import { UserContext } from '../../pages/_app';
 
 export const getNavWidth: (isMediaPhone: boolean, theme: Theme) => number = (isMediaPhone, theme) => {
 	return isMediaPhone ? theme.spacing(5) : theme.spacing(15)
@@ -77,7 +78,7 @@ type UsageProps = {
 	switchDarkMode: () => void
 }
 const Usage: FC<UsageProps> = (props) => {
-	const isMediaPhone = useMediaQuery('(max-width:700px)')
+	const { isMediaPhone } = useContext(UserContext)
 	return (
 		<Navigation {...props} isMediaPhone={isMediaPhone}>
 			{

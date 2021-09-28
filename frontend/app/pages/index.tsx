@@ -367,7 +367,7 @@ const ListEditForm: FC<{ list: List }> = ({ list }) => {
 const CreateListForm: FC = () => {
 	const { classes, translation, dispatchSnack, apiUrl, authToken, lists } = useContext(HomeContext)
 
-	const isMediaPhone = useMediaQuery('(max-width: 700px)')
+	const { isMediaPhone } = useContext(UserContext)
 	const theme: Theme = useTheme()
 	const navWidth = getNavWidth(isMediaPhone, theme)
 

@@ -399,7 +399,7 @@ const SublistEditForm: FC<{ sublist: Sublist }> = ({ sublist }) => {
 const CreateSublistForm: FC = () => {
 	const { classes, translation, dispatchSnack, apiUrl, authToken, sublists, listId } = useContext(ListContext)
 
-	const isMediaPhone = useMediaQuery('(max-width: 700px)')
+	const { isMediaPhone } = useContext(UserContext)
 	const theme: Theme = useTheme()
 	const navWidth = getNavWidth(isMediaPhone, theme)
 

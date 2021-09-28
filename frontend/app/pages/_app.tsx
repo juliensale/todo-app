@@ -4,7 +4,7 @@ import '../public/fonts/fonts.css'
 import type { AppProps } from 'next/app'
 import { createTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
-import { CssBaseline } from '@material-ui/core'
+import { CssBaseline, useMediaQuery } from '@material-ui/core'
 import { getTheme } from '../components/Theme'
 import Layout from '../components/Layout/Layout'
 
@@ -12,7 +12,8 @@ import Layout from '../components/Layout/Layout'
 type UserContextType = {
   authToken: string,
   setAuthToken: React.Dispatch<React.SetStateAction<string>>,
-  hasChecked: boolean
+  hasChecked: boolean,
+  isMediaPhone: boolean
 }
 export const UserContext = React.createContext({} as UserContextType)
 const UserProvider = UserContext.Provider
@@ -53,11 +54,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     setHasChecked(true)
   }, [])
 
+  const isMediaPhone = useMediaQuery('(max-width:700px)')
+
   const user = useMemo(() => ({
     authToken,
     setAuthToken,
-    hasChecked
-  }), [authToken, setAuthToken, hasChecked])
+    hasChecked,
+    isMediaPhone
+  }), [authToken, setAuthToken, hasChecked, isMediaPhone])
 
   return (
     <ThemeProvider theme={theme}>
