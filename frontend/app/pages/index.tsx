@@ -82,7 +82,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginBottom: theme.spacing(23)
 	},
 	listTitle: {
-		marginLeft: theme.spacing(4)
+		marginLeft: theme.spacing(4),
+		padding: `${theme.spacing(1)}px 0`
 	},
 	buttonContainer: {
 		display: 'flex',

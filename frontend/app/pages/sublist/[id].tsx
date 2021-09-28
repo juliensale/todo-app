@@ -109,7 +109,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		height: '100%',
+		minHeight: '100%',
+		height: 'fit-content',
+		padding: `${theme.spacing(1)}px 0`
 	},
 	buttonContainer: {
 		display: 'flex',
