@@ -59,7 +59,7 @@ class PrivateTaskApiTests(TestCase):
         )
 
         res = self.client.get(TASKS_URL)
-        tasks = Task.objects.all().order_by('-title')
+        tasks = Task.objects.all().order_by('id')
         serializer = TaskSerializer(tasks, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)

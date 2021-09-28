@@ -68,7 +68,7 @@ class PrivateSubTaskApiTests(TestCase):
         )
 
         res = self.client.get(SUBTASKS_URL)
-        subtasks = SubTask.objects.all().order_by('-title')
+        subtasks = SubTask.objects.all().order_by('id')
         serializer = SubTaskSerializer(subtasks, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 2)

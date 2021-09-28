@@ -29,7 +29,7 @@ class BaseItemViewSet(viewsets.GenericViewSet,
         """Retourne les objects pour l'utilisateur connecté seulement"""
         return self.queryset.filter(
             user=self.request.user
-        ).order_by('-title')
+        ).order_by('id')
 
     def perform_create(self, serializer):
         """Création d'un nouvel objet"""

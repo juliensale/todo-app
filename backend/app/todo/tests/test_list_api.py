@@ -40,7 +40,7 @@ class PrivateListApiTests(TestCase):
         List.objects.create(user=self.user, title="liste 2", color="blue")
 
         res = self.client.get(LISTS_URL)
-        lists = List.objects.all().order_by('-title')
+        lists = List.objects.all().order_by('id')
         serializer = ListSerializer(lists, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)

@@ -53,7 +53,7 @@ class PrivateSublistApiTests(TestCase):
         )
 
         res = self.client.get(SUBLISTS_URL)
-        sublists = SubList.objects.all().order_by('-title')
+        sublists = SubList.objects.all().order_by('id')
         serializer = SubListSerializer(sublists, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
