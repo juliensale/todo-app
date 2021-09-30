@@ -13,7 +13,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		padding: theme.spacing(2)
+		padding: theme.spacing(2),
+		position: 'sticky',
+		top: 0,
+		background: theme.palette.background.paper,
+		zIndex: 1
 	},
 	link: {
 		cursor: 'pointer',
@@ -45,7 +49,7 @@ const Head: FC<Props> = ({ objectLinks, className = "", style = {} }) => {
 	const classes = useStyles()
 	const { isMediaPhone } = useContext(UserContext)
 	return (
-		<Box className={className ? `${className} classes.container` : classes.container} style={style}>
+		<Box className={className ? `${className} ${classes.container}` : classes.container} style={style}>
 			{
 				isMediaPhone === false
 					? (
