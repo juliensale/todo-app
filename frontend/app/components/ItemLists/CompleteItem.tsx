@@ -7,9 +7,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		boxShadow: theme.shadows[1],
 		display: 'flex',
 		height: 'fit-content',
-		minHeight: theme.spacing(8),
 		flexDirection: 'row',
-		alignItems: 'center',
 		justifyContent: 'space-between',
 		'&:hover': {
 			background: theme.palette.action.hover

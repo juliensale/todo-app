@@ -82,15 +82,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginBottom: theme.spacing(23)
 	},
 	listTitle: {
-		marginLeft: theme.spacing(4),
-		padding: `${theme.spacing(1)}px 0`
+		marginLeft: theme.spacing(2),
+		minHeight: theme.spacing(8),
+		padding: `${theme.spacing(2)}px 0`,
+		display: 'grid',
+		placeItems: 'center'
 	},
 	buttonContainer: {
 		display: 'flex',
 		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		height: '100%'
+		justifyContent: 'center'
 	},
 	icon: { display: 'grid', placeItems: 'center' },
 	optionsContainer: {

@@ -4,13 +4,14 @@ import Link from 'next/link'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
 	container: {
+		// position: 'relative',
 		width: '100%',
 		boxShadow: theme.shadows[1],
 		display: 'flex',
-		minHeight: theme.spacing(8),
+		// minHeight: theme.spacing(8),
 		height: 'fit-content',
 		flexDirection: 'row',
-		alignItems: 'center',
+		// alignItems: 'center',
 		justifyContent: 'space-between',
 		'&:hover': {
 			background: theme.palette.action.hover

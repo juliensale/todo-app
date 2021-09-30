@@ -102,23 +102,21 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		flex: 'none'
 	},
 	taskTitle: {
-		marginLeft: theme.spacing(2)
+		marginLeft: theme.spacing(2),
+		minHeight: theme.spacing(8),
+		padding: `${theme.spacing(2)}px 0`,
+		display: 'grid',
+		placeItems: 'center'
 	},
 	titleContainer: {
 		display: 'flex',
 		flexDirection: 'row',
-		alignItems: 'center',
 		justifyContent: 'center',
-		minHeight: '100%',
-		height: 'fit-content',
-		padding: `${theme.spacing(1)}px 0`
 	},
 	buttonContainer: {
 		display: 'flex',
 		flexDirection: 'row',
-		alignItems: 'center',
 		justifyContent: 'center',
-		height: '100%'
 	},
 	checked: { display: 'grid', placeItems: 'center', margin: `0 ${theme.spacing(2)}px` },
 	icon: { display: 'grid', placeItems: 'center' },
