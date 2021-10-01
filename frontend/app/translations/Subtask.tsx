@@ -34,11 +34,11 @@ export type Translation = {
 }
 
 export const en: Translation = {
-	create: "Create a subtask",
+	create: "Create a sub-task",
 	title: "Title",
 	feedbacks: {
 		create: {
-			success: "Subtask created!",
+			success: "Sub-task created!",
 			error: {
 				'400': 'Bad request.',
 				'404': 'Server loading.',
@@ -46,7 +46,7 @@ export const en: Translation = {
 			}
 		},
 		edit: {
-			success: "Subtask edited!",
+			success: "Sub-task edited!",
 			error: {
 				'400': 'Bad request.',
 				'404': 'Server loading.',
@@ -63,7 +63,7 @@ export const en: Translation = {
 	options: "Options",
 	delete: "Delete",
 	warning: "Warning",
-	warningMessage: ["You are about to delete the following subtask:", "This action cannot be reversed.", "Are you sure you want to delete it?"],
+	warningMessage: ["You are about to delete the following sub-task:", "This action cannot be reversed.", "Are you sure you want to delete it?"],
 	edit: "Edit",
 	submit: "Submit"
 };

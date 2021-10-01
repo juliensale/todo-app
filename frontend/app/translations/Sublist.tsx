@@ -38,11 +38,11 @@ export type Translation = {
 }
 
 export const en: Translation = {
-	create: "Create a sublist",
+	create: "Create a sub-list",
 	title: "Title",
 	feedbacks: {
 		create: {
-			success: "Sublist created!",
+			success: "Sub-list created!",
 			error: {
 				'400': 'Bad request.',
 				'404': 'Server loading.',
@@ -50,7 +50,7 @@ export const en: Translation = {
 			}
 		},
 		edit: {
-			success: "Sublist edited!",
+			success: "Sub-list edited!",
 			error: {
 				'400': 'Bad request.',
 				'404': 'Server loading.',
@@ -59,20 +59,20 @@ export const en: Translation = {
 		},
 		delete: {
 			success: "Deleted!",
-			error: "The sublist could not be deleted."
+			error: "The sub-list could not be deleted."
 		},
 		noCookie: 'You must allow cookies',
 		baseError: 'An error occured.'
 	},
 	options: "Options",
-	seeSublist: "See Sublist",
+	seeSublist: "See Sub-list",
 	delete: "Delete",
 	warning: "Warning",
-	warningMessage: ["You are about to delete the following sublist:", "This action will result in deleting each of its tasks, and their content. It cannot be reversed.", "Are you sure you want to delete it?"],
+	warningMessage: ["You are about to delete the following sub-list:", "This action will result in deleting each of its tasks, and their content. It cannot be reversed.", "Are you sure you want to delete it?"],
 	edit: "Edit",
 	submit: "Submit",
 	noSublist: [
-		"There is no Sublist yet.",
+		"There is no sub-list yet.",
 		'Add a title and click the "+" button in the form below to create one.'
 	],
 	idError: "The list does not exist.",
@@ -114,7 +114,7 @@ export const fr: Translation = {
 	edit: "Modifier",
 	submit: 'Envoyer',
 	noSublist: [
-		"Il n'y a pas encore de Sous-Liste.",
+		"Il n'y a pas encore de sous-Liste.",
 		'Ajoutez un titre et cliquez sur le bouton "+" dans le formulaire ci-dessous pour en créer une.'
 	],
 	idError: "La liste n'existe pas.",
