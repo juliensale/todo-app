@@ -6,6 +6,7 @@ import { getNavWidth } from '../../components/Layout/Navigation';
 import AddIcon from '@material-ui/icons/Add'
 import { useRouter } from 'next/dist/client/router';
 import { en, fr, Translation } from '../../translations/Task'
+import { en as subtaskEn, fr as subtaskFr, Translation as SubtaskTranslation } from '../../translations/Subtask'
 import { getTaskCreateFormReducer, TaskCreateFormState } from '../../reducers/Task/createReducer';
 import { getTaskEditFormReducer, TaskEditFormState } from '../../reducers/Task/editReducer';
 import useSWR, { mutate, trigger } from 'swr';
@@ -169,6 +170,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 type ContextType = {
 	classes: ClassNameMap,
 	translation: Translation,
+	subtaskTranslation: SubtaskTranslation,
 	apiUrl: string,
 	authToken: string,
 	tasks: Task[] | undefined,
@@ -191,6 +193,7 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 	const router = useRouter()
 	const { locale } = router
 	const translation = locale === 'fr' ? fr : en
+	const subtaskTranslation = locale === 'fr' ? subtaskFr : subtaskEn
 
 	const sublistId = useMemo(() => {
 		const id = router.query.id
@@ -230,6 +233,7 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 	const value = useMemo(() => ({
 		classes,
 		translation,
+		subtaskTranslation,
 		apiUrl,
 		authToken,
 		tasks,
@@ -238,7 +242,7 @@ const Sublist: FC<SublistProps> = ({ children }) => {
 		motherSublist,
 		motherList,
 		subtasks
-	}), [classes, translation, apiUrl, authToken, tasks, dispatchSnack, sublistId, motherSublist, motherList, subtasks])
+	}), [classes, translation, subtaskTranslation, apiUrl, authToken, tasks, dispatchSnack, sublistId, motherSublist, motherList, subtasks])
 
 	return (
 		<Provider value={value}>
@@ -293,14 +297,14 @@ const SubtaskList: FC<{ task: Task, open: boolean }> = ({ task, open }) => {
 }
 
 const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
-	const { subtasks, apiUrl, authToken, classes, translation, dispatchSnack } = useContext(SublistContext)
+	const { subtasks, apiUrl, authToken, classes, subtaskTranslation, dispatchSnack } = useContext(SublistContext)
 
 	const initialState: SubtaskCreateFormState = {
 		data: {
 			title: ''
 		}
 	}
-	const reducer = getSubtaskCreateFormReducer(initialState, translation, dispatchSnack)
+	const reducer = getSubtaskCreateFormReducer(initialState, subtaskTranslation, dispatchSnack)
 	const [state, dispatch] = useReducer(reducer, initialState)
 
 	const handleSubmit: React.FormEventHandler = (e) => {
@@ -349,7 +353,7 @@ const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
 	return (
 		<Box className={classes.subtaskCreateFormContainer}>
 			<form onSubmit={handleSubmit} className={classes.createForm}>
-				<TextField required className={classes.subtaskInput} name="title" variant="outlined" label={translation.create} value={state.data.title} onChange={handleChange} />
+				<TextField required className={classes.subtaskInput} name="title" variant="outlined" label={subtaskTranslation.create} value={state.data.title} onChange={handleChange} />
 				<Fab className={classes.plusButton} size='small' color="primary" type="submit"><AddIcon /></Fab>
 			</form>
 		</Box>
@@ -357,7 +361,7 @@ const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
 }
 
 const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
-	const { subtasks, apiUrl, authToken, classes, translation } = useContext(SublistContext)
+	const { subtasks, apiUrl, authToken, classes, subtaskTranslation } = useContext(SublistContext)
 
 	const handleComplete = useCallback(() => {
 		mutate(
@@ -402,7 +406,7 @@ const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
 					<Typography className={classes.taskTitle} style={{ textDecorationLine: subtask.completed ? 'line-through' : 'none' }} > {subtask.title}</Typography>
 				</div>
 				<div className={classes.buttonContainer}>
-					<ItemButton stopPropagation title={translation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
+					<ItemButton stopPropagation title={subtaskTranslation.options} onClick={() => setModalOpen(true)}><MoreHorizIcon className={classes.icon} /></ItemButton>
 				</div>
 			</CompleteItem>
 			<SubtaskModal subtask={subtask} modalOpen={modalOpen} closeModal={closeModal} />
@@ -412,16 +416,16 @@ const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
 
 const SubtaskModal: FC<{ subtask: Subtask, modalOpen: boolean, closeModal: () => void }> = ({ subtask, modalOpen, closeModal }) => {
 
-	const { classes, translation } = useContext(SublistContext)
+	const { classes, subtaskTranslation } = useContext(SublistContext)
 
 	const [deleteOpen, setDeleteOpen] = useState(false)
 
 	return (
 		<CustomModal open={modalOpen} handleClose={closeModal}>
 			<div className={classes.optionsContainer}>
-				<Typography className={classes.optionsTitle} variant="h1" color="primary">{translation.edit}</Typography>
+				<Typography className={classes.optionsTitle} variant="h1" color="primary">{subtaskTranslation.edit}</Typography>
 				<SubtaskEditForm subtask={subtask} />
-				<Button variant="outlined" color="inherit" onClick={() => setDeleteOpen(true)} className={classes.deleteButton}>{translation.delete}</Button>
+				<Button variant="outlined" color="inherit" onClick={() => setDeleteOpen(true)} className={classes.deleteButton}>{subtaskTranslation.delete}</Button>
 			</div>
 			<SubtaskDeleteVerification open={deleteOpen} onClose={() => { setDeleteOpen(false) }} subtask={subtask} />
 		</CustomModal>
@@ -429,7 +433,7 @@ const SubtaskModal: FC<{ subtask: Subtask, modalOpen: boolean, closeModal: () =>
 }
 
 const SubtaskDeleteVerification: FC<{ subtask: Subtask, open: boolean, onClose: () => void }> = ({ subtask, open, onClose }) => {
-	const { classes, translation, dispatchSnack, apiUrl, authToken, subtasks } = useContext(SublistContext)
+	const { classes, subtaskTranslation, dispatchSnack, apiUrl, authToken, subtasks } = useContext(SublistContext)
 	const handleDelete = () => {
 		mutate(
 			[`${apiUrl}/todo/subtasks/`, authToken],
@@ -442,12 +446,12 @@ const SubtaskDeleteVerification: FC<{ subtask: Subtask, open: boolean, onClose: 
 			}
 		})
 			.then(() => {
-				dispatchSnack({ type: 'success', message: translation.feedbacks.delete.success })
+				dispatchSnack({ type: 'success', message: subtaskTranslation.feedbacks.delete.success })
 				trigger([`${apiUrl}/todo/subtasks/`, authToken])
 				trigger([`${apiUrl}/todo/tasks/`, authToken])
 			})
 			.catch(() => {
-				dispatchSnack({ type: 'error', message: translation.feedbacks.delete.error })
+				dispatchSnack({ type: 'error', message: subtaskTranslation.feedbacks.delete.error })
 				trigger([`${apiUrl}/todo/subtasks/`, authToken])
 				trigger([`${apiUrl}/todo/tasks/`, authToken])
 			})
@@ -455,25 +459,25 @@ const SubtaskDeleteVerification: FC<{ subtask: Subtask, open: boolean, onClose: 
 	return (
 		<CustomModal open={open} handleClose={onClose}>
 			<div className={classes.optionsContainer}>
-				<Typography className={classes.optionsTitle} variant="h1" color="error">{translation.warning}</Typography>
-				<Typography variant="body1">{translation.warningMessage[0]} &nbsp; {subtask.title}</Typography>
-				<Typography variant="body1">{translation.warningMessage[1]}</Typography>
-				<Typography variant="body1">{translation.warningMessage[2]}</Typography>
-				<ErrorButton onClick={handleDelete} variant="outlined" className={classes.deleteButton}>{translation.delete}</ErrorButton>
+				<Typography className={classes.optionsTitle} variant="h1" color="error">{subtaskTranslation.warning}</Typography>
+				<Typography variant="body1">{subtaskTranslation.warningMessage[0]} &nbsp; {subtask.title}</Typography>
+				<Typography variant="body1">{subtaskTranslation.warningMessage[1]}</Typography>
+				<Typography variant="body1">{subtaskTranslation.warningMessage[2]}</Typography>
+				<ErrorButton onClick={handleDelete} variant="outlined" className={classes.deleteButton}>{subtaskTranslation.delete}</ErrorButton>
 			</div>
 		</CustomModal>
 	)
 }
 
 const SubtaskEditForm: FC<{ subtask: Subtask }> = ({ subtask }) => {
-	const { apiUrl, authToken, classes, translation, dispatchSnack, subtasks } = useContext(SublistContext)
+	const { apiUrl, authToken, classes, subtaskTranslation, dispatchSnack, subtasks } = useContext(SublistContext)
 
 	const initialState: SubtaskEditFormState = {
 		data: {
 			title: subtask.title
 		}
 	}
-	const editReducer = getSubtaskEditFormReducer(initialState, translation, dispatchSnack)
+	const editReducer = getSubtaskEditFormReducer(initialState, subtaskTranslation, dispatchSnack)
 	const [state, dispatch] = useReducer(editReducer, initialState)
 
 	const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -516,8 +520,8 @@ const SubtaskEditForm: FC<{ subtask: Subtask }> = ({ subtask }) => {
 	}
 	return (
 		<form onSubmit={handleSubmit} className={classes.editForm}>
-			<TextField required className={classes.editInput} label={translation.title} name="title" value={state.data.title} onChange={handleChange} />
-			<Button type="submit" color="primary" variant="contained" className={classes.editButton}>{translation.submit}</Button>
+			<TextField required className={classes.editInput} label={subtaskTranslation.title} name="title" value={state.data.title} onChange={handleChange} />
+			<Button type="submit" color="primary" variant="contained" className={classes.editButton}>{subtaskTranslation.submit}</Button>
 		</form>
 	)
 }
