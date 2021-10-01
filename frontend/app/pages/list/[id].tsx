@@ -145,7 +145,7 @@ type ListProps = {
 const List: FC<ListProps> = ({ children }) => {
 	const classes = useStyles()
 	const { apiUrl } = useSWR('/api/get-api-url').data || { apiUrl: '' }
-	const { authToken } = useContext(UserContext)
+	const { authToken, snackBarActive } = useContext(UserContext)
 	const router = useRouter()
 	const { locale } = router
 	const translation = locale === 'fr' ? fr : en
@@ -199,7 +199,7 @@ const List: FC<ListProps> = ({ children }) => {
 			<LoginRequired>
 				{children}
 			</LoginRequired>
-			{snack ?
+			{snackBarActive && snack ?
 				<Snackbar
 					className={classes.snackBar}
 					open={snack.open}

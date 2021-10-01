@@ -1,6 +1,7 @@
 import { Container, createStyles, Snackbar, makeStyles, Paper, Theme } from '@material-ui/core'
 import { Color } from '@material-ui/lab'
-import React, { FC } from 'react'
+import React, { FC, useContext } from 'react'
+import { UserContext } from '../../pages/_app'
 import Alert from './Alert'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -31,6 +32,7 @@ type Props = {
 }
 const PageForm: FC<Props> = ({ children, onSubmit, snackBarData, closeSnackBar }) => {
 	const classes = useStyles()
+	const { snackBarActive } = useContext(UserContext)
 	return (
 		<>
 			<Container className={classes.container}>
@@ -40,7 +42,7 @@ const PageForm: FC<Props> = ({ children, onSubmit, snackBarData, closeSnackBar }
 					</form>
 				</Paper>
 			</Container>
-			{snackBarData ?
+			{snackBarActive && snackBarData ?
 				<Snackbar
 					open={snackBarData.open}
 					onClose={closeSnackBar}

@@ -24,7 +24,8 @@ export type Translation = {
 			'500': string,
 			password: string
 		},
-		noCookie: string
+		noCookie: string,
+		disable: string
 	},
 	error: {
 		email: string,
@@ -60,7 +61,8 @@ export const en: Translation = {
 			'500': 'Server error.',
 			password: 'The passwords do not match.'
 		},
-		noCookie: 'You must allow cookies.'
+		noCookie: 'You must allow cookies.',
+		disable: 'Enable/Disable feedbacks:'
 	},
 	error: {
 		email: 'A user with this email already exists.',
@@ -96,7 +98,8 @@ export const fr: Translation = {
 			'500': 'Erreur serveur.',
 			password: 'Les mots de passe ne correspondent pas.'
 		},
-		noCookie: 'You must allow cookies.'
+		noCookie: 'You must allow cookies.',
+		disable: 'Activer/Désactiver les retours:'
 	},
 	error: {
 		email: 'Un utilisateur avec cet email existe déjà.',

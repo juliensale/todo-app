@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Container, createStyles, FormControl, IconButton, Input, InputAdornment, InputLabel, makeStyles, Paper, Snackbar, TextField, Theme, Typography } from '@material-ui/core'
+import { Box, Button, CircularProgress, Container, createStyles, FormControl, IconButton, Input, InputAdornment, InputLabel, makeStyles, Paper, Snackbar, Switch, TextField, Theme, Typography } from '@material-ui/core'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
 import axios from 'axios'
 import { useRouter } from 'next/dist/client/router'
@@ -48,6 +48,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginTop: theme.spacing(3),
 		marginRight: 0,
 		marginLeft: 'auto'
+	},
+	switchContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginTop: theme.spacing(3)
 	}
 }))
 
@@ -61,7 +68,7 @@ const Settings: FC<Props> = () => {
 	const { locale } = router
 	const translation = locale === "fr" ? fr : en
 	const { apiUrl } = useSWR('/api/get-api-url/').data || { apiUrl: '' }
-	const { authToken } = useContext(UserContext)
+	const { authToken, snackBarActive, switchSnackBar } = useContext(UserContext)
 
 	const initialState: SettingsFormState = {
 		data: {
@@ -238,6 +245,7 @@ const Settings: FC<Props> = () => {
 								</InputAdornment>
 							} />
 						</FormControl>
+
 						{
 							state.loading.password
 								? <Button className={classes.button} color="primary" variant="contained"><CircularProgress color="inherit" size={24} /></Button>
@@ -245,11 +253,15 @@ const Settings: FC<Props> = () => {
 						}
 					</form>
 
+					<Box className={classes.switchContainer}>
+						<Typography color="primary" variant="body1">{translation.feedbacks.disable}</Typography>
+						<Switch color="primary" checked={snackBarActive} onClick={switchSnackBar}></Switch>
+					</Box>
 				</Paper>
 			</Container>
 
 
-			{state.snack ?
+			{snackBarActive && state.snack ?
 				<Snackbar
 					open={state.snack.open}
 					onClose={closeSnackBar}

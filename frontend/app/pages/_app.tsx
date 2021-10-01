@@ -13,7 +13,9 @@ type UserContextType = {
   authToken: string,
   setAuthToken: React.Dispatch<React.SetStateAction<string>>,
   hasChecked: boolean,
-  isMediaPhone: boolean
+  isMediaPhone: boolean,
+  snackBarActive: boolean,
+  switchSnackBar: () => void
 }
 export const UserContext = React.createContext({} as UserContextType)
 const UserProvider = UserContext.Provider
@@ -54,14 +56,42 @@ function MyApp({ Component, pageProps }: AppProps) {
     setHasChecked(true)
   }, [])
 
+  // Media query
+
   const isMediaPhone = useMediaQuery('(max-width:700px)')
+
+
+  // Snackbar notifications
+
+  const [snackBarActive, setSnackBarActive] = useState(true)
+  useEffect(() => {
+    try {
+      setSnackBarActive(localStorage.getItem('snack-bar') === 'false' ? false : true)
+    } catch { }
+  }, [])
+
+  const switchSnackBar = useCallback(() => {
+    if (snackBarActive) {
+      try {
+        localStorage.setItem('snack-bar', 'false')
+      } catch { }
+      setSnackBarActive(false)
+    } else {
+      try {
+        localStorage.removeItem('snack-bar')
+      } catch { }
+      setSnackBarActive(true)
+    }
+  }, [snackBarActive, setSnackBarActive])
 
   const user = useMemo(() => ({
     authToken,
     setAuthToken,
     hasChecked,
-    isMediaPhone
-  }), [authToken, setAuthToken, hasChecked, isMediaPhone])
+    isMediaPhone,
+    snackBarActive,
+    switchSnackBar
+  }), [authToken, setAuthToken, hasChecked, isMediaPhone, snackBarActive, switchSnackBar])
 
   return (
     <ThemeProvider theme={theme}>
