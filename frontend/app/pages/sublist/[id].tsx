@@ -30,6 +30,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { getSubtaskCreateFormReducer, SubtaskCreateFormState } from '../../reducers/Subtask/createReducer';
 import { getSubtaskEditFormReducer, SubtaskEditFormState } from '../../reducers/Subtask/editReducer';
 import { motion, MotionConfig, useAnimation } from 'framer-motion'
+import { shouldTaskBeComplete } from '../../components/Subtasks/Subtasks';
 
 
 
@@ -361,20 +362,36 @@ const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
 }
 
 const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
-	const { subtasks, apiUrl, authToken, classes, subtaskTranslation } = useContext(SublistContext)
+	const { tasks, subtasks, apiUrl, authToken, classes, subtaskTranslation } = useContext(SublistContext)
 
 	const handleComplete = useCallback(() => {
+		const mockedSubtasks = (subtasks || []).map(item => {
+			var newSubtask = { ...item }
+			if (item.id === subtask.id) {
+				newSubtask.completed = !item.completed
+			}
+			return newSubtask
+		})
 		mutate(
 			[`${apiUrl}/todo/subtasks/`, authToken],
-			(subtasks || []).map(item => {
-				var newSubtask = { ...item }
-				if (item.id === subtask.id) {
-					newSubtask.completed = !item.completed
+			mockedSubtasks,
+			false
+		)
+
+		const shouldMotherTaskComplete = shouldTaskBeComplete(mockedSubtasks!.filter(item => item.task === subtask.task))
+		console.log(shouldMotherTaskComplete)
+		mutate(
+			[`${apiUrl}/todo/tasks/`, authToken],
+			(tasks || []).map(item => {
+				var newTask = { ...item }
+				if (item.id === subtask.task) {
+					newTask.completed = shouldMotherTaskComplete
 				}
-				return newSubtask
+				return newTask
 			}),
 			false
 		)
+
 		axios.put(`${apiUrl}/todo/subtasks/${subtask.id}/${subtask.completed ? 'uncomplete' : 'complete'}/`, {}, {
 			headers: {
 				"Authorization": `Token ${authToken}`
