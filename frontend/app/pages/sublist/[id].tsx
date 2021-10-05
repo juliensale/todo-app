@@ -379,7 +379,6 @@ const SubtaskItem: FC<{ subtask: Subtask }> = ({ subtask }) => {
 		)
 
 		const shouldMotherTaskComplete = shouldTaskBeComplete(mockedSubtasks!.filter(item => item.task === subtask.task))
-		console.log(shouldMotherTaskComplete)
 		mutate(
 			[`${apiUrl}/todo/tasks/`, authToken],
 			(tasks || []).map(item => {
@@ -450,11 +449,24 @@ const SubtaskModal: FC<{ subtask: Subtask, modalOpen: boolean, closeModal: () =>
 }
 
 const SubtaskDeleteVerification: FC<{ subtask: Subtask, open: boolean, onClose: () => void }> = ({ subtask, open, onClose }) => {
-	const { classes, subtaskTranslation, dispatchSnack, apiUrl, authToken, subtasks } = useContext(SublistContext)
+	const { classes, subtaskTranslation, dispatchSnack, apiUrl, authToken, tasks, subtasks } = useContext(SublistContext)
 	const handleDelete = () => {
+		const mockedSubtasks = (subtasks || []).filter(item => item.id !== subtask.id)
 		mutate(
 			[`${apiUrl}/todo/subtasks/`, authToken],
-			(subtasks || []).filter(item => item.id !== subtask.id),
+			mockedSubtasks,
+			false
+		)
+		const shouldMotherTaskComplete = shouldTaskBeComplete(mockedSubtasks!.filter(item => item.task === subtask.task))
+		mutate(
+			[`${apiUrl}/todo/tasks/`, authToken],
+			(tasks || []).map(item => {
+				var newTask = { ...item }
+				if (item.id === subtask.task) {
+					newTask.completed = shouldMotherTaskComplete
+				}
+				return newTask
+			}),
 			false
 		)
 		axios.delete(`${apiUrl}/todo/subtasks/${subtask.id}/`, {
