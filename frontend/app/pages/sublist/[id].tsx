@@ -298,7 +298,7 @@ const SubtaskList: FC<{ task: Task, open: boolean }> = ({ task, open }) => {
 }
 
 const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
-	const { subtasks, apiUrl, authToken, classes, subtaskTranslation, dispatchSnack } = useContext(SublistContext)
+	const { tasks, subtasks, apiUrl, authToken, classes, subtaskTranslation, dispatchSnack } = useContext(SublistContext)
 
 	const initialState: SubtaskCreateFormState = {
 		data: {
@@ -311,17 +311,30 @@ const SubtaskCreateForm: FC<{ task: Task }> = ({ task }) => {
 	const handleSubmit: React.FormEventHandler = (e) => {
 		e.preventDefault()
 		dispatch({ type: 'create' })
+
+		const mockedSubtasks = [
+			...(subtasks || []),
+			{
+				id: Math.random(),
+				task: task.id,
+				title: state.data.title,
+				completed: false
+			}
+		]
 		mutate(
 			[`${apiUrl}/todo/subtasks/`, authToken],
-			[
-				...(subtasks || []),
-				{
-					id: Math.random(),
-					task: task.id,
-					title: state.data.title,
-					completed: false
+			mockedSubtasks,
+			false
+		)
+		mutate(
+			[`${apiUrl}/todo/tasks/`, authToken],
+			(tasks || []).map(item => {
+				var newTask = { ...item }
+				if (item.id === task.id) {
+					newTask.completed = false
 				}
-			],
+				return newTask
+			}),
 			false
 		)
 		axios.post(`${apiUrl}/todo/subtasks/`, {
