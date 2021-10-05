@@ -627,7 +627,7 @@ const TaskList: FC = () => {
 }
 
 const TaskItem: FC<{ task: Task }> = ({ task }) => {
-	const { classes, translation, authToken, apiUrl, tasks } = useContext(SublistContext)
+	const { classes, translation, authToken, apiUrl, tasks, subtasks } = useContext(SublistContext)
 
 	const [open, setOpen] = useState(false)
 	const switchOpen = useCallback(() => { setOpen(!open) }, [open, setOpen])
@@ -646,14 +646,31 @@ const TaskItem: FC<{ task: Task }> = ({ task }) => {
 			}),
 			false
 		)
+		mutate(
+			[`${apiUrl}/todo/subtasks/`, authToken],
+			(subtasks || []).map(item => {
+				var newSubtask = { ...item }
+				if (item.task === task.id) {
+					newSubtask.completed = !task.completed
+				}
+				return newSubtask
+			}),
+			false
+		)
 		const url = `${apiUrl}/todo/tasks/${task.id}/${task.completed ? 'uncomplete' : 'complete'}/`
 		axios.put(url, {}, {
 			headers: {
 				"Authorization": `Token ${authToken}`
 			}
 		})
-			.then(() => { trigger([`${apiUrl}/todo/tasks/`, authToken]) })
-			.catch(() => { trigger([`${apiUrl}/todo/tasks/`, authToken]) })
+			.then(() => {
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+			})
+			.catch(() => {
+				trigger([`${apiUrl}/todo/tasks/`, authToken])
+				trigger([`${apiUrl}/todo/subtasks/`, authToken])
+			})
 	}, [task, tasks, apiUrl, authToken])
 	return (
 		<>
