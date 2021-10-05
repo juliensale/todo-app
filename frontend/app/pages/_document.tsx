@@ -29,17 +29,8 @@ class MyDocument extends Document {
 			<Html>
 				<Head>
 
-					<link rel="preload" as="font" href="/fonts/catamaran-v8-latin-300.woff2" crossOrigin="anonymous" />
-					<link rel="preload" as="font" href="/fonts/catamaran-v8-latin-500.woff2" crossOrigin="anonymous" />
-					<link rel="preload" as="font" href="/fonts/catamaran-v8-latin-600.woff2" crossOrigin="anonymous" />
 
-					<link rel="preload" as="font" href="/fonts/oxygen-v10-latin-300.woff2" crossOrigin="anonymous" />
-					<link rel="preload" as="font" href="/fonts/oxygen-v10-latin-regular.woff2" crossOrigin="anonymous" />
-					<link rel="preload" as="font" href="/fonts/oxygen-v10-latin-700.woff2" crossOrigin="anonymous" />
 
-					<link rel="preload" as="font" href="/fonts/montserrat-v18-latin-600.woff2" crossOrigin="anonymous" />
-					<link rel="preload" as="font" href="/fonts/montserrat-v18-latin-700.woff2" crossOrigin="anonymous" />
-					<link rel="preload" as="font" href="/fonts/montserrat-v18-latin-800.woff2" crossOrigin="anonymous" />
 
 					<link rel="manifest" href="/PWA/manifest.json" />
 					<link rel="apple-touch-icon" sizes="57x57" href="/PWA/apple-icon-57x57.png" />
