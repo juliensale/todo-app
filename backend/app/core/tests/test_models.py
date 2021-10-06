@@ -348,3 +348,43 @@ class SubTaskModelTests(TestCase):
         self.assertFalse(self.task.completed)
         self.assertTrue(self.subtask.completed)
         self.assertFalse(self.subtask2.completed)
+
+    def test_delete_last_subtask_not_complete(self):
+        """Test that deleting the last subtask does not complete the mother task"""
+        task = models.Task.objects.create(
+            user=self.user,
+            sublist=self.sublist,
+            title="Test task",
+        )
+        subtask = models.SubTask.objects.create(
+            user=self.user,
+            task=task,
+            title="Test subtask",
+        )
+        self.assertFalse(task.completed)
+
+        subtask.delete()
+        task.refresh_from_db()
+
+        self.assertFalse(task.completed)
+
+    def test_delete_last_subtask_not_uncomplete(self):
+        """Test that deleting the last subtask does not uncomplete the mother task"""
+        task = models.Task.objects.create(
+            user=self.user,
+            sublist=self.sublist,
+            title="tache test",
+            completed=True
+        )
+        subtask = models.SubTask.objects.create(
+            user=self.user,
+            task=task,
+            title="sous-tache test",
+            completed=True
+        )
+        self.assertTrue(task.completed)
+
+        subtask.delete()
+        task.refresh_from_db()
+
+        self.assertTrue(task.completed)
