@@ -465,23 +465,28 @@ const SubtaskDeleteVerification: FC<{ subtask: Subtask, open: boolean, onClose: 
 	const { classes, subtaskTranslation, dispatchSnack, apiUrl, authToken, tasks, subtasks } = useContext(SublistContext)
 	const handleDelete = () => {
 		const mockedSubtasks = (subtasks || []).filter(item => item.id !== subtask.id)
+
 		mutate(
 			[`${apiUrl}/todo/subtasks/`, authToken],
 			mockedSubtasks,
 			false
 		)
-		const shouldMotherTaskComplete = shouldTaskBeComplete(mockedSubtasks!.filter(item => item.task === subtask.task))
-		mutate(
-			[`${apiUrl}/todo/tasks/`, authToken],
-			(tasks || []).map(item => {
-				var newTask = { ...item }
-				if (item.id === subtask.task) {
-					newTask.completed = shouldMotherTaskComplete
-				}
-				return newTask
-			}),
-			false
-		)
+
+		if (mockedSubtasks.filter(item => item.task === subtask.task).length > 0) {
+			const shouldMotherTaskComplete = shouldTaskBeComplete(mockedSubtasks!.filter(item => item.task === subtask.task))
+			mutate(
+				[`${apiUrl}/todo/tasks/`, authToken],
+				(tasks || []).map(item => {
+					var newTask = { ...item }
+					if (item.id === subtask.task) {
+						newTask.completed = shouldMotherTaskComplete
+					}
+					return newTask
+				}),
+				false
+			)
+
+		}
 		axios.delete(`${apiUrl}/todo/subtasks/${subtask.id}/`, {
 			headers: {
 				"Authorization": `Token ${authToken}`
