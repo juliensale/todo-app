@@ -112,7 +112,8 @@ class Task(models.Model):
         for subtask in subtasks:
             shouldComplete = shouldComplete and subtask.completed
 
-        self.set_completed(shouldComplete)
+        if len(subtasks) > 0:
+            self.set_completed(shouldComplete)
 
     def save(self, *args, **kwargs):
         if self.user == self.sublist.user:
